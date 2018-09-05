@@ -1,0 +1,59 @@
+.section {
+  @include clearfix;
+
+  .block {
+    width: 50%;
+    float: left;
+
+    &.red{
+      background-color: $red;
+    }
+
+    &.yellow {
+      background-color: $yellow;
+    }
+
+    &.turqoise {
+      background-color: $turqoise;
+    }
+
+    &.green{
+      background-color: $green;
+    }
+
+    &.blue{
+      background-color: $blue;
+    }
+
+    &.white{
+      background-color: white;
+    }
+
+    .content-wrapper {
+      margin: 0;
+      max-width: $maxSiteWidth/2;
+    }
+
+    &.fourth {
+      width: 25%;
+
+      .content-wrapper {
+        max-width: $maxSiteWidth/4;
+      }
+    }
+
+    &.three-fourth {
+      width: 75%;
+
+      .content-wrapper {
+        max-width: ($maxSiteWidth/4)*3;
+      }
+    }
+
+    &:first-child {
+      .content-wrapper {
+        margin-left: auto;
+      }
+    }
+  }
+}

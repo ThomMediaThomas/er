@@ -1,0 +1,15 @@
+#top-bar {
+  background-color: $turqoise;
+  color: $blue;
+  font-size: calculateRem(26px);
+  text-align: right;
+
+  strong, a{
+    font-weight: $fancyExtraBold;
+  }
+
+  a {
+    color: $red;
+    text-decoration: none;
+  }
+}

@@ -1,0 +1,56 @@
+html, body {
+  font-size: $bodyFontSize;
+  font-family: $bodyFont;
+  color: $bodyFontColor;
+  line-height: 1.6;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: $maxSiteWidth;
+  margin: 0 auto;
+  padding: $baseMargin;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $fancyFont;
+  text-transform: uppercase;
+  line-height: 1;
+
+  .sub {
+    color: $bodyFontColor;
+  }
+
+  &.turqoise, .sub.turqoise {
+    color: $turqoise;
+  }
+
+  &.red, .sub.red{
+    color: $red;
+  }
+
+  &.green, .sub.green{
+    color: $green;
+  }
+
+  &.blue, .sub.blue{
+    color: $blue;
+  }
+
+  &.white, .sub.white{
+    color: white;
+  }
+}
+
+h1 {
+  font-size: calculateRem(92px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(34px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}

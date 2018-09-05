@@ -1,3 +1,16 @@
-body {
-  background-color: lime;
-}
+@import "config/reset";
+
+@import "config/variables";
+
+@import "helpers/pxToRem";
+@import "helpers/clearfix";
+
+@import "site";
+@import "elements/header";
+@import "elements/footer";
+@import "elements/blocks";
+
+
+
+
+

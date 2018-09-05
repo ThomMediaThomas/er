@@ -4,6 +4,7 @@
 		<meta charset="<?php bloginfo('charset'); ?>">
 		<title><?php wp_title(''); ?><?php if(wp_title('', false)) { echo ' :'; } ?> <?php bloginfo('name'); ?></title>
 
+		<link href="//fonts.googleapis.com/css?family=Dosis|Roboto" rel="stylesheet">
 		<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/styles/main.css">
 
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -14,3 +15,4 @@
 
 	</head>
 	<body <?php body_class(); ?>>
+	<?php get_template_part('/elements/site-header'); ?>

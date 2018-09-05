@@ -1,0 +1,130 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+html, body {
+  font-size: 18px;
+  font-family: "Roboto", sans-serif;
+  color: #525252;
+  line-height: 1.6; }
+
+.content-wrapper {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 20px; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Dosis", sans-serif;
+  text-transform: uppercase;
+  line-height: 1; }
+  h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub, h6 .sub {
+    color: #525252; }
+  h1.turqoise, h1 .sub.turqoise, h2.turqoise, h2 .sub.turqoise, h3.turqoise, h3 .sub.turqoise, h4.turqoise, h4 .sub.turqoise, h5.turqoise, h5 .sub.turqoise, h6.turqoise, h6 .sub.turqoise {
+    color: #c8e3dc; }
+  h1.red, h1 .sub.red, h2.red, h2 .sub.red, h3.red, h3 .sub.red, h4.red, h4 .sub.red, h5.red, h5 .sub.red, h6.red, h6 .sub.red {
+    color: #ca303c; }
+  h1.green, h1 .sub.green, h2.green, h2 .sub.green, h3.green, h3 .sub.green, h4.green, h4 .sub.green, h5.green, h5 .sub.green, h6.green, h6 .sub.green {
+    color: #a0a433; }
+  h1.blue, h1 .sub.blue, h2.blue, h2 .sub.blue, h3.blue, h3 .sub.blue, h4.blue, h4 .sub.blue, h5.blue, h5 .sub.blue, h6.blue, h6 .sub.blue {
+    color: #426b6f; }
+  h1.white, h1 .sub.white, h2.white, h2 .sub.white, h3.white, h3 .sub.white, h4.white, h4 .sub.white, h5.white, h5 .sub.white, h6.white, h6 .sub.white {
+    color: white; }
+
+h1 {
+  font-size: 5.11111rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h1 .sub {
+    font-size: 1.88889rem;
+    font-weight: 400;
+    display: block; }
+
+#top-bar {
+  background-color: #c8e3dc;
+  color: #426b6f;
+  font-size: 1.44444rem;
+  text-align: right; }
+  #top-bar strong, #top-bar a {
+    font-weight: 800; }
+  #top-bar a {
+    color: #ca303c;
+    text-decoration: none; }
+
+.section:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.section .block {
+  width: 50%;
+  float: left; }
+  .section .block.red {
+    background-color: #ca303c; }
+  .section .block.yellow {
+    background-color: #eec633; }
+  .section .block.turqoise {
+    background-color: #c8e3dc; }
+  .section .block.green {
+    background-color: #a0a433; }
+  .section .block.blue {
+    background-color: #426b6f; }
+  .section .block.white {
+    background-color: white; }
+  .section .block .content-wrapper {
+    margin: 0;
+    max-width: 512px; }
+  .section .block.fourth {
+    width: 25%; }
+    .section .block.fourth .content-wrapper {
+      max-width: 256px; }
+  .section .block.three-fourth {
+    width: 75%; }
+    .section .block.three-fourth .content-wrapper {
+      max-width: 768px; }
+  .section .block:first-child .content-wrapper {
+    margin-left: auto; }
