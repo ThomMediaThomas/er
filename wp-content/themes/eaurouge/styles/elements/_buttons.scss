@@ -1,0 +1,68 @@
+$darken: 10%;
+
+.button {
+  padding: $baseMargin/2 $baseMargin;
+  @include border-radius(5px);
+  font-size: calculateRem(26px);
+  display: inline-block;
+  font-weight: $fancyExtraBold;
+  text-transform: uppercase;
+  color: White;
+  text-decoration: none;
+  cursor: pointer;
+
+  @include transition(all, .2s, ease-in-out);
+
+  i {
+    position: relative;
+    top: 2px;
+  }
+
+  &.red {
+    background-color: $red;
+
+    &:hover {
+      background-color: darken($red, $darken);
+    }
+  }
+
+  &.yellow {
+    background-color: $yellow;
+
+    &:hover {
+      background-color: darken($yellow, $darken);
+    }
+  }
+
+  &.turqoise {
+    background-color: $turqoise;
+
+    &:hover {
+      background-color: darken($turqoise, $darken);
+    }
+  }
+
+  &.green {
+    background-color: $green;
+
+    &:hover {
+      background-color: darken($green, $darken);
+    }
+  }
+
+  &.blue {
+    background-color: $blue;
+
+    &:hover {
+      background-color: darken($blue, $darken);
+    }
+  }
+
+  &.white {
+    background-color: white;
+
+    &:hover {
+      background-color: darken(White, $darken);
+    }
+  }
+}

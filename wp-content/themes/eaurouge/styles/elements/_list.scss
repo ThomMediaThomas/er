@@ -1,0 +1,14 @@
+ul.usps {
+  font-size: calculateRem(26px);
+  font-family: $fancyFont;
+
+  i {
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+  }
+
+  &.white {
+    color: White;
+  }
+}

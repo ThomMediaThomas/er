@@ -1,0 +1,28 @@
+.box {
+  padding: $baseMargin;
+  @include border-radius(10px);
+
+  &.red {
+    background-color: $red;
+  }
+
+  &.yellow {
+    background-color: $yellow;
+  }
+
+  &.turqoise {
+    background-color: $turqoise;
+  }
+
+  &.green {
+    background-color: $green;
+  }
+
+  &.blue {
+    background-color: $blue;
+  }
+
+  &.white {
+    background-color: white;
+  }
+}

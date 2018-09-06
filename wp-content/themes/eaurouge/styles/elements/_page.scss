@@ -1,0 +1,13 @@
+.text {
+  .main {
+    width: 75%;
+    float: left;
+    padding-right: $baseMargin;
+  }
+
+  .aside {
+    width: 25%;
+    float: right;
+    padding-left: $baseMargin;
+  }
+}

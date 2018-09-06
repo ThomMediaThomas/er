@@ -1,9 +1,13 @@
 .section {
   @include clearfix;
+  display: table;
+  width: 100%;
 
   .block {
     width: 50%;
-    float: left;
+    //float: left;
+    display: table-cell;
+    vertical-align: top;
 
     &.red{
       background-color: $red;
@@ -32,22 +36,6 @@
     .content-wrapper {
       margin: 0;
       max-width: $maxSiteWidth/2;
-    }
-
-    &.fourth {
-      width: 25%;
-
-      .content-wrapper {
-        max-width: $maxSiteWidth/4;
-      }
-    }
-
-    &.three-fourth {
-      width: 75%;
-
-      .content-wrapper {
-        max-width: ($maxSiteWidth/4)*3;
-      }
     }
 
     &:first-child {

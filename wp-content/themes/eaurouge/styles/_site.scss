@@ -10,6 +10,11 @@ html, body {
   max-width: $maxSiteWidth;
   margin: 0 auto;
   padding: $baseMargin;
+  @include clearfix;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -50,6 +55,19 @@ h1 {
 
   .sub {
     font-size: calculateRem(34px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}
+
+h2 {
+  font-size: calculateRem(43px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(25px);
     font-weight: $fancyRegular;
     display: block;
   }

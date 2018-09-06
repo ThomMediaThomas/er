@@ -1,0 +1,7 @@
+p, ul, ol {
+  margin-bottom: $baseMargin;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
