@@ -6,7 +6,18 @@
         </h5>
     </div>
 </div>
-<header>
+<header id="header">
+    <nav id="nav">
+        <ul>
+            <li><a href="#" title="">De camping</a></li>
+            <li><a href="#" title="">Activiteiten</a></li>
+            <li><a href="#" title="">Circuit van Spa</a></li>
+            <li><a href="#" title="">Omgeving</a></li>
+            <li><a href="#" title="">Nieuws</a></li>
+            <li><a href="#" title="">Foto's</a></li>
+            <li><a href="#" title="">Contact</a></li>
+        </ul>
+    </nav>
     <div class="content-wrapper">
         <h1>
             <a href="/" title="Camping de l'eau rouge">

@@ -148,7 +148,7 @@ html, body {
 
 .content-wrapper {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px; }
   .content-wrapper:after {
@@ -197,11 +197,43 @@ h2 {
     font-weight: 400;
     display: block; }
 
+h3 {
+  font-size: 1.55556rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h3 .sub {
+    font-size: 1.27778rem;
+    font-weight: 400;
+    display: block; }
+
+h4 {
+  font-size: 1.27778rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h4 .sub {
+    font-size: 1.16667rem;
+    font-weight: 400;
+    display: block; }
+
+h5 {
+  font-size: 1rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h5 .sub {
+    font-size: 1.05556rem;
+    font-weight: 400;
+    display: block; }
+
 #top-bar {
   background-color: #c8e3dc;
   color: #426b6f;
-  font-size: 1.44444rem;
   text-align: right; }
+  #top-bar h5 {
+    font-size: 1.44444rem;
+    margin-bottom: 0px; }
   #top-bar strong, #top-bar a {
     font-weight: 800; }
   #top-bar a {
@@ -231,9 +263,19 @@ h2 {
       background-color: #426b6f; }
     .section .block.white {
       background-color: white; }
+    .section .block.image {
+      position: relative;
+      background-color: #426b6f;
+      overflow: hidden; }
+      .section .block.image img {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: auto; }
     .section .block .content-wrapper {
       margin: 0;
-      max-width: 700px; }
+      max-width: 600px; }
     .section .block:first-child .content-wrapper {
       margin-left: auto; }
 
@@ -323,3 +365,15 @@ p, ul, ol {
   margin-bottom: 20px; }
   p:last-child, ul:last-child, ol:last-child {
     margin-bottom: 0px; }
+  p .red, ul .red, ol .red {
+    color: #ca303c; }
+  p .blue, ul .blue, ol .blue {
+    color: #426b6f; }
+  p .turqoise, ul .turqoise, ol .turqoise {
+    color: #c8e3dc; }
+  p .yellow, ul .yellow, ol .yellow {
+    color: #eec633; }
+  p .green, ul .green, ol .green {
+    color: #a0a433; }
+  p strong, p a, ul strong, ul a, ol strong, ol a {
+    font-weight: 800; }

@@ -33,6 +33,20 @@
       background-color: white;
     }
 
+    &.image {
+      position: relative;
+      background-color: $blue;
+      overflow: hidden;
+
+      img {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: auto;
+      }
+    }
+
     .content-wrapper {
       margin: 0;
       max-width: $maxSiteWidth/2;

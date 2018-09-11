@@ -1,8 +1,13 @@
 #top-bar {
   background-color: $turqoise;
   color: $blue;
-  font-size: calculateRem(26px);
   text-align: right;
+
+  h5 {
+    font-size: calculateRem(26px);
+    margin-bottom: 0px;
+  }
+
 
   strong, a{
     font-weight: $fancyExtraBold;

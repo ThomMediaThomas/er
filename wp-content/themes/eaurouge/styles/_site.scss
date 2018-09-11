@@ -72,3 +72,42 @@ h2 {
     display: block;
   }
 }
+
+h3 {
+  font-size: calculateRem(28px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(23px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}
+
+h4 {
+  font-size: calculateRem(23px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(21px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}
+
+h5 {
+  font-size: calculateRem(18px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(19px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}

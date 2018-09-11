@@ -11,20 +11,23 @@
 				</div>
 				<div class="aside">
 					<div class="box turqoise">
-						Test, hallo
+						<h3 class="blue"><span class="sub">Wij zijn graag </span> bereikbaar</h3>
+						<p class="blue">U kan ons altijd bereiken op <a href="#" class="red">0123456789</a> of op <a href="#" class="red">info@eau-rouge.com</a>.</p>
+						<p class="blue">Of kom even langs, gezellig!<br/>
+							<strong class="red" class="red">
+								L’eau rouge<br/>
+								Chenaux 25<br/>
+								1234 Stavelot (België)
+							</strong>
+						</p>
 					</div>
 				</div>
 			</div>
 		</section>
 
 		<section class="section">
-			<div class="block turqoise">
-				<div class="content-wrapper">
-					<h1 class="blue">
-						<span class="sub">Hartelijk welkom bij Camping de</span> l'eau rouge
-					</h1>
-					<p>De rust, het prachtig groene terrein, het riviertje l’Eau Rouge dat zich langs de camping slingert, maar ook de gemoedelijkheid, netheid, sfeer van rust en toch de verrassende afwisseling met veel avontuur en eigen buitenzwembad voor u en uw kinderen. Ontdek onze camping en beleef hier een heerlijke vakantie!</p>
-				</div>
+			<div class="block image">
+				<img src="<?php echo get_template_directory_uri(); ?>/img/bg-sidebar.jpg" />
 			</div>
 			<div class="block green">
 				<div class="content-wrapper">

@@ -4,4 +4,28 @@ p, ul, ol {
   &:last-child {
     margin-bottom: 0px;
   }
+
+  .red {
+    color: $red;
+  }
+
+  .blue {
+    color: $blue;
+  }
+
+  .turqoise {
+    color: $turqoise;
+  }
+
+  .yellow {
+    color: $yellow;
+  }
+
+  .green {
+    color: $green;
+  }
+
+  strong, a {
+    font-weight: $fancyExtraBold;
+  }
 }
