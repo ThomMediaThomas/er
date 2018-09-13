@@ -160,73 +160,6 @@ html, body {
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Dosis", sans-serif;
-  text-transform: uppercase;
-  line-height: 1; }
-  h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub, h6 .sub {
-    color: #525252; }
-  h1.turqoise, h1 .sub.turqoise, h2.turqoise, h2 .sub.turqoise, h3.turqoise, h3 .sub.turqoise, h4.turqoise, h4 .sub.turqoise, h5.turqoise, h5 .sub.turqoise, h6.turqoise, h6 .sub.turqoise {
-    color: #c8e3dc; }
-  h1.red, h1 .sub.red, h2.red, h2 .sub.red, h3.red, h3 .sub.red, h4.red, h4 .sub.red, h5.red, h5 .sub.red, h6.red, h6 .sub.red {
-    color: #ca303c; }
-  h1.green, h1 .sub.green, h2.green, h2 .sub.green, h3.green, h3 .sub.green, h4.green, h4 .sub.green, h5.green, h5 .sub.green, h6.green, h6 .sub.green {
-    color: #a0a433; }
-  h1.blue, h1 .sub.blue, h2.blue, h2 .sub.blue, h3.blue, h3 .sub.blue, h4.blue, h4 .sub.blue, h5.blue, h5 .sub.blue, h6.blue, h6 .sub.blue {
-    color: #426b6f; }
-  h1.white, h1 .sub.white, h2.white, h2 .sub.white, h3.white, h3 .sub.white, h4.white, h4 .sub.white, h5.white, h5 .sub.white, h6.white, h6 .sub.white {
-    color: white; }
-
-h1 {
-  font-size: 5.11111rem;
-  font-weight: 800;
-  display: block;
-  margin-bottom: 20px; }
-  h1 .sub {
-    font-size: 1.88889rem;
-    font-weight: 400;
-    display: block; }
-
-h2 {
-  font-size: 2.38889rem;
-  font-weight: 800;
-  display: block;
-  margin-bottom: 20px; }
-  h2 .sub {
-    font-size: 1.38889rem;
-    font-weight: 400;
-    display: block; }
-
-h3 {
-  font-size: 1.55556rem;
-  font-weight: 800;
-  display: block;
-  margin-bottom: 20px; }
-  h3 .sub {
-    font-size: 1.27778rem;
-    font-weight: 400;
-    display: block; }
-
-h4 {
-  font-size: 1.27778rem;
-  font-weight: 800;
-  display: block;
-  margin-bottom: 20px; }
-  h4 .sub {
-    font-size: 1.16667rem;
-    font-weight: 400;
-    display: block; }
-
-h5 {
-  font-size: 1rem;
-  font-weight: 800;
-  display: block;
-  margin-bottom: 20px; }
-  h5 .sub {
-    font-size: 1.05556rem;
-    font-weight: 400;
-    display: block; }
-
 #top-bar {
   background-color: #c8e3dc;
   color: #426b6f;
@@ -269,13 +202,16 @@ h5 {
       overflow: hidden; }
       .section .block.image img {
         position: absolute;
-        top: 0%;
+        top: 25%;
+        margin-top: -25%;
         left: 0%;
         width: 100%;
         height: auto; }
     .section .block .content-wrapper {
       margin: 0;
-      max-width: 600px; }
+      max-width: 600px;
+      padding-top: 40px;
+      padding-bottom: 40px; }
     .section .block:first-child .content-wrapper {
       margin-left: auto; }
 
@@ -361,19 +297,94 @@ ul.usps {
   ul.usps.white {
     color: White; }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Dosis", sans-serif;
+  text-transform: uppercase;
+  line-height: 1; }
+  h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub, h6 .sub {
+    color: #525252; }
+  h1.turqoise, h1 .sub.turqoise, h2.turqoise, h2 .sub.turqoise, h3.turqoise, h3 .sub.turqoise, h4.turqoise, h4 .sub.turqoise, h5.turqoise, h5 .sub.turqoise, h6.turqoise, h6 .sub.turqoise {
+    color: #c8e3dc; }
+  h1.red, h1 .sub.red, h2.red, h2 .sub.red, h3.red, h3 .sub.red, h4.red, h4 .sub.red, h5.red, h5 .sub.red, h6.red, h6 .sub.red {
+    color: #ca303c; }
+  h1.green, h1 .sub.green, h2.green, h2 .sub.green, h3.green, h3 .sub.green, h4.green, h4 .sub.green, h5.green, h5 .sub.green, h6.green, h6 .sub.green {
+    color: #a0a433; }
+  h1.blue, h1 .sub.blue, h2.blue, h2 .sub.blue, h3.blue, h3 .sub.blue, h4.blue, h4 .sub.blue, h5.blue, h5 .sub.blue, h6.blue, h6 .sub.blue {
+    color: #426b6f; }
+  h1.white, h1 .sub.white, h2.white, h2 .sub.white, h3.white, h3 .sub.white, h4.white, h4 .sub.white, h5.white, h5 .sub.white, h6.white, h6 .sub.white {
+    color: white; }
+
+h1 {
+  font-size: 5.11111rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h1 .sub {
+    font-size: 1.88889rem;
+    font-weight: 400;
+    display: block; }
+
+h2 {
+  font-size: 2.38889rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h2 .sub {
+    font-size: 1.38889rem;
+    font-weight: 400;
+    display: block; }
+
+h3 {
+  font-size: 1.55556rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h3 .sub {
+    font-size: 1.27778rem;
+    font-weight: 400;
+    display: block; }
+
+h4 {
+  font-size: 1.27778rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h4 .sub {
+    font-size: 1.16667rem;
+    font-weight: 400;
+    display: block; }
+
+h5 {
+  font-size: 1rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h5 .sub {
+    font-size: 1.05556rem;
+    font-weight: 400;
+    display: block; }
+
 p, ul, ol {
   margin-bottom: 20px; }
   p:last-child, ul:last-child, ol:last-child {
     margin-bottom: 0px; }
-  p .red, ul .red, ol .red {
-    color: #ca303c; }
-  p .blue, ul .blue, ol .blue {
-    color: #426b6f; }
-  p .turqoise, ul .turqoise, ol .turqoise {
-    color: #c8e3dc; }
-  p .yellow, ul .yellow, ol .yellow {
-    color: #eec633; }
-  p .green, ul .green, ol .green {
-    color: #a0a433; }
   p strong, p a, ul strong, ul a, ol strong, ol a {
     font-weight: 800; }
+
+a:not(.button).red, p.red, ul.red, ol.red, strong.red, span.red {
+  color: #ca303c; }
+
+a:not(.button).blue, p.blue, ul.blue, ol.blue, strong.blue, span.blue {
+  color: #426b6f; }
+
+a:not(.button).turqoise, p.turqoise, ul.turqoise, ol.turqoise, strong.turqoise, span.turqoise {
+  color: #c8e3dc; }
+
+a:not(.button).white, p.white, ul.white, ol.white, strong.white, span.white {
+  color: White; }
+
+a:not(.button).yellow, p.yellow, ul.yellow, ol.yellow, strong.yellow, span.yellow {
+  color: #eec633; }
+
+a:not(.button).green, p.green, ul.green, ol.green, strong.green, span.green {
+  color: #a0a433; }

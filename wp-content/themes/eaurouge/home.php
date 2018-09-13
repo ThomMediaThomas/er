@@ -27,7 +27,7 @@
 
 		<section class="section">
 			<div class="block image">
-				<img src="<?php echo get_template_directory_uri(); ?>/img/bg-sidebar.jpg" />
+				<img src="<?php echo get_template_directory_uri(); ?>/img/zwembad.jpg" />
 			</div>
 			<div class="block green">
 				<div class="content-wrapper">
@@ -41,11 +41,25 @@
 						<li><i class="icon-check"></i> Elke dag een ander uitgebreid recreatie-programma</li>
 						<li><i class="icon-check"></i> Goede uitvalsbasis voor tal van leuke uitjes</li>
 					</ul>
-					<a class="button yellow">Ik ben een knop <i class="icon-chevron-right"></i></a>
 				</div>
 			</div>
 		</section>
 
+		<section class="section">
+			<div class="block red">
+				<div class="content-wrapper">
+					<h2 class="white">
+						<span class="sub turqoise">Domain de l'eau rouge</span>
+						Ontdek dit pareltje
+					</h2>
+					<p class="white">Op camping l’Eau Rouge zijn voldoende voorzieningen om van uw vakantie naar de Belgische Ardennen een topvakantie te maken. Zo is onze camping voorzien van modern sanitair, een buitenzwembad, een speeltuin voor de kinderen en een ruime kantine met gezellig terras.</p>
+					<a class="button yellow">Bekijk ons foto-album <i class="icon-chevron-right"></i></a>
+				</div>
+			</div>
+			<div class="block image">
+				<img src="<?php echo get_template_directory_uri(); ?>/img/waterval.jpg" />
+			</div>
+		</section>
 	</main>
 
 <?php get_footer(); ?>

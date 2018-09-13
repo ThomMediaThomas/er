@@ -2,7 +2,6 @@
 
 	<main role="main">
 
-		Hallo allemaal!
 
 	</main>
 
