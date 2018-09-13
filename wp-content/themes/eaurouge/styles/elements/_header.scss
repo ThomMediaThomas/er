@@ -1,13 +1,15 @@
+$topbarHeight: 66px;
+
 #top-bar {
   background-color: $turqoise;
   color: $blue;
   text-align: right;
+  height: $topbarHeight;
 
   h5 {
     font-size: calculateRem(26px);
     margin-bottom: 0px;
   }
-
 
   strong, a{
     font-weight: $fancyExtraBold;
@@ -16,5 +18,47 @@
   a {
     color: $red;
     text-decoration: none;
+  }
+}
+
+#nav {
+  position: absolute;
+  top: $topbarHeight;
+  left: 0px;
+  width: 100%;
+
+  font-family: $fancyFont;
+  font-weight: $fancyExtraBold;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: calculateRem(22px);
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.4+0,0+100 */
+  background: -moz-linear-gradient(top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+
+  .content-wrapper {
+    padding: 0px $baseMargin;
+  }
+
+  li {
+    display: inline-block;
+  }
+
+  a {
+    padding: $baseMargin;
+    color: White;
+    text-decoration: none;
+    border-top: 0px solid $red;
+    @include transition(all, .2s, ease-in-out);
+    display: block;
+
+    &:hover {
+      color: $red;
+      padding-top: $baseMargin - 4px;
+      border-top: 4px solid $red;
+    }
   }
 }

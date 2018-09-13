@@ -1,6 +1,13 @@
 <?php /* Template Name: Homepage */ ?>
 <?php get_header(); ?>
 	<main role="main">
+		<section class="hero" style="background-image: url('<?php echo get_template_directory_uri(); ?>/img/uitzicht-weiland.jpg');">
+			<div class="content-wrapper">
+				<a href="/" title="Camping de l'eau rouge">
+					<img class="logo" src="<?php echo get_template_directory_uri(); ?>/img/logo.png" title="Domaine de l'eau rouge" alt="Domaine de l'eau rouge" />
+				</a>
+			</div>
+		</section>
 		<section class="section">
 			<div class="content-wrapper text">
 				<div class="main">
@@ -8,6 +15,7 @@
 						<span class="sub">Hartelijk welkom bij Camping de</span> l'eau rouge
 					</h1>
 					<p>De rust, het prachtig groene terrein, het riviertje l’Eau Rouge dat zich langs de camping slingert, maar ook de gemoedelijkheid, netheid, sfeer van rust en toch de verrassende afwisseling met veel avontuur en eigen buitenzwembad voor u en uw kinderen. Ontdek onze camping en beleef hier een heerlijke vakantie!</p>
+					<a class="button blue">Bekijk onze faciliteiten <i class="icon-chevron-right"></i></a>
 				</div>
 				<div class="aside">
 					<div class="box turqoise">

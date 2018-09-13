@@ -163,7 +163,8 @@ html, body {
 #top-bar {
   background-color: #c8e3dc;
   color: #426b6f;
-  text-align: right; }
+  text-align: right;
+  height: 66px; }
   #top-bar h5 {
     font-size: 1.44444rem;
     margin-bottom: 0px; }
@@ -172,6 +173,46 @@ html, body {
   #top-bar a {
     color: #ca303c;
     text-decoration: none; }
+
+#nav {
+  position: absolute;
+  top: 66px;
+  left: 0px;
+  width: 100%;
+  font-family: "Dosis", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1.22222rem;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.4+0,0+100 */
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0)));
+  background: -o-linear-gradient(top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', endColorstr='#00000000',GradientType=0 );
+  /* IE6-9 */ }
+  #nav .content-wrapper {
+    padding: 0px 20px; }
+  #nav li {
+    display: inline-block; }
+  #nav a {
+    padding: 20px;
+    color: White;
+    text-decoration: none;
+    border-top: 0px solid #ca303c;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    display: block; }
+    #nav a:hover {
+      color: #ca303c;
+      padding-top: 16px;
+      border-top: 4px solid #ca303c; }
 
 .section {
   display: table;
@@ -296,6 +337,15 @@ ul.usps {
     margin-right: 5px; }
   ul.usps.white {
     color: White; }
+
+.hero {
+  background-size: cover;
+  background-position: center center;
+  text-align: center;
+  padding: 80px 0; }
+  .hero .logo {
+    width: 300px;
+    height: auto; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Dosis", sans-serif;

@@ -8,21 +8,16 @@
 </div>
 <header id="header">
     <nav id="nav">
-        <ul>
-            <li><a href="#" title="">De camping</a></li>
-            <li><a href="#" title="">Activiteiten</a></li>
-            <li><a href="#" title="">Circuit van Spa</a></li>
-            <li><a href="#" title="">Omgeving</a></li>
-            <li><a href="#" title="">Nieuws</a></li>
-            <li><a href="#" title="">Foto's</a></li>
-            <li><a href="#" title="">Contact</a></li>
-        </ul>
+        <div class="content-wrapper">
+            <ul>
+                <li><a href="#" title="">De camping</a></li>
+                <li><a href="#" title="">Activiteiten</a></li>
+                <li><a href="#" title="">Circuit van Spa</a></li>
+                <li><a href="#" title="">Omgeving</a></li>
+                <li><a href="#" title="">Nieuws</a></li>
+                <li><a href="#" title="">Foto's</a></li>
+                <li><a href="#" title="">Contact</a></li>
+            </ul>
+        </div>
     </nav>
-    <div class="content-wrapper">
-        <h1>
-            <a href="/" title="Camping de l'eau rouge">
-                <img src="<?php echo get_template_directory_uri(); ?>/img/logo.png" title="Domaine de l'eau rouge" alt="Domaine de l'eau rouge" />
-            </a>
-        </h1>
-    </div>
 </header>
