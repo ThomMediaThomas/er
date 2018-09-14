@@ -226,15 +226,20 @@ html, body {
     display: table-cell;
     vertical-align: top; }
     .section .block.red {
-      background-color: #ca303c; }
+      background-color: #ca303c;
+      color: White; }
     .section .block.yellow {
-      background-color: #eec633; }
+      background-color: #eec633;
+      color: White; }
     .section .block.turqoise {
-      background-color: #c8e3dc; }
+      background-color: #c8e3dc;
+      color: White; }
     .section .block.green {
-      background-color: #a0a433; }
+      background-color: #a0a433;
+      color: White; }
     .section .block.blue {
-      background-color: #426b6f; }
+      background-color: #426b6f;
+      color: White; }
     .section .block.white {
       background-color: white; }
     .section .block.image {
@@ -302,7 +307,8 @@ html, body {
   -moz-transition: all 0.2s ease-in-out; }
   .button i {
     position: relative;
-    top: 2px; }
+    top: 2px;
+    margin-left: 20px; }
   .button.red {
     background-color: #ca303c; }
     .button.red:hover {

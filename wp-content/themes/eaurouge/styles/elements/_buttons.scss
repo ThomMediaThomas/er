@@ -16,6 +16,7 @@ $darken: 10%;
   i {
     position: relative;
     top: 2px;
+    margin-left: $baseMargin;
   }
 
   &.red {
