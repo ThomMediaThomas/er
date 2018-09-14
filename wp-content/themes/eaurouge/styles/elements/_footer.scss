@@ -1,0 +1,25 @@
+#footer {
+  background-color: $turqoise;
+  color: $blue;
+
+  .footer-block {
+    width: 30%;
+    float: left;
+
+    .footer-block-column {
+      float: left;
+      width: 50%;
+    }
+
+    &.first {
+      width: 40%;
+    }
+  }
+}
+
+#bottom-bar {
+  background-color: $blue;
+  color: $turqoise;
+  text-align: center;
+  font-size: calculateRem(16px);
+}

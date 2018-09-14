@@ -56,9 +56,9 @@ $topbarHeight: 66px;
     display: block;
 
     &:hover {
-      color: $red;
+      color: $yellow;
       padding-top: $baseMargin - 4px;
-      border-top: 4px solid $red;
+      border-top: 4px solid $yellow;
     }
   }
 }

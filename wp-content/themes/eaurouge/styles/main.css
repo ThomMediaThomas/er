@@ -210,9 +210,27 @@ html, body {
     -moz-transition: all 0.2s ease-in-out;
     display: block; }
     #nav a:hover {
-      color: #ca303c;
+      color: #eec633;
       padding-top: 16px;
-      border-top: 4px solid #ca303c; }
+      border-top: 4px solid #eec633; }
+
+#footer {
+  background-color: #c8e3dc;
+  color: #426b6f; }
+  #footer .footer-block {
+    width: 30%;
+    float: left; }
+    #footer .footer-block .footer-block-column {
+      float: left;
+      width: 50%; }
+    #footer .footer-block.first {
+      width: 40%; }
+
+#bottom-bar {
+  background-color: #426b6f;
+  color: #c8e3dc;
+  text-align: center;
+  font-size: 0.88889rem; }
 
 .section {
   display: table;
