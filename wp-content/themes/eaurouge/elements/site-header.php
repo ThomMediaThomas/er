@@ -9,15 +9,7 @@
 <header id="header">
     <nav id="nav">
         <div class="content-wrapper">
-            <ul>
-                <li><a href="#" title="">De camping</a></li>
-                <li><a href="#" title="">Activiteiten</a></li>
-                <li><a href="#" title="">Circuit van Spa</a></li>
-                <li><a href="#" title="">Omgeving</a></li>
-                <li><a href="#" title="">Nieuws</a></li>
-                <li><a href="#" title="">Foto's</a></li>
-                <li><a href="#" title="">Contact</a></li>
-            </ul>
+            <?php wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); ?>
         </div>
     </nav>
 </header>

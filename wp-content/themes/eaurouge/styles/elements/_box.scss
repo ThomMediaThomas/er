@@ -1,5 +1,4 @@
 .box {
-  padding: $baseMargin;
   @include border-radius(10px);
 
   &.red {

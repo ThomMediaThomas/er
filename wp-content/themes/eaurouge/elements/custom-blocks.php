@@ -32,10 +32,16 @@
                                     <img src="<?php echo get_sub_field('image'); ?>" />
                                 <?php endif; ?>
                                 <?php if ($sub_block_type == 'text'): ?>
-                                    <div class="content-wrapper">
-                                        <?php echo get_sub_field('text'); ?>
-                                        <?php get_template_part('/elements/buttons'); ?>
-                                    </div>
+                                    <?php if(get_row_index() != 1): ?>
+                                        <div class="box <?php echo get_sub_field('color'); ?>">
+                                    <?php endif; ?>
+                                        <div class="content-wrapper">
+                                            <?php echo get_sub_field('text'); ?>
+                                            <?php get_template_part('/elements/buttons'); ?>
+                                        </div>
+                                    <?php if(get_row_index() != 1): ?>
+                                        </div>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </div>
                         <?php endwhile; ?>

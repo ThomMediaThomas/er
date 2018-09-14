@@ -164,9 +164,12 @@ html, body {
   background-color: #c8e3dc;
   color: #426b6f;
   text-align: right;
-  height: 66px; }
+  height: 42px; }
+  #top-bar .content-wrapper {
+    padding-top: 10px;
+    padding-bottom: 10px; }
   #top-bar h5 {
-    font-size: 1.44444rem;
+    font-size: 1.22222rem;
     margin-bottom: 0px; }
   #top-bar strong, #top-bar a {
     font-weight: 800; }
@@ -176,7 +179,7 @@ html, body {
 
 #nav {
   position: absolute;
-  top: 66px;
+  top: 42px;
   left: 0px;
   width: 100%;
   font-family: "Dosis", sans-serif;
@@ -197,22 +200,39 @@ html, body {
   /* IE6-9 */ }
   #nav .content-wrapper {
     padding: 0px 20px; }
-  #nav li {
-    display: inline-block; }
-  #nav a {
-    padding: 20px;
-    color: White;
-    text-decoration: none;
-    border-top: 0px solid #ca303c;
-    -o-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    display: block; }
-    #nav a:hover {
+  #nav .menu-main-container > ul > li {
+    display: inline-block;
+    position: relative; }
+    #nav .menu-main-container > ul > li > a {
+      padding: 20px;
+      color: White;
+      text-decoration: none;
+      border-top: 0px solid #ca303c;
+      -o-transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
+      -webkit-transition: all 0.2s ease-in-out;
+      -moz-transition: all 0.2s ease-in-out;
+      display: block; }
+    #nav .menu-main-container > ul > li.current-menu-item > a, #nav .menu-main-container > ul > li > a:hover {
       color: #eec633;
       padding-top: 16px;
       border-top: 4px solid #eec633; }
+    #nav .menu-main-container > ul > li .sub-menu {
+      display: none;
+      position: absolute;
+      width: 150px;
+      top: 100%;
+      left: 50%;
+      margin-left: -75px;
+      background-color: #eec633;
+      color: White; }
+      #nav .menu-main-container > ul > li .sub-menu a {
+        color: #ca303c;
+        text-decoration: none; }
+        #nav .menu-main-container > ul > li .sub-menu a:hover {
+          color: #426b6f; }
+    #nav .menu-main-container > ul > li:hover .sub-menu {
+      display: block; }
 
 #footer {
   background-color: #c8e3dc;
@@ -266,8 +286,7 @@ html, body {
       overflow: hidden; }
       .section .block.image img {
         position: absolute;
-        top: 25%;
-        margin-top: -25%;
+        bottom: 0%;
         left: 0%;
         width: 100%;
         height: auto; }
@@ -280,7 +299,6 @@ html, body {
       margin-left: auto; }
 
 .box {
-  padding: 20px;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px; }
@@ -367,9 +385,18 @@ ul.usps {
   background-position: center center;
   text-align: center;
   padding: 80px 0; }
+  .hero .logo-holder {
+    margin-bottom: 20px;
+    display: block; }
   .hero .logo {
     width: 300px;
     height: auto; }
+    .hero .logo.small {
+      width: 200px; }
+  .hero h1, .hero h2 {
+    color: White; }
+  .hero h2 {
+    font-weight: 400; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Dosis", sans-serif;

@@ -4,9 +4,26 @@
   text-align: center;
   padding: $baseMargin*4 0;
 
+  .logo-holder {
+    margin-bottom: $baseMargin;
+    display: block;
+  }
+
   .logo {
     width: 300px;
     height: auto;
+
+    &.small {
+      width: 200px;
+    }
+  }
+
+  h1, h2 {
+    color: White;
+  }
+
+  h2 {
+    font-weight: $fancyRegular;
   }
 }
 

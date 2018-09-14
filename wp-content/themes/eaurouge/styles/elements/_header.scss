@@ -1,4 +1,4 @@
-$topbarHeight: 66px;
+$topbarHeight: 42px;
 
 #top-bar {
   background-color: $turqoise;
@@ -6,8 +6,13 @@ $topbarHeight: 66px;
   text-align: right;
   height: $topbarHeight;
 
+  .content-wrapper {
+    padding-top: $baseMargin/2;
+    padding-bottom: $baseMargin/2;
+  }
+
   h5 {
-    font-size: calculateRem(26px);
+    font-size: calculateRem(22px);
     margin-bottom: 0px;
   }
 
@@ -43,22 +48,47 @@ $topbarHeight: 66px;
     padding: 0px $baseMargin;
   }
 
-  li {
+  .menu-main-container > ul > li {
     display: inline-block;
-  }
+    position: relative;
 
-  a {
-    padding: $baseMargin;
-    color: White;
-    text-decoration: none;
-    border-top: 0px solid $red;
-    @include transition(all, .2s, ease-in-out);
-    display: block;
+    > a {
+      padding: $baseMargin;
+      color: White;
+      text-decoration: none;
+      border-top: 0px solid $red;
+      @include transition(all, .2s, ease-in-out);
+      display: block;
+    }
 
-    &:hover {
+    &.current-menu-item > a, > a:hover{
       color: $yellow;
       padding-top: $baseMargin - 4px;
       border-top: 4px solid $yellow;
+    }
+
+    .sub-menu {
+      display: none;
+      position: absolute;
+      width: 150px;
+      top: 100%;
+      left: 50%;
+      margin-left: -75px;
+      background-color: $yellow;
+      color: White;
+
+      a {
+        color: $red;
+        text-decoration: none;
+
+        &:hover {
+          color: $blue;
+        }
+      }
+    }
+
+    &:hover .sub-menu {
+      display: block;
     }
   }
 }
