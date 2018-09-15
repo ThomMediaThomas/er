@@ -1,0 +1,22 @@
+.rating-holder {
+  width: 220px;
+  height: 32px;
+  display: block;
+  position: relative;
+  background: url("../img/rating.png") no-repeat transparent top left;
+  left: -4px;
+  margin-bottom: $baseMargin/2;
+
+  .rating {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background: url("../img/rating.png") no-repeat transparent bottom left;
+  }
+
+  &.white, &.white .rating{
+    background-image: url("../img/rating-white.png");
+  }
+}

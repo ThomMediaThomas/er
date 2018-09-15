@@ -1,0 +1,30 @@
+.column-holder {
+  @include clearfix;
+  margin-left: -$baseMargin;
+  margin-right: -$baseMargin;
+
+  .column {
+    float: left;
+
+    > .content-wrapper {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+
+    &.third {
+      width: 33.33%;
+    }
+
+    &.half {
+      width: 50%;
+    }
+
+    &.main {
+        width: 75%;
+    }
+
+    &.aside {
+      width: 25%;
+    }
+  }
+}

@@ -1,0 +1,43 @@
+.reviews {
+  > .content-wrapper {
+    padding-top: $baseMargin*3;
+    padding-bottom: $baseMargin*3;
+  }
+
+  .review {
+    text-align: center;
+
+    .rating-holder {
+      margin: 0 auto $baseMargin auto;
+    }
+
+    .quote {
+      font-size: calculateRem(36px);
+      line-height: 38px;
+      font-family: $writtenFont;
+      display: block;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .author {
+      font-size: calculateRem(26px);
+      font-famiy: $fancyFont;
+      text-transform: uppercase;
+      font-weight: $fancyExtraBold;
+      display: block;
+
+      span {
+        font-weight: $fancyRegular;
+      }
+    }
+
+    .source {
+      display: block;
+      font-size: calculateRem(12px);
+      color: $turqoise;
+      text-transform: uppercase;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.slider {
+  position: relative;
+  overflow:hidden;
+
+  .slides {
+    @include clearfix;
+    position: relative;
+    left: 0;
+    @include transition(all, .5s, ease-in-out);
+  }
+
+  .slide {
+    float: left;
+  }
+
+  .slide-nav {
+    position: absolute;
+    font-size: calculateRem(40px);
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    top: 50%;
+    margin-top: -20px;
+
+    &.previous {
+      left: 0px;
+    }
+
+    &.next {
+      right: 0px;
+    }
+  }
+}

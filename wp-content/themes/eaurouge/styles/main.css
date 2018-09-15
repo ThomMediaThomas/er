@@ -160,6 +160,11 @@ html, body {
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 #top-bar {
   background-color: #c8e3dc;
   color: #426b6f;
@@ -235,15 +240,33 @@ html, body {
       display: block; }
 
 #footer {
-  background-color: #c8e3dc;
+  background: url(../img/footer-bg.png) no-repeat #c8e3dc bottom right;
   color: #426b6f; }
+  #footer ul.horizontal li {
+    opacity: 1;
+    -o-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out; }
+  #footer ul.horizontal:hover li {
+    opacity: 0.5; }
+    #footer ul.horizontal:hover li:hover {
+      opacity: 1; }
+  #footer .footer-block-row {
+    margin-bottom: 20px; }
+    #footer .footer-block-row:after {
+      content: "";
+      display: table;
+      clear: both; }
+    #footer .footer-block-row:last-child {
+      margin-bottom: 0px; }
   #footer .footer-block {
-    width: 30%;
+    width: 60%;
     float: left; }
     #footer .footer-block .footer-block-column {
       float: left;
       width: 50%; }
-    #footer .footer-block.first {
+    #footer .footer-block.second {
       width: 40%; }
 
 #bottom-bar {
@@ -301,7 +324,11 @@ html, body {
 .box {
   border-radius: 10px;
   -webkit-border-radius: 10px;
-  -moz-border-radius: 10px; }
+  -moz-border-radius: 10px;
+  overflow: hidden; }
+  .box img {
+    width: 100%;
+    height: auto; }
   .box.red {
     background-color: #ca303c; }
   .box.yellow {
@@ -314,16 +341,6 @@ html, body {
     background-color: #426b6f; }
   .box.white {
     background-color: white; }
-
-.text .main {
-  width: 75%;
-  float: left;
-  padding-right: 20px; }
-
-.text .aside {
-  width: 25%;
-  float: right;
-  padding-left: 20px; }
 
 .button {
   padding: 10px 20px;
@@ -345,6 +362,11 @@ html, body {
     position: relative;
     top: 2px;
     margin-left: 20px; }
+  .button.small {
+    padding: 10px;
+    font-size: 1rem; }
+    .button.small i {
+      margin-left: 10px; }
   .button.red {
     background-color: #ca303c; }
     .button.red:hover {
@@ -380,6 +402,10 @@ ul.usps {
   ul.usps.white {
     color: White; }
 
+ul.horizontal li, ol.horizontal li {
+  display: inline-block;
+  margin-right: 10px; }
+
 .hero {
   background-size: cover;
   background-position: center center;
@@ -390,13 +416,113 @@ ul.usps {
     display: block; }
   .hero .logo {
     width: 300px;
-    height: auto; }
+    height: auto;
+    margin: 0 auto; }
     .hero .logo.small {
       width: 200px; }
   .hero h1, .hero h2 {
-    color: White; }
+    color: White;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8); }
   .hero h2 {
     font-weight: 400; }
+
+.column-holder {
+  margin-left: -20px;
+  margin-right: -20px; }
+  .column-holder:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .column-holder .column {
+    float: left; }
+    .column-holder .column > .content-wrapper {
+      padding-top: 0px;
+      padding-bottom: 0px; }
+    .column-holder .column.third {
+      width: 33.33%; }
+    .column-holder .column.half {
+      width: 50%; }
+    .column-holder .column.main {
+      width: 75%; }
+    .column-holder .column.aside {
+      width: 25%; }
+
+.rating-holder {
+  width: 220px;
+  height: 32px;
+  display: block;
+  position: relative;
+  background: url("../img/rating.png") no-repeat transparent top left;
+  left: -4px;
+  margin-bottom: 10px; }
+  .rating-holder .rating {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background: url("../img/rating.png") no-repeat transparent bottom left; }
+  .rating-holder.white, .rating-holder.white .rating {
+    background-image: url("../img/rating-white.png"); }
+
+.slider {
+  position: relative;
+  overflow: hidden; }
+  .slider .slides {
+    position: relative;
+    left: 0;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out; }
+    .slider .slides:after {
+      content: "";
+      display: table;
+      clear: both; }
+  .slider .slide {
+    float: left; }
+  .slider .slide-nav {
+    position: absolute;
+    font-size: 2.22222rem;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    top: 50%;
+    margin-top: -20px; }
+    .slider .slide-nav.previous {
+      left: 0px; }
+    .slider .slide-nav.next {
+      right: 0px; }
+
+.reviews > .content-wrapper {
+  padding-top: 60px;
+  padding-bottom: 60px; }
+
+.reviews .review {
+  text-align: center; }
+  .reviews .review .rating-holder {
+    margin: 0 auto 20px auto; }
+  .reviews .review .quote {
+    font-size: 2rem;
+    line-height: 38px;
+    font-family: "Caveat Brush", cursive;
+    display: block;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto; }
+  .reviews .review .author {
+    font-size: 1.44444rem;
+    font-famiy: "Dosis", sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    display: block; }
+    .reviews .review .author span {
+      font-weight: 400; }
+  .reviews .review .source {
+    display: block;
+    font-size: 0.66667rem;
+    color: #c8e3dc;
+    text-transform: uppercase; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Dosis", sans-serif;
@@ -465,12 +591,31 @@ h5 {
     font-weight: 400;
     display: block; }
 
+img {
+  max-width: 100%;
+  height: auto;
+  display: block; }
+  img.aligncenter {
+    margin: 0 auto; }
+  img.alignleft {
+    margin: 0 auto 0 0; }
+  img.alignright {
+    margin: 0  0 0 auto; }
+
 p, ul, ol {
   margin-bottom: 20px; }
-  p:last-child, ul:last-child, ol:last-child {
+  p:last-child, p.no-margin, ul:last-child, ul.no-margin, ol:last-child, ol.no-margin {
     margin-bottom: 0px; }
   p strong, p a, ul strong, ul a, ol strong, ol a {
     font-weight: 800; }
+
+a:not(.button) {
+  text-decoration: none;
+  color: #ca303c; }
+
+a:not(.button).smaller, p.smaller, ul.smaller, ol.smaller, strong.smaller, span.smaller {
+  font-size: 0.8em;
+  font-style: italic; }
 
 a:not(.button).red, p.red, ul.red, ol.red, strong.red, span.red {
   color: #ca303c; }

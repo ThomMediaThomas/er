@@ -1,9 +1,35 @@
 #footer {
-  background-color: $turqoise;
+  background: url(../img/footer-bg.png) no-repeat $turqoise bottom right;
   color: $blue;
 
+  ul.horizontal {
+    li {
+      opacity: 1;
+      @include transition (all, .25s, ease-in-out);
+    }
+
+    &:hover {
+      li {
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .footer-block-row {
+    @include clearfix;
+    margin-bottom: $baseMargin;
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
   .footer-block {
-    width: 30%;
+    width: 60%;
     float: left;
 
     .footer-block-column {
@@ -11,7 +37,7 @@
       width: 50%;
     }
 
-    &.first {
+    &.second {
       width: 40%;
     }
   }

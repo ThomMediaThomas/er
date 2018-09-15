@@ -16,3 +16,7 @@ html, body {
 * {
   box-sizing: border-box;
 }
+
+.clearfix {
+  @include clearfix;
+}

@@ -1,40 +1,56 @@
 <footer id="footer">
     <div class="content-wrapper">
         <div class="footer-block first">
-            <h4 class="red">Ardennen camping L'eau rouge</h4>
-            <div class="footer-block-column">
-                <p>L’eau rouge<br />
-                    Chenaux 25<br />
-                    4970 Stavelot (België)</p>
-                <p>
-                    <strong>T: &nbsp;</strong><a href="tel:003280863075" class="red">0032 (0)80 - 86 30 75</a><br />
-                    <strong>M: &nbsp;</strong><a href="mailto:info@eaurouge.nl" class="red">info@eaurouge.nl</a>
-                </p>
+            <h4 class="red"><?php the_field('contact_block_title', 'options'); ?></h4>
+            <div class="footer-block-row">
+                <div class="footer-block-column">
+                    <?php the_field('contact_block_1', 'option'); ?>
+                </div>
+                <div class="footer-block-column">
+                    <?php the_field('contact_block_2', 'option'); ?>
+                </div>
             </div>
-            <div class="footer-block-column">
-                <p><strong>GPS-adres:</strong><br />
-                    Route de L’Eau Rouge<br />
-                    4970 Stavelot, België
-                </p>
+            <div class="footer-block-row">
+                <h5 class="blue"><?php the_field('sitemap_block_title', 'options'); ?></h5>
+                <div class="footer-block-column">
+                    <?php the_field('sitemap_block_1', 'option'); ?>
+                </div>
+                <div class="footer-block-column">
+                    <?php the_field('sitemap_block_2', 'option'); ?>
+                </div>
             </div>
         </div>
         <div class="footer-block second">
-            <h4 class="red">Ontdek Camping L'eau Rouge</h4>
-            <ul>
-                <li>De camping</li>
-                <li>Activiteiten</li>
-                <li>Circuit van SPA</li>
-                <li>Omgeving</li>
-                <li>Nieuws</li>
-                <li>Foto's</li>
-                <li>Contact</li>
-            </ul>
-        </div>
-        <div class="footer-block third">
-            <h4 class="red">Volg ons ook op</h4>
-            <p>Facebook, Twitter, Instagram, ...</p>
-            <h5 class="blue">Onze vrienden</h5>
-            <p>Plopsa, ANWB, Facebook, ...</p>
+            <h4 class="red"><?php the_field('rating_title', 'options'); ?></h4>
+            <?php $rating = (float)get_field('rating', 'options'); ?>
+            <span class="rating-holder white">
+                <span class="rating" style="width: <?php echo ($rating/5)*100; ?>%;"></span>
+            </span>
+            <?php the_field('rating_text', 'options'); ?>
+            <h4 class="red"><?php the_field('follow_block_title', 'options'); ?></h4>
+            <?php if(have_rows('follow_block_mediums', 'options')): ?>
+                <ul class="horizontal">
+                    <?php while( have_rows('follow_block_mediums', 'options') ): the_row(); ?>
+                        <li>
+                            <a href="<?php the_sub_field('link'); ?>" title="<?php the_sub_field('title'); ?>" target="_blank">
+                                <img src="<?php the_sub_field('image'); ?>" alt="<?php the_sub_field('title'); ?>" title="<?php the_sub_field('title'); ?>" />
+                            </a>
+                        </li>
+                    <?php endwhile; ?>
+                </ul>
+            <?php endif; ?>
+            <h5 class="blue"><?php the_field('friends_title', 'options'); ?></h5>
+            <?php if(have_rows('friends', 'options')): ?>
+                <ul class="horizontal">
+                    <?php while( have_rows('friends', 'options') ): the_row(); ?>
+                        <li>
+                            <a href="<?php the_sub_field('link'); ?>" title="<?php the_sub_field('title'); ?>" target="_blank">
+                                <img src="<?php the_sub_field('image'); ?>" alt="<?php the_sub_field('title'); ?>" title="<?php the_sub_field('title'); ?>" />
+                            </a>
+                        </li>
+                    <?php endwhile; ?>
+                </ul>
+            <?php endif; ?>
         </div>
     </div>
 </footer>

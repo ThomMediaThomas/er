@@ -19,6 +19,15 @@ $darken: 10%;
     margin-left: $baseMargin;
   }
 
+  &.small {
+    padding: $baseMargin/2;
+    font-size: calculateRem(18px);
+
+    i {
+      margin-left: $baseMargin/2;
+    }
+  }
+
   &.red {
     background-color: $red;
 
