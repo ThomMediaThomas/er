@@ -1,4 +1,4 @@
-<section class="hero" style="background-image: url('<?php echo get_field('image'); ?>;">
+<section class="hero" style="background-image: url('<?php echo get_field('image'); ?>');">
     <div class="content-wrapper">
         <?php if (get_field('show_logo')) : ?>
             <a href="/" title="Camping de l'eau rouge" class="logo-holder">
