@@ -2,7 +2,7 @@
     <div class="content-wrapper">
         <h5>
             <strong>Vragen?</strong>
-            <span>Bel ons op <a href="tel:0123456789" title="Bel ons">0123456789</a></span>
+            <span>Bel ons op <a href="tel:0123456789" title="Bel ons">0032 (0)80 – 86 30 75</a></span>
         </h5>
     </div>
 </div>
