@@ -280,6 +280,9 @@ html, body {
   text-align: center;
   font-size: 0.88889rem; }
 
+.section-intro {
+  text-align: center; }
+
 .section {
   display: table;
   width: 100%; }

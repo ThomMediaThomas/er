@@ -1,6 +1,7 @@
 <?php if( have_rows('blocks') ): ?>
     <?php while( have_rows('blocks') ): the_row();
         $block_type = get_sub_field('block_type');
+        $intro = get_sub_field('intro');
         ?>
         <section class="section">
             <?php if( have_rows('sub_blocks') ): ?>
@@ -51,6 +52,9 @@
                 <?php endif; ?>
                 <?php if ($block_type == 'three-panes'): ?>
                     <div class="content-wrapper">
+                        <div class="section-intro">
+                            <?php echo $intro; ?>
+                        </div>
                         <div class="column-holder">
                             <?php while( have_rows('sub_blocks') ): the_row();
                                 $sub_block_type = get_sub_field('sub_block_type');
