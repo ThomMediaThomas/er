@@ -3,12 +3,21 @@ $topbarHeight: 42px;
 #top-bar {
   background-color: $turqoise;
   color: $blue;
-  text-align: right;
   height: $topbarHeight;
 
   .content-wrapper {
     padding-top: $baseMargin/2;
     padding-bottom: $baseMargin/2;
+  }
+
+  .left, .right {
+    float: left;
+    width: 50%;
+    min-height: 10px;
+
+    &.right {
+      text-align: right;
+    }
   }
 
   h5 {

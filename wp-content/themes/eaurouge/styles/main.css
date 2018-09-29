@@ -168,11 +168,16 @@ html, body {
 #top-bar {
   background-color: #c8e3dc;
   color: #426b6f;
-  text-align: right;
   height: 42px; }
   #top-bar .content-wrapper {
     padding-top: 10px;
     padding-bottom: 10px; }
+  #top-bar .left, #top-bar .right {
+    float: left;
+    width: 50%;
+    min-height: 10px; }
+    #top-bar .left.right, #top-bar .right.right {
+      text-align: right; }
   #top-bar h5 {
     font-size: 1.22222rem;
     margin-bottom: 0px; }
