@@ -14,12 +14,6 @@
 		</div>
 	</section>
 
-	<section>
-		<div class="content-wrapper">
-			<?php the_content(get_option('page_for_posts')); ?>
-		</div>
-	</section>
-
 	<?php
 		$counter = 0;
 		if (is_home() && have_posts()) : while ( have_posts() ) : the_post();

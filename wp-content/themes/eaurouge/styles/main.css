@@ -362,11 +362,17 @@ html, body {
     position: relative;
     top: 2px;
     margin-left: 20px; }
+    .button i.first {
+      margin-left: 0px;
+      margin-right: 20px; }
   .button.small {
     padding: 10px;
     font-size: 1rem; }
     .button.small i {
       margin-left: 10px; }
+      .button.small i.first {
+        margin-left: 0px;
+        margin-right: 10px; }
   .button.red {
     background-color: #ca303c; }
     .button.red:hover {
