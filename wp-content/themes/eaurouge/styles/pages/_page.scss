@@ -99,15 +99,15 @@ img {
   display: block;
 
   &.aligncenter {
-    margin: 0 auto;
+    text-align: center;
   }
 
   &.alignleft {
-    margin: 0 auto 0 0;
+    text-align: left;
   }
 
   &.alignright {
-    margin: 0  0 0 auto;
+    text-align: right;
   }
 }
 
@@ -120,6 +120,22 @@ p, ul, ol {
 
   strong, a {
     font-weight: $fancyExtraBold;
+  }
+
+  &.note {
+    font-style: italic;
+  }
+
+  &.aligncenter {
+    margin: 0 auto;
+  }
+
+  &.alignleft {
+    margin: 0 auto 0 0;
+  }
+
+  &.alignright {
+    margin: 0  0 0 auto;
   }
 }
 
@@ -156,5 +172,28 @@ a:not(.button), p, ul, ol, strong, span {
 
   &.green {
     color: $green;
+  }
+}
+
+hr {
+  border: 0px solid $turqoise;
+  height: 1px;
+  background-color: $turqoise;
+  display: block;
+  margin: $baseMargin 0;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px;
+  margin-right: $baseMargin/2;
+  font-family: $fancyFont;
+  font-weight: $fancyExtraBold;
+  color: white;
+  background-color: $green;
+  text-transform: uppercase;
+
+  &.category {
+    background-color: $blue;
   }
 }

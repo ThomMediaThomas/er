@@ -426,6 +426,24 @@ ul.horizontal li, ol.horizontal li {
   .hero h2 {
     font-weight: 400; }
 
+.rating-holder {
+  width: 220px;
+  height: 32px;
+  display: block;
+  position: relative;
+  background: url("../img/rating.png") no-repeat transparent top left;
+  left: -4px;
+  margin-bottom: 10px; }
+  .rating-holder .rating {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background: url("../img/rating.png") no-repeat transparent bottom left; }
+  .rating-holder.white, .rating-holder.white .rating {
+    background-image: url("../img/rating-white.png"); }
+
 .column-holder {
   margin-left: -20px;
   margin-right: -20px; }
@@ -446,24 +464,10 @@ ul.horizontal li, ol.horizontal li {
       width: 75%; }
     .column-holder .column.aside {
       width: 25%; }
-
-.rating-holder {
-  width: 220px;
-  height: 32px;
-  display: block;
-  position: relative;
-  background: url("../img/rating.png") no-repeat transparent top left;
-  left: -4px;
-  margin-bottom: 10px; }
-  .rating-holder .rating {
-    position: absolute;
-    width: 50%;
-    height: 100%;
-    top: 0px;
-    left: 0px;
-    background: url("../img/rating.png") no-repeat transparent bottom left; }
-  .rating-holder.white, .rating-holder.white .rating {
-    background-image: url("../img/rating-white.png"); }
+    .column-holder .column.single-narrowed {
+      float: none;
+      width: 75%;
+      margin: 0 auto; }
 
 .slider {
   position: relative;
@@ -596,11 +600,11 @@ img {
   height: auto;
   display: block; }
   img.aligncenter {
-    margin: 0 auto; }
+    text-align: center; }
   img.alignleft {
-    margin: 0 auto 0 0; }
+    text-align: left; }
   img.alignright {
-    margin: 0  0 0 auto; }
+    text-align: right; }
 
 p, ul, ol {
   margin-bottom: 20px; }
@@ -608,6 +612,14 @@ p, ul, ol {
     margin-bottom: 0px; }
   p strong, p a, ul strong, ul a, ol strong, ol a {
     font-weight: 800; }
+  p.note, ul.note, ol.note {
+    font-style: italic; }
+  p.aligncenter, ul.aligncenter, ol.aligncenter {
+    margin: 0 auto; }
+  p.alignleft, ul.alignleft, ol.alignleft {
+    margin: 0 auto 0 0; }
+  p.alignright, ul.alignright, ol.alignright {
+    margin: 0  0 0 auto; }
 
 a:not(.button) {
   text-decoration: none;
@@ -634,3 +646,22 @@ a:not(.button).yellow, p.yellow, ul.yellow, ol.yellow, strong.yellow, span.yello
 
 a:not(.button).green, p.green, ul.green, ol.green, strong.green, span.green {
   color: #a0a433; }
+
+hr {
+  border: 0px solid #c8e3dc;
+  height: 1px;
+  background-color: #c8e3dc;
+  display: block;
+  margin: 20px 0; }
+
+.tag {
+  display: inline-block;
+  padding: 5px;
+  margin-right: 10px;
+  font-family: "Dosis", sans-serif;
+  font-weight: 800;
+  color: white;
+  background-color: #a0a433;
+  text-transform: uppercase; }
+  .tag.category {
+    background-color: #426b6f; }
