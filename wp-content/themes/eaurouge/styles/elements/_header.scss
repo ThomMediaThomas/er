@@ -57,6 +57,10 @@ $topbarHeight: 42px;
     padding: 0px $baseMargin;
   }
 
+  ul {
+    list-style: none;
+  }
+
   .menu-main-container > ul > li {
     display: inline-block;
     position: relative;
@@ -77,27 +81,64 @@ $topbarHeight: 42px;
     }
 
     .sub-menu {
-      display: none;
+      opacity: 0;
+      visibility: hidden;
       position: absolute;
-      width: 150px;
+      width: 250px;
       top: 100%;
       left: 50%;
-      margin-left: -75px;
+      margin-left: -125px;
       background-color: $yellow;
       color: White;
 
-      a {
-        color: $red;
-        text-decoration: none;
+      @include transition(all, .25s, ease-in-out);
+      @include transform(translateY(40px));
 
-        &:hover {
-          color: $blue;
+      -webkit-box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+         -moz-box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+              box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+
+      &:before {
+        $arrowSize: 15px;
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: $arrowSize solid transparent;
+        border-right: $arrowSize solid transparent;
+        border-bottom: $arrowSize solid $yellow;
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        margin-left: -$arrowSize;
+        margin-top: -$arrowSize;
+      }
+
+      li {
+        border-bottom: 1px solid $red;
+
+        a {
+          color: $red;
+          display: block;
+          text-decoration: none;
+          padding: $baseMargin/3;
+          @include transition(all, .25s, ease-in-out);
+        }
+
+        &:hover a {
+          color: White;
+          background-color: $red;
+        }
+
+        &:last-child {
+          border-bottom: 0px;
         }
       }
     }
 
     &:hover .sub-menu {
-      display: block;
+      visibility: visible;
+      opacity: 1;
+      @include transform(translateY(0px));
     }
   }
 }

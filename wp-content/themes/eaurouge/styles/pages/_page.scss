@@ -99,15 +99,15 @@ img {
   display: block;
 
   &.aligncenter {
-    text-align: center;
+    margin: 0 auto;
   }
 
   &.alignleft {
-    text-align: left;
+    margin: 0 auto 0 0;
   }
 
   &.alignright {
-    text-align: right;
+    margin: 0  0 0 auto;
   }
 }
 
@@ -127,15 +127,19 @@ p, ul, ol {
   }
 
   &.aligncenter {
-    margin: 0 auto;
+    text-align: center;
   }
 
   &.alignleft {
-    margin: 0 auto 0 0;
+    text-align: left;
   }
 
   &.alignright {
-    margin: 0  0 0 auto;
+    text-align: right;
+  }
+
+  a {
+    text-decoration: underline;
   }
 }
 

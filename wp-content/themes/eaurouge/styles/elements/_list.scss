@@ -13,6 +13,11 @@ ul.usps {
   }
 }
 
+ul {
+  list-style: circle;
+  margin-left: $baseMargin;
+}
+
 ul.horizontal, ol.horizontal {
   li {
     display: inline-block;
