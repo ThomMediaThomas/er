@@ -10,14 +10,17 @@
                         $sub_block_type = get_sub_field('sub_block_type');
                         $color = get_sub_field('color');
                         ?>
-                        <div class="block <?php echo $sub_block_type . ' ' . $color; ?>">
                             <?php if ($sub_block_type == 'image'): ?>
-                                <img src="<?php echo get_sub_field('image'); ?>" />
+                                <div class="block <?php echo $sub_block_type . ' ' . $color; ?>" style="background-image: url('<?php echo get_sub_field('image'); ?>')">
+                                    <img src="<?php echo get_sub_field('image'); ?>" />
+                                </div>
                             <?php endif; ?>
                             <?php if ($sub_block_type == 'text'): ?>
-                                <div class="content-wrapper">
-                                    <?php echo get_sub_field('text'); ?>
-                                    <?php get_template_part('/elements/buttons'); ?>
+                                <div class="block <?php echo $sub_block_type . ' ' . $color; ?>">
+                                    <div class="content-wrapper">
+                                        <?php echo get_sub_field('text'); ?>
+                                        <?php get_template_part('/elements/buttons'); ?>
+                                    </div>
                                 </div>
                             <?php endif; ?>
                         </div>

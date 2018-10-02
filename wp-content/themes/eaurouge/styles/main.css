@@ -358,13 +358,15 @@ html, body {
     .section .block.image {
       position: relative;
       background-color: #426b6f;
-      overflow: hidden; }
+      overflow: hidden;
+      background-size: cover; }
       .section .block.image img {
-        position: absolute;
-        bottom: 0%;
+        opacity: 0;
+        /*position: absolute;
+        top: 0%;
         left: 0%;
-        width: 100%;
-        height: auto; }
+        width: auto;
+        height: 100%;*/ }
     .section .block .content-wrapper {
       margin: 0;
       max-width: 600px;
