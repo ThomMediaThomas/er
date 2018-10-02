@@ -359,9 +359,10 @@ html, body {
       position: relative;
       background-color: #426b6f;
       overflow: hidden;
-      background-size: cover; }
+      background-size: cover;
+      background-position: center center; }
       .section .block.image img {
-        opacity: 0;
+        display: none;
         /*position: absolute;
         top: 0%;
         left: 0%;

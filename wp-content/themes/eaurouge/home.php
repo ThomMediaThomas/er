@@ -20,7 +20,7 @@
 	?>
 		<section class="section">
 			<?php if($counter%2 == 0): ?>
-				<div class="block image turqoise">
+				<div class="block image turqoise" style="background-image: url('<?php echo get_the_post_thumbnail_url(); ?>')">
 					<?php echo the_post_thumbnail(); ?>
 				</div>
 			<?php endif; ?>
@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<?php if($counter%2 != 0): ?>
-				<div class="block image turqoise">
+				<div class="block image turqoise" style="background-image: url('<?php echo get_the_post_thumbnail_url(); ?>')">
 					<?php echo the_post_thumbnail(); ?>
 				</div>
 			<?php endif; ?>
