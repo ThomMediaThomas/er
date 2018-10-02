@@ -19,6 +19,11 @@ h1, h2, h3, h4, h5, h6 {
     color: $green;
   }
 
+  &.yellow, .sub.yellow{
+    color: $yellow;
+  }
+
+
   &.blue, .sub.blue{
     color: $blue;
   }
@@ -122,10 +127,6 @@ p, ul, ol {
     font-weight: $fancyExtraBold;
   }
 
-  &.note {
-    font-style: italic;
-  }
-
   &.aligncenter {
     text-align: center;
   }
@@ -142,6 +143,11 @@ p, ul, ol {
     text-decoration: underline;
   }
 }
+
+em, .note {
+  font-style: italic;
+}
+
 
 a:not(.button) {
   text-decoration: none;
@@ -199,5 +205,36 @@ hr {
 
   &.category {
     background-color: $blue;
+  }
+}
+
+table {
+  margin-bottom: $baseMargin;
+  width: 100%;
+  vertical-align: top;
+  table-layout: fixed;
+  text-align: left;
+
+
+  thead tr {
+    border-bottom: 2px solid $lightGrey;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid $lightGrey;
+
+    &:last-child {
+      border-bottom: 0px;
+    }
+  }
+
+  th {
+    font-family: $fancyFont;
+    text-transform: uppercase;
+    font-weight: $fancyExtraBold;
+  }
+
+  td, th {
+    padding: $baseMargin;
   }
 }

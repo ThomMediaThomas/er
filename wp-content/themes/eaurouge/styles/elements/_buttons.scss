@@ -10,6 +10,11 @@ $darken: 10%;
   color: White;
   text-decoration: none;
   cursor: pointer;
+  margin-bottom: $baseMargin;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
 
   @include transition(all, .2s, ease-in-out);
 

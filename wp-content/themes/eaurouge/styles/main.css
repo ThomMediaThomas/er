@@ -406,10 +406,13 @@ html, body {
   color: White;
   text-decoration: none;
   cursor: pointer;
+  margin-bottom: 20px;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out; }
+  .button:last-child {
+    margin-bottom: 0px; }
   .button i {
     position: relative;
     top: 2px;
@@ -603,6 +606,8 @@ h1, h2, h3, h4, h5, h6 {
     color: #ca303c; }
   h1.green, h1 .sub.green, h2.green, h2 .sub.green, h3.green, h3 .sub.green, h4.green, h4 .sub.green, h5.green, h5 .sub.green, h6.green, h6 .sub.green {
     color: #a0a433; }
+  h1.yellow, h1 .sub.yellow, h2.yellow, h2 .sub.yellow, h3.yellow, h3 .sub.yellow, h4.yellow, h4 .sub.yellow, h5.yellow, h5 .sub.yellow, h6.yellow, h6 .sub.yellow {
+    color: #eec633; }
   h1.blue, h1 .sub.blue, h2.blue, h2 .sub.blue, h3.blue, h3 .sub.blue, h4.blue, h4 .sub.blue, h5.blue, h5 .sub.blue, h6.blue, h6 .sub.blue {
     color: #426b6f; }
   h1.white, h1 .sub.white, h2.white, h2 .sub.white, h3.white, h3 .sub.white, h4.white, h4 .sub.white, h5.white, h5 .sub.white, h6.white, h6 .sub.white {
@@ -675,8 +680,6 @@ p, ul, ol {
     margin-bottom: 0px; }
   p strong, p a, ul strong, ul a, ol strong, ol a {
     font-weight: 800; }
-  p.note, ul.note, ol.note {
-    font-style: italic; }
   p.aligncenter, ul.aligncenter, ol.aligncenter {
     text-align: center; }
   p.alignleft, ul.alignleft, ol.alignleft {
@@ -685,6 +688,9 @@ p, ul, ol {
     text-align: right; }
   p a, ul a, ol a {
     text-decoration: underline; }
+
+em, .note {
+  font-style: italic; }
 
 a:not(.button) {
   text-decoration: none;
@@ -730,3 +736,22 @@ hr {
   text-transform: uppercase; }
   .tag.category {
     background-color: #426b6f; }
+
+table {
+  margin-bottom: 20px;
+  width: 100%;
+  vertical-align: top;
+  table-layout: fixed;
+  text-align: left; }
+  table thead tr {
+    border-bottom: 2px solid #b8b8b8; }
+  table tbody tr {
+    border-bottom: 1px solid #b8b8b8; }
+    table tbody tr:last-child {
+      border-bottom: 0px; }
+  table th {
+    font-family: "Dosis", sans-serif;
+    text-transform: uppercase;
+    font-weight: 800; }
+  table td, table th {
+    padding: 20px; }
