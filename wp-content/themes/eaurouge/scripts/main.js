@@ -1,8 +1,67 @@
 $(document).ready(function () {
     $('.slider').each(function () {
         (new Slider($(this))).init();
-    })
+    });
+
+    $('#quick-booking').each(function () {
+        (new QuickBooking($(this))).init();
+    });
+
+    $('.number-input').each(function () {
+        (new NumberInput($(this))).init();
+    });
 });
+
+function NumberInput($element) {
+    var self = this;
+    self.$element = $element;
+    self.$input = self.$element.find('input');
+    self.$up = self.$element.find('.up');
+    self.$down = self.$element.find('.down');
+
+    self.init = function () {
+        self.bindEvents();
+    };
+
+    self.bindEvents = function () {
+        self.$up.on('click', function () {
+            self.setValue(self.getValue() + 1);
+        });
+
+        self.$down.on('click', function () {
+            if (self.getValue() >= 1) {
+                self.setValue(self.getValue() - 1);
+            }
+        });
+    };
+
+    self.getValue = function () {
+        return parseInt(self.$input.val() ? self.$input.val() : 0);
+    };
+
+    self.setValue = function (value) {
+        self.$input.val(value);
+    };
+}
+
+function QuickBooking($element) {
+    var self = this;
+    self.$element = $element;
+    self.$tabs = this.$element.find('.tab');
+
+    self.init = function () {
+        self.bindEvents();
+    };
+
+    self.bindEvents = function () {
+        self.$tabs.on('click', function () {
+            self.$element.find('.tab-content.active').removeClass('active');
+            self.$element.find($(this).attr('href')).addClass('active');
+            return false;
+        });
+    };
+
+}
 
 function Slider($element) {
     var self = this;

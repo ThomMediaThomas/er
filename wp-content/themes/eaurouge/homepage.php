@@ -4,6 +4,7 @@
 <main role="main">
 
 	<?php get_template_part('/elements/hero'); ?>
+	<?php get_template_part('/elements/quick-booking'); ?>
 	<?php get_template_part('/elements/custom-blocks'); ?>
 	<?php get_template_part('/elements/reviews'); ?>
 

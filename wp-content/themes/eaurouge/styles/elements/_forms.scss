@@ -1,0 +1,95 @@
+$inputRadius: 5px;
+
+label {
+  font-family: $fancyFont;
+  font-weight: $fancyExtraBold;
+  text-transform: uppercase;
+  display: block;
+
+  &.white {
+    color: White;
+  }
+}
+
+input,
+select{
+  display: block;
+  width: 100%;
+  background-color: White;
+  border: 0px;
+  padding: 10px;
+  font-size: calculateRem(18px);
+  color: $bodyFontColor;
+  @include border-radius($inputRadius);
+
+  &::placeholder {
+    font-style: italic;
+    color: $lightGrey;
+  }
+
+  &:focus {
+    border: 0px;
+    outline: none;
+  }
+
+  &.with-icon {
+    background: url("../img/input-bg.png") no-repeat white top left;
+    padding-left: 41px;
+
+    &.date {
+      background-position: 0 0;
+    }
+
+    &.adults {
+      background-position: 0 -41px;
+    }
+
+    &.children {
+      background-position: 0 -82px;
+    }
+  }
+}
+
+.number-input {
+  $upDownWidth: 22px;
+  position: relative;
+  display: block;
+
+  .up, .down {
+    cursor: pointer;
+    background-color: $turqoiseDark;
+    color: $blue;
+    font-family: $fancyFont;
+    font-weight: $fancyExtraBold;
+    font-size: calculateRem($upDownWidth);
+    line-height: 32px;
+    display: block;
+    width: $upDownWidth;
+    height: 100%;
+    text-align: center;
+
+    @include transition(all, .25s, ease-in-out);
+
+    position: absolute;
+    top: 0px;
+    right: 0px;
+
+    &:hover {
+      color: White;
+      background-color: $blue;
+    }
+  }
+
+  .up {
+    border-radius: 0px $inputRadius $inputRadius 0px;
+  }
+
+  .down {
+    border-radius: $inputRadius 0px 0px $inputRadius;
+  }
+
+  .down {
+    right: $upDownWidth;
+    border-right: 1px solid $blue;
+  }
+}

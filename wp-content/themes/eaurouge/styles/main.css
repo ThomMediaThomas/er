@@ -567,6 +567,162 @@ ul.horizontal li, ol.horizontal li {
     .slider .slide-nav.next {
       right: 0px; }
 
+label {
+  font-family: "Dosis", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  display: block; }
+  label.white {
+    color: White; }
+
+input,
+select {
+  display: block;
+  width: 100%;
+  background-color: White;
+  border: 0px;
+  padding: 10px;
+  font-size: 1rem;
+  color: #525252;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px; }
+  input::-webkit-input-placeholder,
+  select::-webkit-input-placeholder {
+    font-style: italic;
+    color: #b8b8b8; }
+  input:-ms-input-placeholder,
+  select:-ms-input-placeholder {
+    font-style: italic;
+    color: #b8b8b8; }
+  input::-ms-input-placeholder,
+  select::-ms-input-placeholder {
+    font-style: italic;
+    color: #b8b8b8; }
+  input::placeholder,
+  select::placeholder {
+    font-style: italic;
+    color: #b8b8b8; }
+  input:focus,
+  select:focus {
+    border: 0px;
+    outline: none; }
+  input.with-icon,
+  select.with-icon {
+    background: url("../img/input-bg.png") no-repeat white top left;
+    padding-left: 41px; }
+    input.with-icon.date,
+    select.with-icon.date {
+      background-position: 0 0; }
+    input.with-icon.adults,
+    select.with-icon.adults {
+      background-position: 0 -41px; }
+    input.with-icon.children,
+    select.with-icon.children {
+      background-position: 0 -82px; }
+
+.number-input {
+  position: relative;
+  display: block; }
+  .number-input .up, .number-input .down {
+    cursor: pointer;
+    background-color: #93b9ba;
+    color: #426b6f;
+    font-family: "Dosis", sans-serif;
+    font-weight: 800;
+    font-size: 1.22222rem;
+    line-height: 32px;
+    display: block;
+    width: 22px;
+    height: 100%;
+    text-align: center;
+    -o-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    position: absolute;
+    top: 0px;
+    right: 0px; }
+    .number-input .up:hover, .number-input .down:hover {
+      color: White;
+      background-color: #426b6f; }
+  .number-input .up {
+    border-radius: 0px 5px 5px 0px; }
+  .number-input .down {
+    border-radius: 5px 0px 0px 5px; }
+  .number-input .down {
+    right: 22px;
+    border-right: 1px solid #426b6f; }
+
+#quick-booking {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  margin-top: -75px; }
+
+.tab.yellow, .tab-content.yellow {
+  background-color: #eec633; }
+
+.tab.green, .tab-content.green {
+  background-color: #a0a433; }
+
+.tab {
+  display: inline-block;
+  border-radius: 10px 10px 0px 0px;
+  color: White;
+  padding: 10px 20px;
+  font-family: "Dosis", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: White !important;
+  font-size: 1.44444rem;
+  position: relative;
+  padding-left: 81px; }
+  .tab i {
+    width: 41px;
+    height: 41px;
+    display: block;
+    background: url("../img/direct-booking-icons.png") no-repeat transparent top left;
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    margin-top: -20px; }
+    .tab i.chalet {
+      background-position: bottom left; }
+
+.tab-content {
+  padding: 20px;
+  border-radius: 0 10px 10px 10px;
+  display: none; }
+  .tab-content:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .tab-content.active {
+    display: block; }
+  .tab-content .input-field {
+    float: left;
+    padding-right: 10px; }
+    .tab-content .input-field.date, .tab-content .input-field.vehicle, .tab-content .input-field.accommodation, .tab-content .input-field.guests, .tab-content .input-field.submit {
+      width: 20%; }
+    .tab-content .input-field.guests {
+      padding-right: 0px; }
+      .tab-content .input-field.guests:after {
+        content: "";
+        display: table;
+        clear: both; }
+      .tab-content .input-field.guests .counter {
+        float: left;
+        width: 50%;
+        padding-right: 10px; }
+    .tab-content .input-field.submit {
+      float: right; }
+      .tab-content .input-field.submit .button {
+        margin-top: 8px;
+        margin-right: 0px;
+        float: right; }
+
 .reviews > .content-wrapper {
   padding-top: 60px;
   padding-bottom: 60px; }

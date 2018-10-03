@@ -1,0 +1,92 @@
+#quick-booking {
+  width: 100%;
+  max-width: $maxSiteWidth;
+  margin: 0 auto;
+  position: relative;
+  margin-top: -75px;
+}
+
+$borderRadius: 10px;
+
+.tab, .tab-content {
+  &.yellow {
+    background-color: $yellow;
+  }
+
+  &.green {
+    background-color: $green;
+  }
+}
+
+.tab {
+  display: inline-block;
+  border-radius: $borderRadius $borderRadius 0px 0px;
+  color: White;
+  padding: $baseMargin/2 $baseMargin;
+  font-family: $fancyFont;
+  font-weight: $fancyExtraBold;
+  text-transform: uppercase;
+  color: White !important;
+  font-size: calculateRem(26px);
+
+  position: relative;
+  padding-left: $baseMargin + 61px;
+
+  i {
+    width: 41px;
+    height: 41px;
+    display: block;
+    background: url("../img/direct-booking-icons.png") no-repeat transparent top left;
+
+    position: absolute;
+    top: 50%;
+    left: $baseMargin;
+    margin-top: -20px;
+
+    &.chalet {
+      background-position: bottom left;
+    }
+  }
+}
+
+.tab-content {
+  padding: $baseMargin;
+  border-radius: 0 $borderRadius $borderRadius $borderRadius;
+  @include clearfix();
+
+  display: none;
+
+  &.active {
+    display: block;
+  }
+
+  .input-field {
+    float: left;
+    padding-right: 10px;
+
+    &.date, &.vehicle, &.accommodation, &.guests, &.submit{
+      width: 20%;
+    }
+
+    &.guests {
+      @include clearfix();
+      padding-right: 0px;
+
+      .counter {
+        float: left;
+        width: 50%;
+        padding-right: 10px;
+      }
+    }
+
+    &.submit {
+      float: right;
+
+      .button {
+        margin-top: 8px;
+        margin-right: 0px;
+        float: right;
+      }
+    }
+  }
+}
