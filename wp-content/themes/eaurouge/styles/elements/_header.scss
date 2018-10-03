@@ -25,13 +25,19 @@ $topbarHeight: 42px;
     margin-bottom: 0px;
   }
 
-  strong, a{
+  strong, a:not(.button){
     font-weight: $fancyExtraBold;
   }
 
-  a {
+  a:not(.button){
     color: $red;
     text-decoration: none;
+  }
+
+  .button {
+    position: relative;
+    top: -5px;
+    margin-right: $baseMargin/2;
   }
 }
 

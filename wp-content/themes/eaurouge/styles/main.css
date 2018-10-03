@@ -181,11 +181,15 @@ html, body {
   #top-bar h5 {
     font-size: 1.22222rem;
     margin-bottom: 0px; }
-  #top-bar strong, #top-bar a {
+  #top-bar strong, #top-bar a:not(.button) {
     font-weight: 800; }
-  #top-bar a {
+  #top-bar a:not(.button) {
     color: #ca303c;
     text-decoration: none; }
+  #top-bar .button {
+    position: relative;
+    top: -5px;
+    margin-right: 10px; }
 
 #nav {
   position: absolute;
@@ -429,6 +433,14 @@ html, body {
     .button.small i {
       margin-left: 10px; }
       .button.small i.first {
+        margin-left: 0px;
+        margin-right: 10px; }
+  .button.tiny {
+    padding: 3px 10px;
+    font-size: 0.88889rem; }
+    .button.tiny i {
+      margin-left: 10px; }
+      .button.tiny i.first {
         margin-left: 0px;
         margin-right: 10px; }
   .button.red {
