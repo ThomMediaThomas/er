@@ -459,7 +459,9 @@ html, body {
 
 ul.usps {
   font-size: 1.44444rem;
-  font-family: "Dosis", sans-serif; }
+  font-family: "Dosis", sans-serif;
+  list-style: none;
+  margin-left: 0px; }
   ul.usps i {
     position: relative;
     top: 2px;

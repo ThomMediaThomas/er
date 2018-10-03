@@ -1,6 +1,8 @@
 ul.usps {
   font-size: calculateRem(26px);
   font-family: $fancyFont;
+  list-style: none;
+  margin-left: 0px;
 
   i {
     position: relative;
