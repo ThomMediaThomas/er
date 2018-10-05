@@ -1,0 +1,76 @@
+div.datepicker-dropdown {
+  border: 0px;
+  @include border-radius(10px);
+
+  .datepicker-panel {
+    > ul {
+      > li {
+        font-size: calculateRem(14px);
+        color: $bodyFontColor;
+
+        &[data-view="month prev"],
+        &[data-view="month current"],
+        &[data-view="month next"] {
+          background-color: $red;
+          color: White;
+          font-size: $bodyFontSize;
+          padding: 5px;
+          height: auto;
+        }
+
+        &[data-view="month prev"]:hover,
+        &[data-view="month next"]:hover {
+          background-color: darken($red, 10%);
+        }
+
+        &[data-view="month prev"] {
+          border-radius: 10px 0px 0px 0px;
+        }
+
+        &[data-view="month next"] {
+          border-radius: 0px 10px 0px 0px;
+        }
+
+        &[data-view="month current"] {
+          font-family: $fancyFont;
+          font-weight: $fancyExtraBold;
+          text-transform: uppercase;
+        }
+
+        &[data-view="day"] {
+          &:hover {
+            background-color: $yellow;
+          }
+        }
+
+        &.highlighted, &.picked{
+          font-size: calculateRem(14px);
+          font-weight: bold;
+          background-color: $turqoise;
+          color: $blue;
+        }
+
+        &.muted {
+          color: $lightGrey;
+        }
+      }
+
+      &[data-view="week"] {
+        > li {
+          font-family: $fancyFont;
+          font-weight: $fancyExtraBold;
+          font-size: calculateRem(16px);
+          color: $blue;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}
+
+.datepicker-top-left::before,
+.datepicker-top-right::before,
+.datepicker-top-left::after,
+.datepicker-top-right::after {
+  border-bottom-color: $red;
+}

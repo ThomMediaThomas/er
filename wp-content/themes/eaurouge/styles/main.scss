@@ -9,6 +9,9 @@
 @import "helpers/transition";
 @import "helpers/transform";
 
+@import "vendor/datepicker";
+@import "vendor-overrides/datepicker";
+
 @import "site";
 @import "elements/header";
 @import "elements/footer";

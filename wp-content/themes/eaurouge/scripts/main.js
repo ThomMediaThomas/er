@@ -10,6 +10,11 @@ $(document).ready(function () {
     $('.number-input').each(function () {
         (new NumberInput($(this))).init();
     });
+
+    $('.datepicker').datepicker({
+        format: 'dd-mm-yyyy',
+        language: 'nl-NL'
+    });
 });
 
 function NumberInput($element) {
