@@ -9,3 +9,6 @@
         <h2 class="<?php echo get_field('subtitle_color'); ?>"><?php echo get_field('subtitle'); ?></h2>
     </div>
 </section>
+<?php if (get_field('show_quick_booker')) : ?>
+    <?php get_template_part('/elements/quick-booking'); ?>
+<?php endif; ?>

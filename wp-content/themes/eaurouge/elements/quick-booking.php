@@ -5,7 +5,7 @@
     </div>
     <div class="tabs-content">
         <div class="tab-content active yellow" id="tab-camping">
-            <form id="camping-search">
+            <form id="camping-search" class="quick-booking-form" method="GET" action="/boeken">
                 <div class="input-field date">
                     <label for="date_from" class="white">Van:</label>
                     <input name="date_from" id="date_from" class="with-icon date" type="text" placeholder="dd-mm-jjjj" />
@@ -43,12 +43,12 @@
                     </div>
                 </div>
                 <div class="input-field submit">
-                    <a class="button red" href="/boeken" title="Zoeken naar accommodaties">Zoeken <i class="icon-chevron-right"></i></a>
+                    <a class="button red submit-quick-booking-form" href="/boeken" title="Zoeken naar accommodaties">Zoeken <i class="icon-chevron-right"></i></a>
                 </div>
             </form>
         </div>
-        <div class="tab-content green" id="tab-chalet">
-            <form id="chalet-search">
+        <div class="tab-content green" class="quick-booking-form" id="tab-chalet">
+            <form id="chalet-search" method="GET" action="/boeken">
                 <div class="input-field date">
                     <label for="date_from" class="white">Van:</label>
                     <input name="date_from" id="date_from" class="with-icon date" type="text" placeholder="dd-mm-jjjj" />
@@ -66,7 +66,7 @@
                     </select>
                 </div>
                 <div class="input-field submit">
-                    <a class="button blue" href="/boeken" title="Zoeken naar accommodaties">Zoeken <i class="icon-chevron-right"></i></a>
+                    <a class="button blue submit-quick-booking-form" href="/boeken" title="Zoeken naar accommodaties">Zoeken <i class="icon-chevron-right"></i></a>
                 </div>
             </form>
         </div>

@@ -48,6 +48,7 @@ function QuickBooking($element) {
     var self = this;
     self.$element = $element;
     self.$tabs = this.$element.find('.tab');
+    self.$submit = self.$element.find('.submit-quick-booking-form');
 
     self.init = function () {
         self.bindEvents();
@@ -58,6 +59,10 @@ function QuickBooking($element) {
             self.$element.find('.tab-content.active').removeClass('active');
             self.$element.find($(this).attr('href')).addClass('active');
             return false;
+        });
+
+        self.$submit.on('click', function () {
+            this.parents('form.quick-booking-form').submit();
         });
     };
 
