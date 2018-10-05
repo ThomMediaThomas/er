@@ -536,9 +536,6 @@ ul.horizontal li, ol.horizontal li {
     clear: both; }
   .column-holder .column {
     float: left; }
-    .column-holder .column > .content-wrapper {
-      padding-top: 0px;
-      padding-bottom: 0px; }
     .column-holder .column.third {
       width: 33.33%; }
     .column-holder .column.half {
