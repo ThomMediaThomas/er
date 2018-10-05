@@ -68,8 +68,12 @@ $borderRadius: 10px;
     float: left;
     padding-right: 10px;
 
-    &.date, &.vehicle, &.accommodation, &.guests, &.submit{
+    &.date, &.vehicle, &.guests, &.submit{
       width: 20%;
+    }
+
+    &.accommodation {
+      width: 40%;
     }
 
     &.guests {
