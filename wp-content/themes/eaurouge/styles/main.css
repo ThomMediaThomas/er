@@ -685,6 +685,9 @@ select {
 .tab.green, .tab-content.green {
   background-color: #a0a433; }
 
+.tab.blue, .tab-content.blue {
+  background-color: #426b6f; }
+
 .tab {
   display: inline-block;
   border-radius: 10px 10px 0px 0px;
