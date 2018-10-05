@@ -8,11 +8,17 @@
             <form id="camping-search" class="quick-booking-form" method="GET" action="/boeken">
                 <div class="input-field date">
                     <label for="date_from" class="white">Van:</label>
-                    <input name="date_from" id="date_from" class="with-icon date" type="text" placeholder="dd-mm-jjjj" />
+                    <span class="input-with-icon">
+                        <i class="date"></i>
+                        <input name="date_from" id="date_from" type="text" placeholder="dd-mm-jjjj" />
+                    </span>
                 </div>
                 <div class="input-field date">
                     <label for="date_to" class="white">Tot:</label>
-                    <input name="date_to" id="date_to" class="with-icon date" type="text" placeholder="dd-mm-jjjj" />
+                    <span class="input-with-icon">
+                        <i class="date"></i>
+                        <input name="date_to" id="date_to" type="text" placeholder="dd-mm-jjjj" />
+                    </span>
                 </div>
                 <div class="input-field vehicle">
                     <label for="vehicle" class="white">Kampeermiddel:</label>
@@ -29,14 +35,20 @@
                     <label for="adults" class="white">Aantal personen:</label>
                     <div class="counter">
                         <span class="number-input">
-                            <input name="adults" id="adults" class="with-icon adults" type="number" placeholder="0" />
+                            <span class="input-with-icon">
+                                <i class="adults"></i>
+                                <input name="adults" id="adults" type="number" placeholder="0" />
+                            </span>
                             <i class="up">+</i>
                             <i class="down">-</i>
                         </span>
                     </div>
                     <div class="counter">
                         <span class="number-input">
-                            <input name="children" id="children" class="with-icon children" type="number" placeholder="0" />
+                            <span class="input-with-icon">
+                                <i class="children"></i>
+                                <input name="children" id="children" type="number" placeholder="0" />
+                            </span>
                             <i class="up">+</i>
                             <i class="down">-</i>
                         </span>
@@ -51,11 +63,17 @@
             <form id="chalet-search" method="GET" action="/boeken">
                 <div class="input-field date">
                     <label for="date_from" class="white">Van:</label>
-                    <input name="date_from" id="date_from" class="with-icon date" type="text" placeholder="dd-mm-jjjj" />
+                    <span class="input-with-icon">
+                        <i class="date"></i>
+                        <input name="date_from" id="date_from" type="text" placeholder="dd-mm-jjjj" />
+                    </span>
                 </div>
                 <div class="input-field date">
                     <label for="date_to" class="white">Tot:</label>
-                    <input name="date_to" id="date_to" class="with-icon date" type="text" placeholder="dd-mm-jjjj" />
+                    <span class="input-with-icon">
+                        <i class="date"></i>
+                        <input name="date_to" id="date_to" type="text" placeholder="dd-mm-jjjj" />
+                    </span>
                 </div>
                 <div class="input-field accommodation">
                     <label for="vehicle" class="white">Soort verblijf:</label>

@@ -61,8 +61,9 @@ function QuickBooking($element) {
             return false;
         });
 
-        self.$submit.on('click', function () {
-            this.parents('form.quick-booking-form').submit();
+        self.$submit.on('click', function (event) {
+            event.preventDefault();
+            $(this).parents('form.quick-booking-form').submit();
         });
     };
 

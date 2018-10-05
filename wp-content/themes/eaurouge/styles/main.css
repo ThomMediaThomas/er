@@ -618,19 +618,26 @@ select {
   select:focus {
     border: 0px;
     outline: none; }
-  input.with-icon,
-  select.with-icon {
-    background: url("../img/input-bg.png") no-repeat white top left;
-    padding-left: 41px; }
-    input.with-icon.date,
-    select.with-icon.date {
+
+.input-with-icon {
+  position: relative; }
+  .input-with-icon i {
+    background: url("../img/input-bg.png") no-repeat transparent top left;
+    display: block;
+    width: 41px;
+    height: 41px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 5; }
+    .input-with-icon i.date {
       background-position: 0 0; }
-    input.with-icon.adults,
-    select.with-icon.adults {
+    .input-with-icon i.adults {
       background-position: 0 -41px; }
-    input.with-icon.children,
-    select.with-icon.children {
+    .input-with-icon i.children {
       background-position: 0 -82px; }
+  .input-with-icon input {
+    padding-left: 41px; }
 
 .number-input {
   position: relative;

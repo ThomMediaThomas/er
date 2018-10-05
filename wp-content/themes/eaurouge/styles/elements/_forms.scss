@@ -31,10 +31,20 @@ select{
     border: 0px;
     outline: none;
   }
+}
 
-  &.with-icon {
-    background: url("../img/input-bg.png") no-repeat white top left;
-    padding-left: 41px;
+.input-with-icon {
+  position: relative;
+
+  i {
+    background: url("../img/input-bg.png") no-repeat transparent top left;
+    display: block;
+    width: 41px;
+    height: 41px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 5;
 
     &.date {
       background-position: 0 0;
@@ -47,6 +57,10 @@ select{
     &.children {
       background-position: 0 -82px;
     }
+  }
+
+  input {
+    padding-left: 41px;
   }
 }
 
