@@ -877,6 +877,11 @@ select {
     width: 22px;
     height: 100%;
     text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     -o-transition: all 0.25s ease-in-out;
     transition: all 0.25s ease-in-out;
     -webkit-transition: all 0.25s ease-in-out;

@@ -82,6 +82,12 @@ select{
     height: 100%;
     text-align: center;
 
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+
     @include transition(all, .25s, ease-in-out);
 
     position: absolute;
