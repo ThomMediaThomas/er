@@ -1,6 +1,7 @@
 .box {
   @include border-radius(10px);
   overflow: hidden;
+  margin-bottom: $baseMargin;
 
   img {
     width: 100%;

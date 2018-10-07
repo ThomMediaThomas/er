@@ -1,0 +1,89 @@
+.accommodation {
+  display: block;
+  margin-bottom: $baseMargin;
+  @include clearfix();
+  border-bottom: 1px solid $lightGrey;
+  padding-bottom: $baseMargin;
+
+  &:last-child {
+    border-bottom: 0px;
+    padding-bottom: 0px;
+  }
+
+  .left {
+    width: 30%;
+    float: left;
+
+    img {
+      width: auto;
+      max-width: 100%;
+      margin-bottom: $baseMargin/2;
+    }
+
+    ul.images {
+      list-style: none;
+      margin-left: 0px;
+      @include clearfix();
+
+      li {
+        width: 25%;
+        float: left;
+        padding-right: 5px;
+
+        img {
+          margin-bottom: 0px;
+        }
+
+        a.set-image {
+          display: block;
+
+          &.active {
+            border: 2px solid $green;
+          }
+        }
+      }
+    }
+  }
+
+  .right {
+    width: 70%;
+    float: right;
+    padding: 0px $baseMargin;
+
+    h4 {
+      margin-bottom: $baseMargin/2;
+    }
+  }
+
+  .bottom {
+    @include clearfix();
+
+    .bottom-left {
+      display: block;
+      float: left;
+      width: 50%;
+      font-family: $fancyFont;
+      font-weight: $fancyExtraBold;
+      text-transform: uppercase;
+      line-height: 1;
+      font-size: calculateRem(12px);
+
+      strong, span {
+        display: block;
+      }
+
+      span {
+        color: $lightGrey;
+      }
+
+      strong {
+        font-size: calculateRem(28px);
+        color: $blue;
+      }
+    }
+
+    .button {
+      float: right;
+    }
+  }
+}

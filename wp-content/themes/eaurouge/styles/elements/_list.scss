@@ -13,6 +13,10 @@ ul.usps {
   &.white {
     color: White;
   }
+
+  &.small {
+    font-size: calculateRem(18px);
+  }
 }
 
 ul {

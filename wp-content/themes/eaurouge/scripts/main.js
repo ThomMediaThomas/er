@@ -13,8 +13,29 @@ $(document).ready(function () {
 
     $('.datepicker').datepicker({
         format: 'dd-mm-yyyy',
-        language: 'nl-NL'
+        language: 'nl-NL',
+        autoHide: true
     });
+
+    if ($('#accommodation-finder').length > 0) {
+        $('#stay_type').on('change', function () {
+            if ($(this).val() == 'chalet') {
+                $('#stay_type_chalet').show();
+                $('#stay_type_camping').hide();
+            } else {
+                $('#stay_type_camping').show();
+                $('#stay_type_chalet').hide();
+            }
+        }).trigger('change');
+
+        $('a.set-image').on('click', function () {
+            var $left = $(this).parents('.left');
+            $left.find('a.set-image.active').removeClass('active');
+            $left.find('img.image-larger').attr('src', $(this).attr('href'));
+            $(this).addClass('active');
+            return false;
+        });
+    }
 });
 
 function NumberInput($element) {

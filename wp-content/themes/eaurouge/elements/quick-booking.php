@@ -6,6 +6,7 @@
     <div class="tabs-content">
         <div class="tab-content active green" id="tab-camping">
             <form id="camping-search" class="quick-booking-form" method="GET" action="/boeken">
+                <input type="hidden" name="stay_type" value="camping" />
                 <div class="input-field date">
                     <label for="stay_date_from" class="white">Van:</label>
                     <span class="input-with-icon">
@@ -61,6 +62,7 @@
         </div>
         <div class="tab-content blue" class="quick-booking-form" id="tab-chalet">
             <form id="chalet-search" method="GET" action="/boeken">
+                <input type="hidden" name="stay_type" value="chalet" />
                 <div class="input-field date">
                     <label for="stay_date_from" class="white">Van:</label>
                     <span class="input-with-icon">
@@ -76,10 +78,10 @@
                     </span>
                 </div>
                 <div class="input-field accommodation">
-                    <label for="vehicle" class="white">Soort verblijf:</label>
-                    <select name="vehicle" id="vehicle">
+                    <label for="accommodation" class="white">Soort verblijf:</label>
+                    <select name="accommodation" id="accommodation">
                         <option value="">Maak een keuze</option>
-                        <option value="chalet-6">4-persoons chalet</option>
+                        <option value="chalet-4">4-persoons chalet</option>
                         <option value="chalet-6">6-persoons chalet</option>
                     </select>
                 </div>

@@ -67,6 +67,7 @@ $borderRadius: 10px;
   .input-field {
     float: left;
     padding-right: 10px;
+    margin-bottom: 0px;
 
     &.date, &.vehicle, &.guests, &.submit{
       width: 20%;

@@ -1,5 +1,13 @@
 $inputRadius: 5px;
 
+.input-field {
+  margin-bottom: $baseMargin;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
 label {
   font-family: $fancyFont;
   font-weight: $fancyExtraBold;
@@ -56,6 +64,10 @@ select{
 
     &.children {
       background-position: 0 -82px;
+    }
+
+    &.pets {
+      background-position: 0 -123px;
     }
   }
 
