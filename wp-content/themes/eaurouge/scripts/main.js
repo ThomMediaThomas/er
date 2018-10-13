@@ -22,7 +22,7 @@ $(document).ready(function () {
             if ($(this).val() == 'chalet') {
                 $('#stay_type_chalet').show();
                 $('#stay_type_camping').hide();
-            } else {
+            } else if ($(this).val() == 'camping') {
                 $('#stay_type_camping').show();
                 $('#stay_type_chalet').hide();
             }

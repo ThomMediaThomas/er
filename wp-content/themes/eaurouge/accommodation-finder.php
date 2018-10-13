@@ -110,7 +110,21 @@
                 <div class="column main">
                     <div class="content-wrapper">
                         <?php
-                        query_posts( array( 'post_type' => array('accommodation') ) );
+                        $meta_query = array('relation'		=> 'AND');
+
+                        if (isset($_GET['stay_type'])) {
+                            $meta_query[] = array(
+                                'key'	 	=> 'type',
+                                'value'	  	=> $_GET['stay_type'],
+                                'compare' 	=> 'LIKE',
+                            );
+                        }
+
+                        query_posts(array(
+                            'post_type' => array('accommodation'),
+                            'meta_query'	=> $meta_query
+                        ));
+
                         if (have_posts()) : while ( have_posts() ) : the_post();
                             $title = get_the_title();
                             ?>
