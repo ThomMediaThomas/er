@@ -17,6 +17,12 @@ $(document).ready(function () {
         autoHide: true
     });
 
+    if ($('.submit-parent-form').length > 0) {
+        $('.submit-parent-form').on('click', function () {
+            $(this).parents('form').submit();
+        })
+    }
+
     if ($('#accommodation-finder').length > 0) {
         $('#stay_type').on('change', function () {
             if ($(this).val() == 'chalet') {

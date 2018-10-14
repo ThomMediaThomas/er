@@ -1,6 +1,6 @@
-.accommodation {
-  display: block;
+.accommodation-preview {
   margin-bottom: $baseMargin;
+  display: block;
   @include clearfix();
   border-bottom: 1px solid $lightGrey;
   padding-bottom: $baseMargin;

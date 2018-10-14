@@ -985,53 +985,53 @@ select {
         margin-right: 0px;
         float: right; }
 
-.accommodation {
-  display: block;
+.accommodation-preview {
   margin-bottom: 20px;
+  display: block;
   border-bottom: 1px solid #b8b8b8;
   padding-bottom: 20px; }
-  .accommodation:after {
+  .accommodation-preview:after {
     content: "";
     display: table;
     clear: both; }
-  .accommodation:last-child {
+  .accommodation-preview:last-child {
     border-bottom: 0px;
     padding-bottom: 0px; }
-  .accommodation .left {
+  .accommodation-preview .left {
     width: 30%;
     float: left; }
-    .accommodation .left img {
+    .accommodation-preview .left img {
       width: auto;
       max-width: 100%;
       margin-bottom: 10px; }
-    .accommodation .left ul.images {
+    .accommodation-preview .left ul.images {
       list-style: none;
       margin-left: 0px; }
-      .accommodation .left ul.images:after {
+      .accommodation-preview .left ul.images:after {
         content: "";
         display: table;
         clear: both; }
-      .accommodation .left ul.images li {
+      .accommodation-preview .left ul.images li {
         width: 25%;
         float: left;
         padding-right: 5px; }
-        .accommodation .left ul.images li img {
+        .accommodation-preview .left ul.images li img {
           margin-bottom: 0px; }
-        .accommodation .left ul.images li a.set-image {
+        .accommodation-preview .left ul.images li a.set-image {
           display: block; }
-          .accommodation .left ul.images li a.set-image.active {
+          .accommodation-preview .left ul.images li a.set-image.active {
             border: 2px solid #a0a433; }
-  .accommodation .right {
+  .accommodation-preview .right {
     width: 70%;
     float: right;
     padding: 0px 20px; }
-    .accommodation .right h4 {
+    .accommodation-preview .right h4 {
       margin-bottom: 10px; }
-  .accommodation .bottom:after {
+  .accommodation-preview .bottom:after {
     content: "";
     display: table;
     clear: both; }
-  .accommodation .bottom .bottom-left {
+  .accommodation-preview .bottom .bottom-left {
     display: block;
     float: left;
     width: 50%;
@@ -1040,14 +1040,14 @@ select {
     text-transform: uppercase;
     line-height: 1;
     font-size: 0.66667rem; }
-    .accommodation .bottom .bottom-left strong, .accommodation .bottom .bottom-left span {
+    .accommodation-preview .bottom .bottom-left strong, .accommodation-preview .bottom .bottom-left span {
       display: block; }
-    .accommodation .bottom .bottom-left span {
+    .accommodation-preview .bottom .bottom-left span {
       color: #b8b8b8; }
-    .accommodation .bottom .bottom-left strong {
+    .accommodation-preview .bottom .bottom-left strong {
       font-size: 1.55556rem;
       color: #426b6f; }
-  .accommodation .bottom .button {
+  .accommodation-preview .bottom .button {
     float: right; }
 
 .reviews > .content-wrapper {
