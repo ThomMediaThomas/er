@@ -11,6 +11,10 @@ html, body {
   margin: 0 auto;
   padding: $baseMargin;
   @include clearfix;
+
+  &.no-top {
+    padding-top: 0px;
+  }
 }
 
 * {

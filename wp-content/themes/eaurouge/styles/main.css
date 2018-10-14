@@ -378,6 +378,8 @@ html, body {
     content: "";
     display: table;
     clear: both; }
+  .content-wrapper.no-top {
+    padding-top: 0px; }
 
 * {
   -webkit-box-sizing: border-box;
@@ -994,6 +996,10 @@ select {
     content: "";
     display: table;
     clear: both; }
+  .accommodation-preview.simple {
+    border-bottom: 0px;
+    margin-bottom: 0px;
+    padding-bottom: 0px; }
   .accommodation-preview:last-child {
     border-bottom: 0px;
     padding-bottom: 0px; }
@@ -1045,7 +1051,7 @@ select {
     .accommodation-preview .bottom .bottom-left span {
       color: #b8b8b8; }
     .accommodation-preview .bottom .bottom-left strong {
-      font-size: 1.55556rem;
+      font-size: 2rem;
       color: #426b6f; }
   .accommodation-preview .bottom .button {
     float: right; }
@@ -1243,3 +1249,30 @@ table {
     font-weight: 800; }
   table td, table th {
     padding: 20px; }
+
+ul.price-detail {
+  list-style: none;
+  margin-left: 0px; }
+  ul.price-detail li {
+    font-size: 0.77778rem;
+    padding: 5px 0px; }
+    ul.price-detail li:after {
+      content: "";
+      display: table;
+      clear: both; }
+    ul.price-detail li span, ul.price-detail li strong {
+      float: left; }
+    ul.price-detail li span {
+      width: 75%; }
+    ul.price-detail li strong {
+      text-align: right;
+      font-weight: bold;
+      width: 25%; }
+    ul.price-detail li.total {
+      border-top: 1px solid white;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 1rem;
+      color: #eec633; }
+      ul.price-detail li.total span, ul.price-detail li.total strong {
+        width: 50%; }

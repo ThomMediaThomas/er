@@ -24,12 +24,12 @@
                 </select>
             </div>
             <div class="input-field" id="stay_type_chalet">
-                <?php $accommodation = isset($_GET['accommodation']) ? $_GET['accommodation'] : null; ?>
-                <label for="accommodation" class="white">Soort verblijf:</label>
-                <select name="accommodation" id="accommodation">
+                <?php $accommodation_type = isset($_GET['accommodation_type']) ? $_GET['accommodation_type'] : null; ?>
+                <label for="accommodation_type" class="white">Soort verblijf:</label>
+                <select name="accommodation_type" id="accommodation_type">
                     <option value="">Maak een keuze</option>
-                    <option value="chalet-4" <?php if($accommodation == 'chalet-4'): ?>selected="selected"<?php endif; ?>>4-persoons chalet</option>
-                    <option value="chalet-6" <?php if($accommodation == 'chalet-6'): ?>selected="selected"<?php endif; ?>>6-persoons chalet</option>
+                    <option value="chalet-4" <?php if($accommodation_type == 'chalet-4'): ?>selected="selected"<?php endif; ?>>4-persoons chalet</option>
+                    <option value="chalet-6" <?php if($accommodation_type == 'chalet-6'): ?>selected="selected"<?php endif; ?>>6-persoons chalet</option>
                 </select>
             </div>
             <div class="input-field">

@@ -5,6 +5,12 @@
   border-bottom: 1px solid $lightGrey;
   padding-bottom: $baseMargin;
 
+  &.simple {
+    border-bottom: 0px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+
   &:last-child {
     border-bottom: 0px;
     padding-bottom: 0px;
@@ -77,7 +83,7 @@
       }
 
       strong {
-        font-size: calculateRem(28px);
+        font-size: calculateRem(36px);
         color: $blue;
       }
     }

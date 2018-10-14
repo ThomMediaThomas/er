@@ -60,8 +60,8 @@
                 </div>
             </form>
         </div>
-        <div class="tab-content blue" class="quick-booking-form" id="tab-chalet">
-            <form id="chalet-search" method="GET" action="/boeken">
+        <div class="tab-content blue" id="tab-chalet">
+            <form id="chalet-search" class="quick-booking-form" method="GET" action="/boeken">
                 <input type="hidden" name="stay_type" value="chalet" />
                 <div class="input-field date">
                     <label for="stay_date_from" class="white">Van:</label>
@@ -78,8 +78,8 @@
                     </span>
                 </div>
                 <div class="input-field accommodation">
-                    <label for="accommodation" class="white">Soort verblijf:</label>
-                    <select name="accommodation" id="accommodation">
+                    <label for="accommodation_type" class="white">Soort verblijf:</label>
+                    <select name="accommodation_type" id="accommodation_type">
                         <option value="">Maak een keuze</option>
                         <option value="chalet-4">4-persoons chalet</option>
                         <option value="chalet-6">6-persoons chalet</option>

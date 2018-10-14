@@ -13,7 +13,7 @@
                     <div class="column main">
                         <div class="content-wrapper">
                             <?php
-                            $meta_query = array('relation'		=> 'AND');
+                            $meta_query = array('relation' => 'AND');
 
                             if (isset($_GET['stay_type'])) {
                                 $meta_query[] = array(

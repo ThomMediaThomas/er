@@ -1,4 +1,50 @@
-<?php $title = get_the_title(); ?>
+<?php
+    $title = get_the_title();
+    $hasDates  = isset($_GET['stay_date_from']) && isset($_GET['stay_date_to']);
+    $hasPrice = false;
+
+    if ($hasDates) {
+        $date_from = date_create_from_format('d-m-Y', $_GET['stay_date_from']);
+        $date_from_comparable = date_format($date_from,'Ymd');
+        $date_to = date_create_from_format('d-m-Y', $_GET['stay_date_to']);
+        $date_to_comparable = date_format($date_to,'Ymd');
+        $nights = $date_to->diff($date_from)->format("%a");
+    }
+
+    $price = 0;
+    $pricePeriods = get_field('price_periods');
+
+    if ($pricePeriods) {
+        $currentPricePeriod = array_filter($pricePeriods, function ($period) use ($date_from_comparable) {
+            return $date_from_comparable >= $period['period_from'] && $date_from_comparable <= $period['period_to'];
+        });
+
+        if ($currentPricePeriod) {
+            $currentPricePeriod = reset($currentPricePeriod);
+
+            $hasPrice = true;
+            $adults = intval($_GET['adults']);
+            $children = intval($_GET['children']);
+            $pets = intval($_GET['pets']);
+
+            $price += $nights * floatval($currentPricePeriod['price_per_night']);
+            $price += $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
+            $price += $nights * $children * floatval($currentPricePeriod['price_per_child']);
+            $price += $nights * $pets * floatval($currentPricePeriod['price_per_dog']);
+            $price += $nights * floatval($currentPricePeriod['electricty_per_night']);
+            $price += $nights * ($adults + $children) * floatval($currentPricePeriod['tourist_tax_per_night']);
+            $price += floatval($currentPricePeriod['booking_costs_per_stay']);
+
+            $url = '/boeken/gegevens';
+            $url .= '?accommodation_id=' . get_the_ID();
+            $url .= '&date_from=' . $_GET['stay_date_from'];
+            $url .= '&date_to=' . $_GET['stay_date_to'];
+            $url .= '&adults=' . $_GET['adults'];
+            $url .= '&children=' . $_GET['children'];
+            $url .= '&pets=' . $_GET['pets'];
+        }
+    }
+?>
 <div class="accommodation-preview">
     <div class="left">
         <img class="image-larger" src="<?php echo get_the_post_thumbnail_url(); ?>" title="<?php echo $title; ?>" alt="<?php echo $title; ?>" />
@@ -26,13 +72,15 @@
                 <li><i class="icon-check"></i><?php the_sub_field('usp'); ?></li>
             <?php endwhile; ?>
         </ul>
-        <div class="bottom">
-            <div class="bottom-left">
-                <span>Prijzen vanaf: </span>
-                <strong>25 €</strong>
-                <span>per nacht</span>
+        <?php if ($hasPrice): ?>
+            <div class="bottom">
+                <div class="bottom-left">
+                    <span>Prijs voor het verblijf </span>
+                    <strong>€ <?php echo number_format($price, 2); ?></strong>
+                    <span>incl. toeristenbelasting</span>
+                </div>
+                <a class="button yellow small" href="<?php echo $url; ?>">Verblijf boeken<i class="icon-chevron-right"></i></a>
             </div>
-            <a class="button yellow small">Verblijf boeken<i class="icon-chevron-right"></i></a>
-        </div>
+        <?php endif; ?>
     </div>
 </div>

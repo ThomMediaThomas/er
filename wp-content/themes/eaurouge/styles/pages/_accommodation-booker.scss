@@ -1,0 +1,36 @@
+ul.price-detail {
+  list-style: none;
+  margin-left: 0px;
+
+  li {
+    @include clearfix();
+    font-size: calculateRem(14px);
+    padding: 5px 0px;
+
+    span, strong{
+      float: left;
+    }
+
+    span {
+      width: 75%;
+    }
+
+    strong {
+      text-align: right;
+      font-weight: bold;
+      width: 25%;
+    }
+
+    &.total {
+      border-top: 1px solid white;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 1rem;
+      color: $yellow;
+
+      span, strong {
+        width: 50%;
+      }
+    }
+  }
+}
