@@ -19,6 +19,37 @@ label {
   }
 }
 
+label.checkbox {
+  padding-left: 40px;
+  position: relative;
+
+  input {
+    display: none;
+  }
+
+  .check {
+    width: $baseMargin;
+    height: $baseMargin;
+    display: block;
+    border: 1px solid $lightGrey;
+    @include border-radius($inputRadius);
+    position: absolute;
+    top: 2px;
+    left: 0px;
+  }
+
+  input:checked ~ .check {
+background-color: red;
+  }
+
+  .checkbox-info {
+    display: block;
+    font-family: $bodyFont;
+    font-weight: normal;
+    text-transform: none;
+  }
+}
+
 input,
 select,
 textarea{

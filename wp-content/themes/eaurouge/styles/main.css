@@ -829,6 +829,30 @@ label {
   label.white {
     color: White; }
 
+label.checkbox {
+  padding-left: 40px;
+  position: relative; }
+  label.checkbox input {
+    display: none; }
+  label.checkbox .check {
+    width: 20px;
+    height: 20px;
+    display: block;
+    border: 1px solid #b8b8b8;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    position: absolute;
+    top: 2px;
+    left: 0px; }
+  label.checkbox input:checked ~ .check {
+    background-color: red; }
+  label.checkbox .checkbox-info {
+    display: block;
+    font-family: "Roboto", sans-serif;
+    font-weight: normal;
+    text-transform: none; }
+
 input,
 select,
 textarea {

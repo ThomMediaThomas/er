@@ -16,6 +16,8 @@
 								<hr />
 								<?php get_template_part('/elements/accommodation-booker/selected-family'); ?>
 								<hr />
+								<?php get_template_part('/elements/accommodation-booker/selected-extras'); ?>
+								<hr />
 							</form>
 							<?php get_template_part('/elements/accommodation-booker/your-details'); ?>
                         </div>
