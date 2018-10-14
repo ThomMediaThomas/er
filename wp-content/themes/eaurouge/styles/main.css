@@ -520,6 +520,9 @@ html, body {
 #footer {
   background: url(../img/footer-bg.png) no-repeat #c8e3dc bottom right;
   color: #426b6f; }
+  #footer ul {
+    list-style: none;
+    margin-left: 0px; }
   #footer ul.horizontal li {
     opacity: 1;
     -o-transition: all 0.25s ease-in-out;

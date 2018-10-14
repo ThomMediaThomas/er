@@ -2,6 +2,11 @@
   background: url(../img/footer-bg.png) no-repeat $turqoise bottom right;
   color: $blue;
 
+  ul {
+    list-style: none;
+    margin-left: 0px;
+  }
+
   ul.horizontal {
     li {
       opacity: 1;
