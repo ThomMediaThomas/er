@@ -34,3 +34,24 @@ ul.price-detail {
     }
   }
 }
+
+.family {
+  @include clearfix();
+
+  .input-field {
+    width: 33.3333%;
+    float: left;
+    padding-right: $baseMargin;
+  }
+}
+
+
+.period {
+  @include clearfix();
+
+  .input-field {
+    width: 50%;
+    float: left;
+    padding-right: $baseMargin;
+  }
+}

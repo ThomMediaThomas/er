@@ -11,6 +11,7 @@ $darken: 10%;
   text-decoration: none;
   cursor: pointer;
   margin-bottom: $baseMargin;
+  font-family: $fancyFont;
 
   &:last-child {
     margin-bottom: 0px;

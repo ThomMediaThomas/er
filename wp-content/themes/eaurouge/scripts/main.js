@@ -42,7 +42,29 @@ $(document).ready(function () {
             return false;
         });
     }
+
+    if ($('#accommodation-booker').length > 0) {
+        setBookingDetails();
+    }
 });
+
+function setBookingDetails() {
+    var $field = $('textarea.booking_details');
+    if ($field.length <= 0) {
+        setTimeout(setBookingDetails, 500);
+        return;
+    }
+
+    var value = '';
+    value += 'Accommodatie: ' + $('#accommodation_id').val() + ' / ';
+    value += 'Van: ' + $('#date_from').val() + ' / ';
+    value += 'Tot: ' + $('#date_to').val() + ' / ';
+    value += 'Volwassenen: ' + $('#adults').val() + ' / ';
+    value += 'Kinderen: ' + $('#children').val() + ' / ';
+    value += 'Honden: ' + $('#pets').val() + ' / ';
+    value += 'Uitgerekende prijs: ' + $('#total-price').text();
+    $field.val(value);
+}
 
 function NumberInput($element) {
     var self = this;

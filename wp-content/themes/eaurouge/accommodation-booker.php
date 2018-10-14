@@ -9,7 +9,10 @@
 				<div class="column-holder">
                     <div class="column main">
 						<div class="content-wrapper no-top">
+							<h2 class="blue">Jouw gekozen verblijf</h2>
+							<p>In de vorige stap koos je voor het volgende verblijf, wil je toch nog je verblijf wijzigen? Dat kan, ga dan terug naar <a href="javascript:history.back()" title="Ga terug naar de vorige stap">de vorige stap</a>.</p>
 							<div class="box turqoise">
+								<input type="hidden" id="accommodation_id" name="accommodation_id" value="<?php echo $_GET['accommodation_id']; ?>"/>
 								<div class="content-wrapper">
 									<?php
 									global $post;
@@ -20,7 +23,61 @@
 									?>
 								</div>
 							</div>
+							<hr />
+							<h2 class="blue">Periode</h2>
+							<p>Wil je de gekozen periode wijzigen? Dat kan, ga dan terug naar <a href="javascript:history.back()" title="Ga terug naar de vorige stap">de vorige stap</a>.</p>
+							<div class="period">
+								<div class="input-field">
+									<?php $stayDateFrom = isset($_GET['date_from']) ? $_GET['date_from'] : null; ?>
+									<label for="stay_date_from">Van:</label>
+									<span class="input-with-icon">
+										<i class="date"></i>
+										<input disabled="disabled" name="date_from" value="<?php echo $stayDateFrom; ?>" class="datepicker" id="date_from" type="text" placeholder="dd-mm-jjjj">
+									</span>
+								</div>
+								<div class="input-field">
+									<?php $stayDateTo = isset($_GET['date_to']) ? $_GET['date_to'] : null; ?>
+									<label for="stay_date_to">Tot:</label>
+									<span class="input-with-icon">
+										<i class="date"></i>
+										<input disabled="disabled" name="date_to" value="<?php echo $stayDateTo; ?>" class="datepicker" id="date_to" type="text" placeholder="dd-mm-jjjj" />
+									</span>
+								</div>
+							</div>
+							<hr />
+							<h2 class="blue">Jouw gezelschap</h2>
+							<p>Leuk dat je/jullie komen! In de vorige stap gaf je het volgende reisgezelschap aan. Wil je dit toch nog wijzigen? Dat kan, ga dan terug naar <a href="javascript:history.back()" title="Ga terug naar de vorige stap">de vorige stap</a>.</p>
+							<div class="family">
+								<div class="input-field">
+									<?php $adults = isset($_GET['adults']) ? $_GET['adults'] : null; ?>
+									<label for="adults">Volwassenen:</label>
+									<span class="input-with-icon">
+										<i class="adults"></i>
+										<input name="adults" id="adults" type="number" placeholder="0" disabled="disabled" value="<?php echo $adults; ?>">
+									</span>
+								</div>
+								<div class="input-field">
+									<?php $children = isset($_GET['children']) ? $_GET['children'] : null; ?>
+									<label for="children">Kinderen:</label>
+									<span class="input-with-icon">
+										<i class="children"></i>
+										<input name="children" id="children" type="number" placeholder="0" disabled="disabled" value="<?php echo $children; ?>">
+									</span>
+								</div>
+								<div class="input-field">
+									<?php $pets = isset($_GET['pets']) ? $_GET['pets'] : null; ?>
+									<label for="pets">Huisdieren:</label>
+									<span class="input-with-icon">
+										<i class="pets"></i>
+										<input name="pets" id="pets" type="number" placeholder="0" disabled="disabled" value="<?php echo $pets; ?>">
+									</span>
+								</div>
+							</div>
+							<hr />
 							<h2 class="blue">Jouw gegevens</h2>
+							<p>Om jouw reservering goed af te ronden, hebben we nog enkele gegevens van je nodig. Klik - nadat je alles goed gecontroleerd hebt - op "Reservering afronden" om je reservering te verzenden.</p>
+							<p class="red"><strong>Let op!</strong> Jouw reservering is pas definitief als je een bevesting per e-mail ontvangen hebt. Wij proberen binnen 24 uur na ontvangst een bevestiging te sturen.</p>
+							<?php the_content(); ?>
                         </div>
                     </div>
 					<div class="column aside">
@@ -115,10 +172,17 @@
 									</li>
 									<li class="total">
 										<span>Totaal:</span>
-										<strong>€ <?php echo number_format($total, 2); ?></strong>
+										<strong id="total-price">€ <?php echo number_format($total, 2); ?></strong>
 									</li>
 								</ul>
 								<?php endif; ?>
+							</div>
+						</div>
+						<div class="box red">
+							<div class="content-wrapper">
+								<h4 class="white">Let op!</h4>
+								<p class="white">Jouw reservering is pas definitief als je een bevesting per e-mail ontvangen hebt.</p>
+								<p class="yellow">Wij proberen binnen 24 uur na ontvangst een bevestiging te sturen.</p>
 							</div>
 						</div>
 					</div>

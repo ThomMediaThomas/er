@@ -643,6 +643,7 @@ html, body {
   text-decoration: none;
   cursor: pointer;
   margin-bottom: 20px;
+  font-family: "Dosis", sans-serif;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
@@ -823,36 +824,41 @@ label {
     color: White; }
 
 input,
-select {
+select,
+textarea {
   display: block;
   width: 100%;
   background-color: White;
-  border: 0px;
   padding: 10px;
   font-size: 1rem;
   color: #525252;
   border-radius: 5px;
   -webkit-border-radius: 5px;
-  -moz-border-radius: 5px; }
+  -moz-border-radius: 5px;
+  border: 1px solid #b8b8b8; }
   input::-webkit-input-placeholder,
-  select::-webkit-input-placeholder {
+  select::-webkit-input-placeholder,
+  textarea::-webkit-input-placeholder {
     font-style: italic;
     color: #b8b8b8; }
   input:-ms-input-placeholder,
-  select:-ms-input-placeholder {
+  select:-ms-input-placeholder,
+  textarea:-ms-input-placeholder {
     font-style: italic;
     color: #b8b8b8; }
   input::-ms-input-placeholder,
-  select::-ms-input-placeholder {
+  select::-ms-input-placeholder,
+  textarea::-ms-input-placeholder {
     font-style: italic;
     color: #b8b8b8; }
   input::placeholder,
-  select::placeholder {
+  select::placeholder,
+  textarea::placeholder {
     font-style: italic;
     color: #b8b8b8; }
   input:focus,
-  select:focus {
-    border: 0px;
+  select:focus,
+  textarea:focus {
     outline: none; }
 
 .input-with-icon {
@@ -915,12 +921,18 @@ select {
     right: 22px;
     border-right: 1px solid #426b6f; }
 
+.nf-form-fields-required {
+  display: none; }
+
 #quick-booking {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
   margin-top: -75px; }
+  #quick-booking input,
+  #quick-booking select {
+    border: 0px; }
 
 .tab.yellow, .tab-content.yellow {
   background-color: #eec633; }
@@ -1279,3 +1291,23 @@ ul.price-detail {
       color: #eec633; }
       ul.price-detail li.total span, ul.price-detail li.total strong {
         width: 50%; }
+
+.family:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.family .input-field {
+  width: 33.3333%;
+  float: left;
+  padding-right: 20px; }
+
+.period:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.period .input-field {
+  width: 50%;
+  float: left;
+  padding-right: 20px; }

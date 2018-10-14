@@ -4,6 +4,11 @@
   margin: 0 auto;
   position: relative;
   margin-top: -75px;
+
+  input,
+  select{
+    border: 0px;
+  }
 }
 
 $borderRadius: 10px;

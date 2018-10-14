@@ -20,15 +20,16 @@ label {
 }
 
 input,
-select{
+select,
+textarea{
   display: block;
   width: 100%;
   background-color: White;
-  border: 0px;
   padding: 10px;
   font-size: calculateRem(18px);
   color: $bodyFontColor;
   @include border-radius($inputRadius);
+  border: 1px solid $lightGrey;
 
   &::placeholder {
     font-style: italic;
@@ -36,7 +37,6 @@ select{
   }
 
   &:focus {
-    border: 0px;
     outline: none;
   }
 }
@@ -124,4 +124,8 @@ select{
     right: $upDownWidth;
     border-right: 1px solid $blue;
   }
+}
+
+.nf-form-fields-required {
+  display: none;
 }
