@@ -348,6 +348,8 @@ div.datepicker-dropdown {
       font-weight: bold;
       background-color: #c8e3dc;
       color: #426b6f; }
+    div.datepicker-dropdown .datepicker-panel > ul > li.highlighted {
+      background-color: #eec633; }
     div.datepicker-dropdown .datepicker-panel > ul > li.muted {
       color: #b8b8b8; }
   div.datepicker-dropdown .datepicker-panel > ul[data-view="week"] > li {
@@ -649,6 +651,9 @@ html, body {
   transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out; }
+  .button.disabled {
+    cursor: default;
+    opacity: 0.5; }
   .button:last-child {
     margin-bottom: 0px; }
   .button i {
@@ -861,6 +866,10 @@ textarea {
   select:focus,
   textarea:focus {
     outline: none; }
+  .box input, .box
+  select, .box
+  textarea {
+    border: 0px; }
 
 .input-with-icon {
   position: relative; }
@@ -879,6 +888,8 @@ textarea {
       background-position: 0 -41px; }
     .input-with-icon i.children {
       background-position: 0 -82px; }
+    .input-with-icon i.babies {
+      background-position: 0 -164px; }
     .input-with-icon i.pets {
       background-position: 0 -123px; }
   .input-with-icon input {
@@ -1266,6 +1277,9 @@ table {
   table td, table th {
     padding: 20px; }
 
+#accommodation-booker form {
+  margin-bottom: 20px; }
+
 ul.price-detail {
   list-style: none;
   margin-left: 0px; }
@@ -1299,7 +1313,7 @@ ul.price-detail {
   clear: both; }
 
 .family .input-field {
-  width: 33.3333%;
+  width: 25%;
   float: left;
   padding-right: 20px; }
 
@@ -1312,3 +1326,6 @@ ul.price-detail {
   width: 50%;
   float: left;
   padding-right: 20px; }
+
+#box-price-detail.loading {
+  opacity: 0.2; }

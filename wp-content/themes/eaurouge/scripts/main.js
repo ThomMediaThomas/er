@@ -43,19 +43,43 @@ $(document).ready(function () {
         });
     }
 
-    if ($('#accommodation-booker').length > 0) {
-        setBookingDetails();
-    }
+    $('#accommodation-booker').each(function () {
+        (new AccommodationBooker($(this))).init();
+    });
 });
 
-function setBookingDetails() {
-    $('#field_accommodation_id').val($('#accommodation_id').val());
-    $('#field_date_from').val($('#date_from').val());
-    $('#field_date_to').val($('#date_to').val());
-    $('#field_adults').val($('#adults').val());
-    $('#field_children').val($('#children').val());
-    $('#field_pets').val($('#pets').val());
-    $('#field_calculated_price').val($('#total-price').text());
+function AccommodationBooker($element) {
+    var self = this;
+    self.$element = $element;
+    self.$detailsForm = $element.find('#booking-details-form');
+    self.$boxPriceDetail = $element.find('#box-price-detail');
+
+    self.init = function () {
+        self.bindEvents();
+        self.setBookingDetails();
+    };
+
+    self.bindEvents = function () {
+        self.$detailsForm.find('input').on('change', function () {
+            self.$boxPriceDetail.addClass('loading');
+
+            $.get(self.$detailsForm.attr('action') + '?' + self.$detailsForm.serialize(), function (response) {
+                self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
+                self.$boxPriceDetail.removeClass('loading');
+                self.setBookingDetails();
+            });
+        });
+    };
+
+    self.setBookingDetails = function () {
+        $('#field_accommodation_id').val($('#accommodation_id').val());
+        $('#field_date_from').val($('#date_from').val());
+        $('#field_date_to').val($('#date_to').val());
+        $('#field_adults').val($('#adults').val());
+        $('#field_children').val($('#children').val());
+        $('#field_pets').val($('#pets').val());
+        $('#field_calculated_price').val($('#total-price').text());
+    }
 }
 
 function NumberInput($element) {
@@ -86,7 +110,7 @@ function NumberInput($element) {
     };
 
     self.setValue = function (value) {
-        self.$input.val(value);
+        self.$input.val(value).trigger('change');
     };
 }
 
@@ -109,7 +133,10 @@ function QuickBooking($element) {
 
         self.$submit.on('click', function (event) {
             event.preventDefault();
-            $(this).parents('form.quick-booking-form').submit();
+            var $form = $(this).parents('form.quick-booking-form');
+            if ($form.find('#stay_date_from').val() && $form.find('#stay_date_to').val()) {
+                $form.submit();
+            }
         });
     };
 

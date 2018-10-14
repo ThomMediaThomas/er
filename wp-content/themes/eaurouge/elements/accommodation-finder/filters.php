@@ -69,12 +69,26 @@
             </div>
             <div class="input-field">
                 <?php $children = isset($_GET['children']) ? $_GET['children'] : null; ?>
-                <label for="children" class="white">Aantal kinderen:</label>
+                <label for="children" class="white">Aantal kinderen (4 t/m 15 jaar):</label>
                 <div class="counter">
                     <span class="number-input">
                         <span class="input-with-icon">
                             <i class="children"></i>
                             <input name="children" value="<?php echo $children; ?>" id="children" type="number" placeholder="0" />
+                        </span>
+                        <i class="up">+</i>
+                        <i class="down">-</i>
+                    </span>
+                </div>
+            </div>
+            <div class="input-field">
+                <?php $babies = isset($_GET['babies']) ? $_GET['babies'] : null; ?>
+                <label for="babies" class="white">Aantal kinderen (0 t/m 3 jaar):</label>
+                <div class="counter">
+                    <span class="number-input">
+                        <span class="input-with-icon">
+                            <i class="babies"></i>
+                            <input name="babies" value="<?php echo $babies; ?>" id="babies" type="number" placeholder="0" />
                         </span>
                         <i class="up">+</i>
                         <i class="down">-</i>

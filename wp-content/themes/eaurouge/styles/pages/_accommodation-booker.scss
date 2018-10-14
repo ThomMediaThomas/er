@@ -1,3 +1,9 @@
+#accommodation-booker {
+  form {
+    margin-bottom: $baseMargin;
+  }
+}
+
 ul.price-detail {
   list-style: none;
   margin-left: 0px;
@@ -39,7 +45,7 @@ ul.price-detail {
   @include clearfix();
 
   .input-field {
-    width: 33.3333%;
+    width: 25%;
     float: left;
     padding-right: $baseMargin;
   }
@@ -53,5 +59,11 @@ ul.price-detail {
     width: 50%;
     float: left;
     padding-right: $baseMargin;
+  }
+}
+
+#box-price-detail {
+  &.loading {
+    opacity: 0.2;
   }
 }

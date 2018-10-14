@@ -50,6 +50,10 @@ div.datepicker-dropdown {
           color: $blue;
         }
 
+        &.highlighted {
+          background-color: $yellow;
+        }
+
         &.muted {
           color: $lightGrey;
         }

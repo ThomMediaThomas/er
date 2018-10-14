@@ -25,14 +25,16 @@
             $hasPrice = true;
             $adults = intval($_GET['adults']);
             $children = intval($_GET['children']);
+            $babies = intval($_GET['babies']);
             $pets = intval($_GET['pets']);
 
             $price += $nights * floatval($currentPricePeriod['price_per_night']);
             $price += $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
             $price += $nights * $children * floatval($currentPricePeriod['price_per_child']);
+            $price += $nights * $babies * floatval($currentPricePeriod['price_per_baby']);
             $price += $nights * $pets * floatval($currentPricePeriod['price_per_dog']);
             $price += $nights * floatval($currentPricePeriod['electricty_per_night']);
-            $price += $nights * ($adults + $children) * floatval($currentPricePeriod['tourist_tax_per_night']);
+            $price += $nights * ($adults + $children + $babies) * floatval($currentPricePeriod['tourist_tax_per_night']);
             $price += floatval($currentPricePeriod['booking_costs_per_stay']);
 
             $url = '/boeken/gegevens';
@@ -41,6 +43,7 @@
             $url .= '&date_to=' . $_GET['stay_date_to'];
             $url .= '&adults=' . $_GET['adults'];
             $url .= '&children=' . $_GET['children'];
+            $url .= '&babies=' . $_GET['babies'];
             $url .= '&pets=' . $_GET['pets'];
         }
     }
@@ -72,7 +75,7 @@
                 <li><i class="icon-check"></i><?php the_sub_field('usp'); ?></li>
             <?php endwhile; ?>
         </ul>
-        <?php if ($hasPrice): ?>
+        <?php if ($hasPrice) { ?>
             <div class="bottom">
                 <div class="bottom-left">
                     <span>Prijs voor het verblijf </span>
@@ -81,6 +84,13 @@
                 </div>
                 <a class="button yellow small" href="<?php echo $url; ?>">Verblijf boeken<i class="icon-chevron-right"></i></a>
             </div>
-        <?php endif; ?>
+        <?php } else { ?>
+            <div class="bottom">
+                <div class="bottom-left">
+                    <span>We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen.</span>
+                </div>
+                <a class="button yellow small disabled">Verblijf boeken<i class="icon-chevron-right"></i></a>
+            </div>
+        <?php } ?>
     </div>
 </div>

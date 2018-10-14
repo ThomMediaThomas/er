@@ -39,6 +39,10 @@ textarea{
   &:focus {
     outline: none;
   }
+
+  .box & {
+    border: 0px;
+  }
 }
 
 .input-with-icon {
@@ -64,6 +68,10 @@ textarea{
 
     &.children {
       background-position: 0 -82px;
+    }
+
+    &.babies {
+      background-position: 0 -164px;
     }
 
     &.pets {
