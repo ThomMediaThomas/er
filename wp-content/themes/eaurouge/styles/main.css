@@ -644,6 +644,7 @@ html, body {
   cursor: pointer;
   margin-bottom: 20px;
   font-family: "Dosis", sans-serif;
+  border: 0px;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   -webkit-transition: all 0.2s ease-in-out;
@@ -810,9 +811,9 @@ ul.horizontal li, ol.horizontal li {
     .slider .slide-nav.next {
       right: 0px; }
 
-.input-field {
+.input-field, .frm_top_container {
   margin-bottom: 20px; }
-  .input-field:last-child {
+  .input-field:last-child, .frm_top_container:last-child {
     margin-bottom: 0px; }
 
 label {

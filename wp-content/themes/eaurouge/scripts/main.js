@@ -49,21 +49,13 @@ $(document).ready(function () {
 });
 
 function setBookingDetails() {
-    var $field = $('textarea.booking_details');
-    if ($field.length <= 0) {
-        setTimeout(setBookingDetails, 500);
-        return;
-    }
-
-    var value = '';
-    value += 'Accommodatie: ' + $('#accommodation_id').val() + ' / ';
-    value += 'Van: ' + $('#date_from').val() + ' / ';
-    value += 'Tot: ' + $('#date_to').val() + ' / ';
-    value += 'Volwassenen: ' + $('#adults').val() + ' / ';
-    value += 'Kinderen: ' + $('#children').val() + ' / ';
-    value += 'Honden: ' + $('#pets').val() + ' / ';
-    value += 'Uitgerekende prijs: ' + $('#total-price').text();
-    $field.val(value);
+    $('#field_accommodation_id').val($('#accommodation_id').val());
+    $('#field_date_from').val($('#date_from').val());
+    $('#field_date_to').val($('#date_to').val());
+    $('#field_adults').val($('#adults').val());
+    $('#field_children').val($('#children').val());
+    $('#field_pets').val($('#pets').val());
+    $('#field_calculated_price').val($('#total-price').text());
 }
 
 function NumberInput($element) {

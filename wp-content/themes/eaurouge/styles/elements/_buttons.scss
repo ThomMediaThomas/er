@@ -12,6 +12,7 @@ $darken: 10%;
   cursor: pointer;
   margin-bottom: $baseMargin;
   font-family: $fancyFont;
+  border: 0px;
 
   &:last-child {
     margin-bottom: 0px;
