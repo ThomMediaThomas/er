@@ -24,13 +24,6 @@
                     </div>
 					<div class="column aside">
 						<?php get_template_part('/elements/accommodation-booker/price-detail'); ?>
-						<div class="box red">
-							<div class="content-wrapper">
-								<h4 class="white">Let op!</h4>
-								<p class="white">Jouw reservering is pas definitief als je een bevesting per e-mail ontvangen hebt.</p>
-								<p class="yellow">Wij proberen binnen 24 uur na ontvangst een bevestiging te sturen.</p>
-							</div>
-						</div>
 					</div>
 		        </div>
 			</div>
