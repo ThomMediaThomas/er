@@ -79,6 +79,16 @@ function AccommodationBooker($element) {
         $('#field_children').val($('#children').val());
         $('#field_pets').val($('#pets').val());
         $('#field_calculated_price').val($('#total-price').text());
+
+        //extras
+        var $checkedExtras = $('input[name="extras[]"]:checked'),
+            extrasValue = [];
+
+        $checkedExtras.each(function () {
+            extrasValue.push($(this).val());
+        });
+
+        $('#field_extras').val(extrasValue.join(','));
     }
 }
 

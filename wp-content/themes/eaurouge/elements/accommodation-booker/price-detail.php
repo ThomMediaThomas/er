@@ -80,7 +80,32 @@
                     <span><?php echo $nights; ?> x elektra</span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
-                <li>
+                <?php
+                $extras = get_field('extras', $_GET['accommodation_id']);
+                $selected_extras = $_GET['extras'];
+                $extra_counter = 0;
+
+                foreach ($selected_extras as $extra_key):
+                    $extra_counter++;
+                    $extra = array_filter($extras, function ($extra) use ($extra_key){
+                        return $extra['key'] == $extra_key;
+                    });
+
+                    if ($extra) :
+                        $extra = reset($extra);
+                        ?>
+                        <li <?php if($extra_counter == 1): ?>class="with-separator"<?php endif; ?>>
+                            <?php
+                            $amount = $extra['price_is_per_night'] ? $nights : 1;
+                            $price = $amount * floatval($extra['price']);
+                            $total += $price;
+                            ?>
+                            <span><?php echo $amount; ?> x <?php echo strtolower($extra['title']); ?></span>
+                            <strong>€ <?php echo number_format($price, 2); ?></strong>
+                        </li>
+                    <?php endif;
+                endforeach; ?>
+                <li class="with-separator hidden">
                     <?php
                     $price = $nights * ($adults + $children + $babies) * floatval($currentPricePeriod['tourist_tax_per_night']);
                     $total += $price;
@@ -88,7 +113,7 @@
                     <span><?php echo ($adults + $children + $babies); ?> x toeristenbelasting</span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
-                <li>
+                <li class="hidden">
                     <?php
                     $price = floatval($currentPricePeriod['booking_costs_per_stay']);
                     $total += $price;
@@ -98,7 +123,10 @@
                 </li>
                 <li class="total">
                     <span>Totaal:</span>
-                    <strong id="total-price">€ <?php echo number_format($total, 2); ?></strong>
+                    <strong id="total-price">€ <?php echo number_format($total, 2); ?><br /></strong>
+                </li>
+                <li class="info">
+                    De getoonde prijs is inclusief reserveringskosten (éénmalig per verblijf), milieu-heffing en toeristenbelasting (per persoon, per nacht).
                 </li>
             </ul>
         <?php endif; ?>
