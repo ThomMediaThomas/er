@@ -1,6 +1,6 @@
 <?php
     $title = get_the_title();
-    $hasDates  = isset($_GET['stay_date_from']) && isset($_GET['stay_date_to']);
+    $hasDates  = !empty($_GET['stay_date_from']) && !empty($_GET['stay_date_to']);
     $hasPrice = false;
 
     if ($hasDates) {
