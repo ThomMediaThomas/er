@@ -112,6 +112,8 @@
         </div>
     </div>
     <div class="input-field">
+        <?php the_field('above_search_button'); ?>
         <a class="button red submit-parent-form">Zoeken <i class="icon-chevron-right"></i></a>
+        <?php the_field('below_search_button'); ?>
     </div>
 </form>
