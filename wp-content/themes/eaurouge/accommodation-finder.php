@@ -12,6 +12,8 @@
                     </div>
                     <div class="column main">
                         <div class="content-wrapper">
+							<?php the_Field('above_search_results'); ?>
+							<hr />
                             <?php
                             $meta_query = array('relation' => 'AND');
 
