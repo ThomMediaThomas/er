@@ -7,7 +7,8 @@
 			<div class="content-wrapper">
 				<div class="column-holder">
                     <div class="column main">
-						<div class="content-wrapper no-top">
+						<div class="content-wrapper">
+                            <?php the_field('page_intro'); ?>
 							<?php global $wp; ?>
 							<form id="booking-details-form" action="<?php echo home_url($wp->request); ?>" method="GET">
 								<?php get_template_part('/elements/accommodation-booker/selected-accommodation'); ?>

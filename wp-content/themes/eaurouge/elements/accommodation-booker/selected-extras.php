@@ -1,6 +1,6 @@
-<h2 class="blue">Extra's</h2>
-<p>Vink hieronder de extra's aan waar je gebruik van wenst te maken tijdens je vakantie.</p>
+<?php the_field('extras_intro'); ?>
 <?php $selected_extras = $_GET['extras']; ?>
+<?php if(have_rows('extras')): ?>
 <?php while( have_rows('extras', $_GET['accommodation_id']) ): the_row(); ?>
     <div class="input-field">
             <?php
@@ -15,3 +15,6 @@
             <span class="checkbox-info">(<?php the_sub_field('info'); ?> )</span></label>
     </div>
 <?php endwhile; ?>
+<?php else: ?>
+    <p><strong><?php the_field('no_extras_for_accommodation'); ?></strong></p>
+<?php endif; ?>

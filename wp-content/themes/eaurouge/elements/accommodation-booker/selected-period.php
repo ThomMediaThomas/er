@@ -1,4 +1,4 @@
-<h2 class="blue">Periode</h2>
+<?php the_field('period_intro'); ?>
 <div class="period">
     <div class="input-field">
         <?php $stayDateFrom = isset($_GET['date_from']) ? $_GET['date_from'] : null; ?>

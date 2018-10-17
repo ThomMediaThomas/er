@@ -1,6 +1,6 @@
 <div class="box green" id="box-price-detail">
     <div class="content-wrapper">
-        <h3 class="yellow"><span class="white sub">Overzicht van</span> jouw verblijf</h3>
+        <?php the_field('price_intro'); ?>
         <?php
         $adults = intval($_GET['adults']);
         $children = intval($_GET['children']);
@@ -85,26 +85,28 @@
                 $selected_extras = $_GET['extras'];
                 $extra_counter = 0;
 
-                foreach ($selected_extras as $extra_key):
-                    $extra_counter++;
-                    $extra = array_filter($extras, function ($extra) use ($extra_key){
-                        return $extra['key'] == $extra_key;
-                    });
+                if ($selected_extras):
+                    foreach ($selected_extras as $extra_key):
+                        $extra_counter++;
+                        $extra = array_filter($extras, function ($extra) use ($extra_key){
+                            return $extra['key'] == $extra_key;
+                        });
 
-                    if ($extra) :
-                        $extra = reset($extra);
-                        ?>
-                        <li <?php if($extra_counter == 1): ?>class="with-separator"<?php endif; ?>>
-                            <?php
-                            $amount = $extra['price_is_per_night'] ? $nights : 1;
-                            $price = $amount * floatval($extra['price']);
-                            $total += $price;
+                        if ($extra) :
+                            $extra = reset($extra);
                             ?>
-                            <span><?php echo $amount; ?> x <?php echo strtolower($extra['title']); ?></span>
-                            <strong>€ <?php echo number_format($price, 2); ?></strong>
-                        </li>
-                    <?php endif;
-                endforeach; ?>
+                            <li <?php if($extra_counter == 1): ?>class="with-separator"<?php endif; ?>>
+                                <?php
+                                $amount = $extra['price_is_per_night'] ? $nights : 1;
+                                $price = $amount * floatval($extra['price']);
+                                $total += $price;
+                                ?>
+                                <span><?php echo $amount; ?> x <?php echo strtolower($extra['title']); ?></span>
+                                <strong>€ <?php echo number_format($price, 2); ?></strong>
+                            </li>
+                        <?php endif;
+                    endforeach;
+                endif; ?>
                 <li class="with-separator hidden">
                     <?php
                     $price = $nights * ($adults + $children + $babies) * floatval($currentPricePeriod['tourist_tax_per_night']);
@@ -126,7 +128,7 @@
                     <strong id="total-price">€ <?php echo number_format($total, 2); ?><br /></strong>
                 </li>
                 <li class="info">
-                    De getoonde prijs is inclusief reserveringskosten (éénmalig per verblijf), milieu-heffing en toeristenbelasting (per persoon, per nacht).
+                    <?php the_field('note_below_price'); ?>
                 </li>
             </ul>
         <?php endif; ?>

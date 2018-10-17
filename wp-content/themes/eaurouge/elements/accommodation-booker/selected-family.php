@@ -1,4 +1,4 @@
-<h2 class="blue">Jouw gezelschap</h2>
+<?php the_field('family_intro'); ?>
 <div class="family">
     <div class="input-field">
         <?php $adults = isset($_GET['adults']) ? $_GET['adults'] : null; ?>
