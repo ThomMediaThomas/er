@@ -1316,6 +1316,25 @@ table {
   table td, table th {
     padding: 20px; }
 
+#accommodation-finder-results {
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -moz-transform: translateY(0px);
+  -o-transform: translateY(0px);
+  -ms-transform: translateY(0px);
+  -webkit-transform: translateY(0px);
+  transform: translateY(0px);
+  opacity: 1; }
+  #accommodation-finder-results.loading {
+    opacity: 0.1;
+    -moz-transform: translateY(100px);
+    -o-transform: translateY(100px);
+    -ms-transform: translateY(100px);
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px); }
+
 #accommodation-booker form {
   margin-bottom: 20px; }
 
@@ -1374,5 +1393,21 @@ ul.price-detail {
   float: left;
   padding-right: 20px; }
 
-#box-price-detail.loading {
-  opacity: 0.2; }
+#box-price-detail {
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -moz-transform: translateY(0px);
+  -o-transform: translateY(0px);
+  -ms-transform: translateY(0px);
+  -webkit-transform: translateY(0px);
+  transform: translateY(0px);
+  opacity: 1; }
+  #box-price-detail.loading {
+    opacity: 0.1;
+    -moz-transform: translateY(100px);
+    -o-transform: translateY(100px);
+    -ms-transform: translateY(100px);
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px); }

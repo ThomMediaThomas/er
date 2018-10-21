@@ -23,7 +23,28 @@ $(document).ready(function () {
         })
     }
 
-    if ($('#accommodation-finder').length > 0) {
+    $('#accommodation-finder').each(function () {
+        (new AccommodationFinder($(this))).init();
+    });
+
+    $('#accommodation-booker').each(function () {
+        (new AccommodationBooker($(this))).init();
+    });
+});
+
+function AccommodationFinder($element) {
+    var self = this;
+    self.$element = $element;
+    self.$form = self.$element.find('#accommodation-finder-filters');
+    self.$results = self.$element.find('#accommodation-finder-results');
+
+    self.init = function () {
+        self.bindEvents();
+    };
+
+    self.bindEvents = function () {
+        self.$form.find('input, select').on('change', debounce(self.filterResults, 500));
+
         $('#stay_type').on('change', function () {
             if ($(this).val() == 'chalet') {
                 $('#stay_type_chalet').show();
@@ -41,12 +62,17 @@ $(document).ready(function () {
             $(this).addClass('active');
             return false;
         });
-    }
+    };
 
-    $('#accommodation-booker').each(function () {
-        (new AccommodationBooker($(this))).init();
-    });
-});
+    self.filterResults = function () {
+        self.$results.addClass('loading');
+
+        $.get(self.$form.attr('action') + '?' + self.$form.serialize(), function (response) {
+            self.$results.html($(response).find('#accommodation-finder-results').html());
+            self.$results.removeClass('loading');
+        });
+    }
+}
 
 function AccommodationBooker($element) {
     var self = this;

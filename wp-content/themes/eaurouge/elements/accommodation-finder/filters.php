@@ -1,4 +1,5 @@
-<form method="GET">
+<?php global $wp; ?>
+<form method="GET" id="accommodation-finder-filters" action="<?php echo home_url($wp->request); ?>">
     <div class="box yellow">
         <div class="content-wrapper">
             <h3 class="red">Verblijf</h3>

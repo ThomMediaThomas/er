@@ -10,7 +10,7 @@
                     <div class="column aside">
                         <?php get_template_part('/elements/accommodation-finder/filters'); ?>
                     </div>
-                    <div class="column main">
+                    <div class="column main" id="accommodation-finder-results">
                         <div class="content-wrapper">
 							<?php the_Field('above_search_results'); ?>
 							<hr />
