@@ -78,6 +78,13 @@
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
+            <?php if ($block_type == 'intro'): ?>
+                <div class="content-wrapper">
+                    <div class="section-intro">
+                        <?php echo $intro; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
         </section>
     <?php endwhile; ?>
 <?php endif; ?>

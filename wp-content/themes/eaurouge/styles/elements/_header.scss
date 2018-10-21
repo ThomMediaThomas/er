@@ -86,7 +86,7 @@ $topbarHeight: 42px;
       border-top: 4px solid $yellow;
     }
 
-    .sub-menu {
+    > .sub-menu {
       opacity: 0;
       visibility: hidden;
       position: absolute;
@@ -121,6 +121,7 @@ $topbarHeight: 42px;
 
       li {
         border-bottom: 1px solid $red;
+        position: relative;
 
         a {
           color: $red;
@@ -130,13 +131,27 @@ $topbarHeight: 42px;
           @include transition(all, .25s, ease-in-out);
         }
 
-        &:hover a {
+        &:hover > a {
           color: White;
           background-color: $red;
         }
 
         &:last-child {
           border-bottom: 0px;
+        }
+
+        > .sub-menu {
+          position: absolute;
+          width: 250px;
+          left: 100%;
+          margin: 0px;
+          top: 0px;
+          display: none;
+          background-color: $yellow;
+        }
+
+        &:hover > .sub-menu {
+          display: block;
         }
       }
     }
