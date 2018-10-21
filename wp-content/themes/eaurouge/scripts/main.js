@@ -60,14 +60,16 @@ function AccommodationBooker($element) {
     };
 
     self.bindEvents = function () {
-        self.$detailsForm.find('input').on('change', function () {
-            self.$boxPriceDetail.addClass('loading');
+        self.$detailsForm.find('input').on('change', debounce(self.calculatePrice, 500));
+    };
 
-            $.get(self.$detailsForm.attr('action') + '?' + self.$detailsForm.serialize(), function (response) {
-                self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
-                self.$boxPriceDetail.removeClass('loading');
-                self.setBookingDetails();
-            });
+    self.calculatePrice = function () {
+        self.$boxPriceDetail.addClass('loading');
+
+        $.get(self.$detailsForm.attr('action') + '?' + self.$detailsForm.serialize(), function (response) {
+            self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
+            self.$boxPriceDetail.removeClass('loading');
+            self.setBookingDetails();
         });
     };
 
