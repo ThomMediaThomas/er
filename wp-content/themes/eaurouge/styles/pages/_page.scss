@@ -112,11 +112,13 @@ img {
   }
 
   &.alignleft {
-    margin: 0 auto 0 0;
+    float: left;
+    margin-right: $baseMargin;
   }
 
   &.alignright {
-    margin: 0  0 0 auto;
+    float: right;
+    margin-left: $baseMargin;
   }
 }
 

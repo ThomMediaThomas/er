@@ -23,6 +23,23 @@
                                     'value'	  	=> $_GET['stay_type'],
                                     'compare' 	=> 'LIKE',
                                 );
+
+
+								if ($_GET['stay_type'] == 'chalet' && isset($_GET['accommodation_type'])) {
+									$meta_query[] = array(
+										'key'	 	=> 'subtype',
+										'value'	  	=> $_GET['accommodation_type'],
+										'compare' 	=> 'LIKE',
+									);
+								}
+
+								if ($_GET['stay_type'] == 'camping' && isset($_GET['vehicle'])) {
+									$meta_query[] = array(
+										'key'	 	=> 'subtype',
+										'value'	  	=> $_GET['vehicle'],
+										'compare' 	=> 'LIKE',
+									);
+								}
                             }
 
                             if (isset($_GET['adults']) || isset($_GET['children'])) {

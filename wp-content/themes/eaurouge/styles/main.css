@@ -1227,9 +1227,11 @@ img {
   img.aligncenter {
     margin: 0 auto; }
   img.alignleft {
-    margin: 0 auto 0 0; }
+    float: left;
+    margin-right: 20px; }
   img.alignright {
-    margin: 0  0 0 auto; }
+    float: right;
+    margin-left: 20px; }
 
 p, ul, ol {
   margin-bottom: 20px; }
