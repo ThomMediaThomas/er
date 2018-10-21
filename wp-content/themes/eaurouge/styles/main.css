@@ -733,10 +733,11 @@ ul.horizontal li, ol.horizontal li {
   text-align: center;
   padding: 80px 0; }
   .hero .logo-holder {
-    margin-bottom: 20px;
-    display: block; }
+    margin: 0 auto 20px auto;
+    display: block;
+    width: 300px; }
   .hero .logo {
-    width: 300px;
+    width: 100%;
     height: auto;
     margin: 0 auto; }
     .hero .logo.small {

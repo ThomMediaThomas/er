@@ -5,12 +5,13 @@
   padding: $baseMargin*4 0;
 
   .logo-holder {
-    margin-bottom: $baseMargin;
+    margin: 0 auto $baseMargin auto;
     display: block;
+    width: 300px;
   }
 
   .logo {
-    width: 300px;
+    width: 100%;
     height: auto;
     margin: 0 auto;
 
