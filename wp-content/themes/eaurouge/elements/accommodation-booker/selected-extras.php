@@ -1,11 +1,11 @@
 <?php the_field('extras_intro'); ?>
 <?php $selected_extras = $_GET['extras']; ?>
-<?php if(have_rows('extras')): ?>
+<?php if(have_rows('extras', $_GET['accommodation_id'])): ?>
 <?php while( have_rows('extras', $_GET['accommodation_id']) ): the_row(); ?>
     <div class="input-field">
             <?php
                 $key = get_sub_field('key');
-                $selected = in_array($key, $selected_extras);
+                $selected = $selected_extras ? in_array($key, $selected_extras) : false;
             ?>
             <label for="<?php echo $key; ?>" class="checkbox">
             <input type="checkbox" <?php if($selected): ?>checked="checked"<?php endif; ?> class="extras-for-stay" name="extras[]" value="<?php echo $key; ?>" id="<?php echo $key; ?>" />
