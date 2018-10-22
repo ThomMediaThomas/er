@@ -178,3 +178,10 @@ textarea{
 .nf-form-fields-required {
   display: none;
 }
+
+.frm_message {
+  padding: 20px;
+  @include border-radius(10px);
+  background-color: $turqoise;
+  color: $blue;
+}

@@ -987,6 +987,14 @@ textarea {
 .nf-form-fields-required {
   display: none; }
 
+.frm_message {
+  padding: 20px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  background-color: #c8e3dc;
+  color: #426b6f; }
+
 #quick-booking {
   width: 100%;
   max-width: 1200px;
