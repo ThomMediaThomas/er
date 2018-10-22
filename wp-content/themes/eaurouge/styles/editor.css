@@ -1,0 +1,342 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+@font-face {
+  font-family: 'icomoon';
+  src: url("../fonts/icomoon.eot?hv7i2s");
+  src: url("../fonts/icomoon.eot?hv7i2s#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf?hv7i2s") format("truetype"), url("../fonts/icomoon.woff?hv7i2s") format("woff"), url("../fonts/icomoon.svg?hv7i2s#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon-asterisk:before {
+  content: "\f069"; }
+
+.icon-plus:before {
+  content: "\f067"; }
+
+.icon-question:before {
+  content: "\f128"; }
+
+.icon-minus:before {
+  content: "\f068"; }
+
+.icon-heart:before {
+  content: "\f004"; }
+
+.icon-star:before {
+  content: "\f005"; }
+
+.icon-user:before {
+  content: "\f007"; }
+
+.icon-check:before {
+  content: "\f00c"; }
+
+.icon-close:before {
+  content: "\f00d"; }
+
+.icon-remove:before {
+  content: "\f00d"; }
+
+.icon-times:before {
+  content: "\f00d"; }
+
+.icon-repeat:before {
+  content: "\f01e"; }
+
+.icon-rotate-right:before {
+  content: "\f01e"; }
+
+.icon-refresh:before {
+  content: "\f021"; }
+
+.icon-chevron-left:before {
+  content: "\f053"; }
+
+.icon-chevron-right:before {
+  content: "\f054"; }
+
+.icon-plus-circle:before {
+  content: "\f055"; }
+
+.icon-minus-circle:before {
+  content: "\f056"; }
+
+.icon-times-circle:before {
+  content: "\f057"; }
+
+.icon-check-circle:before {
+  content: "\f058"; }
+
+.icon-question-circle:before {
+  content: "\f059"; }
+
+.icon-info-circle:before {
+  content: "\f05a"; }
+
+.icon-exclamation-circle:before {
+  content: "\f06a"; }
+
+.icon-exclamation-triangle:before {
+  content: "\f071"; }
+
+.icon-warning:before {
+  content: "\f071"; }
+
+html, body {
+  font-size: 18px;
+  font-family: "Roboto", sans-serif;
+  color: #525252;
+  line-height: 1.6; }
+
+h1.white, h2.white, h3.white, h4.white, h5.white, h6.white,
+p.white, a.white, ul.white, ol.white {
+  background-color: #b8b8b8; }
+
+body {
+  padding: 20px; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Dosis", sans-serif;
+  text-transform: uppercase;
+  line-height: 1; }
+  h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub, h6 .sub {
+    color: #525252; }
+  h1.turqoise, h1 .sub.turqoise, h2.turqoise, h2 .sub.turqoise, h3.turqoise, h3 .sub.turqoise, h4.turqoise, h4 .sub.turqoise, h5.turqoise, h5 .sub.turqoise, h6.turqoise, h6 .sub.turqoise {
+    color: #c8e3dc; }
+  h1.red, h1 .sub.red, h2.red, h2 .sub.red, h3.red, h3 .sub.red, h4.red, h4 .sub.red, h5.red, h5 .sub.red, h6.red, h6 .sub.red {
+    color: #ca303c; }
+  h1.green, h1 .sub.green, h2.green, h2 .sub.green, h3.green, h3 .sub.green, h4.green, h4 .sub.green, h5.green, h5 .sub.green, h6.green, h6 .sub.green {
+    color: #a0a433; }
+  h1.yellow, h1 .sub.yellow, h2.yellow, h2 .sub.yellow, h3.yellow, h3 .sub.yellow, h4.yellow, h4 .sub.yellow, h5.yellow, h5 .sub.yellow, h6.yellow, h6 .sub.yellow {
+    color: #eec633; }
+  h1.blue, h1 .sub.blue, h2.blue, h2 .sub.blue, h3.blue, h3 .sub.blue, h4.blue, h4 .sub.blue, h5.blue, h5 .sub.blue, h6.blue, h6 .sub.blue {
+    color: #426b6f; }
+  h1.white, h1 .sub.white, h2.white, h2 .sub.white, h3.white, h3 .sub.white, h4.white, h4 .sub.white, h5.white, h5 .sub.white, h6.white, h6 .sub.white {
+    color: white; }
+  h1.no-margin, h2.no-margin, h3.no-margin, h4.no-margin, h5.no-margin, h6.no-margin {
+    margin-bottom: 0px; }
+
+h1 {
+  font-size: 5.11111rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h1 .sub {
+    font-size: 1.88889rem;
+    font-weight: 400;
+    display: block; }
+
+h2 {
+  font-size: 2.38889rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h2 .sub {
+    font-size: 1.38889rem;
+    font-weight: 400;
+    display: block; }
+
+h3 {
+  font-size: 1.55556rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h3 .sub {
+    font-size: 1.27778rem;
+    font-weight: 400;
+    display: block; }
+
+h4 {
+  font-size: 1.27778rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h4 .sub {
+    font-size: 1.16667rem;
+    font-weight: 400;
+    display: block; }
+
+h5 {
+  font-size: 1rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 20px; }
+  h5 .sub {
+    font-size: 1.05556rem;
+    font-weight: 400;
+    display: block; }
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block; }
+  img.aligncenter {
+    margin: 0 auto; }
+  img.alignleft {
+    float: left;
+    margin-right: 20px; }
+  img.alignright {
+    float: right;
+    margin-left: 20px; }
+
+p, ul, ol {
+  margin-bottom: 20px; }
+  p:last-child, p.no-margin, ul:last-child, ul.no-margin, ol:last-child, ol.no-margin {
+    margin-bottom: 0px; }
+  p strong, p a, ul strong, ul a, ol strong, ol a {
+    font-weight: 800; }
+  p.aligncenter, ul.aligncenter, ol.aligncenter {
+    text-align: center; }
+  p.alignleft, ul.alignleft, ol.alignleft {
+    text-align: left; }
+  p.alignright, ul.alignright, ol.alignright {
+    text-align: right; }
+  p a, ul a, ol a {
+    text-decoration: underline; }
+
+em, .note {
+  font-style: italic; }
+
+a:not(.button) {
+  text-decoration: none;
+  color: #ca303c; }
+
+a:not(.button).smaller, p.smaller, ul.smaller, ol.smaller, strong.smaller, span.smaller {
+  font-size: 0.8em;
+  font-style: italic; }
+
+a:not(.button).red, p.red, ul.red, ol.red, strong.red, span.red {
+  color: #ca303c; }
+
+a:not(.button).blue, p.blue, ul.blue, ol.blue, strong.blue, span.blue {
+  color: #426b6f; }
+
+a:not(.button).turqoise, p.turqoise, ul.turqoise, ol.turqoise, strong.turqoise, span.turqoise {
+  color: #c8e3dc; }
+
+a:not(.button).white, p.white, ul.white, ol.white, strong.white, span.white {
+  color: White; }
+
+a:not(.button).yellow, p.yellow, ul.yellow, ol.yellow, strong.yellow, span.yellow {
+  color: #eec633; }
+
+a:not(.button).green, p.green, ul.green, ol.green, strong.green, span.green {
+  color: #a0a433; }
+
+hr {
+  border: 0px solid #c8e3dc;
+  height: 1px;
+  background-color: #c8e3dc;
+  display: block;
+  margin: 20px 0; }
+
+.tag {
+  display: inline-block;
+  padding: 5px;
+  margin-right: 10px;
+  font-family: "Dosis", sans-serif;
+  font-weight: 800;
+  color: white;
+  background-color: #a0a433;
+  text-transform: uppercase; }
+  .tag.category {
+    background-color: #426b6f; }
+
+table {
+  margin-bottom: 20px;
+  width: 100%;
+  vertical-align: top;
+  table-layout: fixed;
+  text-align: left; }
+  table thead tr {
+    border-bottom: 2px solid #b8b8b8; }
+  table tbody tr {
+    border-bottom: 1px solid #b8b8b8; }
+    table tbody tr:last-child {
+      border-bottom: 0px; }
+  table th {
+    font-family: "Dosis", sans-serif;
+    text-transform: uppercase;
+    font-weight: 800; }
+  table td, table th {
+    padding: 20px; }
+
+ul.usps {
+  font-size: 1.44444rem;
+  font-family: "Dosis", sans-serif;
+  list-style: none;
+  margin-left: 0px; }
+  ul.usps i {
+    position: relative;
+    top: 2px;
+    margin-right: 5px; }
+  ul.usps.white {
+    color: White; }
+  ul.usps.small {
+    font-size: 1rem; }
+
+ul {
+  list-style: circle;
+  margin-left: 20px; }
+
+ul.horizontal li, ol.horizontal li {
+  display: inline-block;
+  margin-right: 10px; }

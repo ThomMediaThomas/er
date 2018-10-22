@@ -1,0 +1,302 @@
+@import "config/reset";
+@import "config/variables";
+@import "config/icomoon";
+@import "helpers/pxToRem";
+
+html, body {
+  font-size: $bodyFontSize;
+  font-family: $bodyFont;
+  color: $bodyFontColor;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, a, ul, ol {
+  &.white {
+    background-color: $lightGrey;
+  }
+}
+
+body {
+  padding: $baseMargin;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $fancyFont;
+  text-transform: uppercase;
+  line-height: 1;
+
+  .sub {
+    color: $bodyFontColor;
+  }
+
+  &.turqoise, .sub.turqoise {
+    color: $turqoise;
+  }
+
+  &.red, .sub.red{
+    color: $red;
+  }
+
+  &.green, .sub.green{
+    color: $green;
+  }
+
+  &.yellow, .sub.yellow{
+    color: $yellow;
+  }
+
+
+  &.blue, .sub.blue{
+    color: $blue;
+  }
+
+  &.white, .sub.white{
+    color: white;
+  }
+
+  &.no-margin {
+    margin-bottom: 0px;
+  }
+}
+
+h1 {
+  font-size: calculateRem(92px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(34px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}
+
+h2 {
+  font-size: calculateRem(43px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(25px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}
+
+h3 {
+  font-size: calculateRem(28px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(23px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}
+
+h4 {
+  font-size: calculateRem(23px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(21px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}
+
+h5 {
+  font-size: calculateRem(18px);
+  font-weight: $fancyExtraBold;
+  display: block;
+  margin-bottom: $baseMargin;
+
+  .sub {
+    font-size: calculateRem(19px);
+    font-weight: $fancyRegular;
+    display: block;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+
+  &.aligncenter {
+    margin: 0 auto;
+  }
+
+  &.alignleft {
+    float: left;
+    margin-right: $baseMargin;
+  }
+
+  &.alignright {
+    float: right;
+    margin-left: $baseMargin;
+  }
+}
+
+p, ul, ol {
+  margin-bottom: $baseMargin;
+
+  &:last-child, &.no-margin {
+    margin-bottom: 0px;
+  }
+
+  strong, a {
+    font-weight: $fancyExtraBold;
+  }
+
+  &.aligncenter {
+    text-align: center;
+  }
+
+  &.alignleft {
+    text-align: left;
+  }
+
+  &.alignright {
+    text-align: right;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+em, .note {
+  font-style: italic;
+}
+
+
+a:not(.button) {
+  text-decoration: none;
+  color: $red;
+}
+
+a:not(.button), p, ul, ol, strong, span {
+  &.smaller {
+    font-size: 0.8em;
+    font-style: italic;
+  }
+
+  &.red {
+    color: $red;
+  }
+
+  &.blue {
+    color: $blue;
+  }
+
+  &.turqoise {
+    color: $turqoise;
+  }
+
+  &.white {
+    color: White;
+  }
+
+  &.yellow {
+    color: $yellow;
+  }
+
+  &.green {
+    color: $green;
+  }
+}
+
+hr {
+  border: 0px solid $turqoise;
+  height: 1px;
+  background-color: $turqoise;
+  display: block;
+  margin: $baseMargin 0;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px;
+  margin-right: $baseMargin/2;
+  font-family: $fancyFont;
+  font-weight: $fancyExtraBold;
+  color: white;
+  background-color: $green;
+  text-transform: uppercase;
+
+  &.category {
+    background-color: $blue;
+  }
+}
+
+table {
+  margin-bottom: $baseMargin;
+  width: 100%;
+  vertical-align: top;
+  table-layout: fixed;
+  text-align: left;
+
+
+  thead tr {
+    border-bottom: 2px solid $lightGrey;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid $lightGrey;
+
+    &:last-child {
+      border-bottom: 0px;
+    }
+  }
+
+  th {
+    font-family: $fancyFont;
+    text-transform: uppercase;
+    font-weight: $fancyExtraBold;
+  }
+
+  td, th {
+    padding: $baseMargin;
+  }
+}
+
+ul.usps {
+  font-size: calculateRem(26px);
+  font-family: $fancyFont;
+  list-style: none;
+  margin-left: 0px;
+
+  i {
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+  }
+
+  &.white {
+    color: White;
+  }
+
+  &.small {
+    font-size: calculateRem(18px);
+  }
+}
+
+ul {
+  list-style: circle;
+  margin-left: $baseMargin;
+}
+
+ul.horizontal, ol.horizontal {
+  li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}

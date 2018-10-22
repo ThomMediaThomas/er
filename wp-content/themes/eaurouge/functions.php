@@ -10,6 +10,8 @@ if (function_exists('acf_add_options_page')) {
 
 add_theme_support('post-thumbnails');
 add_post_type_support('post', 'excerpt');
+add_editor_style('styles/editor.css');
+
 
 // Register Custom Post Type
 function accommodations() {
