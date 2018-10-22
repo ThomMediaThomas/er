@@ -80,7 +80,7 @@
             <?php endif; ?>
             <?php if ($block_type == 'intro'): ?>
                 <div class="content-wrapper">
-                    <div class="section-intro">
+                    <div class="section-intro intro-only">
                         <?php echo $intro; ?>
                     </div>
                 </div>
