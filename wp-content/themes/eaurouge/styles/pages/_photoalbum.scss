@@ -1,0 +1,31 @@
+.bwg_thumbnail.bwg_container {
+  margin: 0;
+  padding: 0;
+}
+
+#bwg_container1_0 #bwg_container2_0 .bwg-container-0.bwg-album-thumbnails {
+  width: 100%;
+  padding: 0px;
+  justify-content: left!important;
+}
+
+.bwg-item {
+  a {
+    background-color: $turqoise;
+    @include border-radius(10px);
+    overflow: hidden;
+    margin-bottom: $baseMargin;
+
+    .bwg-title1 {
+      text-align: left;
+      font-family: $fancyFont;
+      font-weight: $fancyExtraBold;
+      text-transform: uppercase;
+      padding: $baseMargin/2;
+    }
+  }
+}
+
+#bwg_container1_0 #bwg_container2_0 .bwg-container-0.bwg-album-thumbnails .bwg-title2 {
+  color: $blue!important;
+}

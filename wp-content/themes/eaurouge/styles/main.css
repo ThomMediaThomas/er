@@ -1330,6 +1330,34 @@ table {
   table td, table th {
     padding: 20px; }
 
+.bwg_thumbnail.bwg_container {
+  margin: 0;
+  padding: 0; }
+
+#bwg_container1_0 #bwg_container2_0 .bwg-container-0.bwg-album-thumbnails {
+  width: 100%;
+  padding: 0px;
+  -webkit-box-pack: left !important;
+  -ms-flex-pack: left !important;
+  justify-content: left !important; }
+
+.bwg-item a {
+  background-color: #c8e3dc;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px; }
+  .bwg-item a .bwg-title1 {
+    text-align: left;
+    font-family: "Dosis", sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 10px; }
+
+#bwg_container1_0 #bwg_container2_0 .bwg-container-0.bwg-album-thumbnails .bwg-title2 {
+  color: #426b6f !important; }
+
 #accommodation-finder-results {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
