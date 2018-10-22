@@ -72,14 +72,6 @@
                     <span><?php echo $pets; ?> x huisdier</span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
-                <li>
-                    <?php
-                    $price = $nights * floatval($currentPricePeriod['electricty_per_night']);
-                    $total += $price;
-                    ?>
-                    <span><?php echo $nights; ?> x elektra</span>
-                    <strong>€ <?php echo number_format($price, 2); ?></strong>
-                </li>
                 <?php
                 $extras = get_field('extras', $_GET['accommodation_id']);
                 $selected_extras = $_GET['extras'];
@@ -107,7 +99,7 @@
                         <?php endif;
                     endforeach;
                 endif; ?>
-                <li class="with-separator hidden">
+                <li class="with-separator">
                     <?php
                     $price = $nights * ($adults + $children + $babies) * floatval($currentPricePeriod['tourist_tax_per_night']);
                     $total += $price;
@@ -115,7 +107,7 @@
                     <span><?php echo ($adults + $children + $babies); ?> x toeristenbelasting</span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
-                <li class="hidden">
+                <li class="">
                     <?php
                     $price = floatval($currentPricePeriod['booking_costs_per_stay']);
                     $total += $price;

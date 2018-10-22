@@ -28,6 +28,13 @@
             $babies = intval($_GET['babies']);
             $pets = intval($_GET['pets']);
 
+            $extras = get_field('extras');
+            if ($extras) {
+                $defaultExtras = array_filter($extras, function ($extra) {
+                    return $extra['default'];
+                });
+            }
+
             $price += $nights * floatval($currentPricePeriod['price_per_night']);
             $price += $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
             $price += $nights * $children * floatval($currentPricePeriod['price_per_child']);
@@ -37,6 +44,14 @@
             $price += $nights * ($adults + $children + $babies) * floatval($currentPricePeriod['tourist_tax_per_night']);
             $price += floatval($currentPricePeriod['booking_costs_per_stay']);
 
+            if ($extras && $defaultExtras) {
+                foreach ($defaultExtras as $defaultExtra) {
+                    $amount = $defaultExtra['price_is_per_night'] ? $nights : 1;
+                    $price += $amount * $defaultExtra['price'];
+                }
+
+            }
+
             $url = '/boeken/gegevens';
             $url .= '?accommodation_id=' . get_the_ID();
             $url .= '&date_from=' . $_GET['stay_date_from'];
@@ -45,6 +60,14 @@
             $url .= '&children=' . $_GET['children'];
             $url .= '&babies=' . $_GET['babies'];
             $url .= '&pets=' . $_GET['pets'];
+
+            if ($extras && $defaultExtras) {
+                $joinedExtras = implode(',', array_map(function ($extra) {
+                    return $extra['key'];
+                }, $defaultExtras));
+
+                $url .= '&extras[]=' . $joinedExtras;
+            }
         }
     }
 ?>
