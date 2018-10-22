@@ -1,3 +1,27 @@
+<div id="labels">
+    <div class="inner">
+        <div class="content-wrapper">
+            <div class="left">
+                <?php if(have_rows('links_left', 'options')): ?>
+                    <?php while( have_rows('links_left', 'options') ): the_row(); ?>
+                        <a href="<?php the_sub_field('link'); ?>" title="<?php the_sub_field('title'); ?>" target="_blank">
+                            <img src="<?php the_sub_field('image'); ?>" alt="<?php the_sub_field('title'); ?>" title="<?php the_sub_field('title'); ?>" />
+                        </a>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+            </div>
+            <div class="right">
+                <?php if(have_rows('links_right', 'options')): ?>
+                    <?php while( have_rows('links_right', 'options') ): the_row(); ?>
+                        <a href="<?php the_sub_field('link'); ?>" title="<?php the_sub_field('title'); ?>" target="_blank">
+                            <img src="<?php the_sub_field('image'); ?>" alt="<?php the_sub_field('title'); ?>" title="<?php the_sub_field('title'); ?>" />
+                        </a>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
 <footer id="footer">
     <div class="content-wrapper">
         <div class="footer-block first">

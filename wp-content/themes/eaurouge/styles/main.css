@@ -569,6 +569,49 @@ html, body {
   text-align: center;
   font-size: 0.88889rem; }
 
+#labels {
+  background-color: white;
+  position: relative;
+  padding: 2px 0px;
+  -webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5); }
+  #labels .inner {
+    border-top: 2px dashed #c8e3dc;
+    border-bottom: 2px dashed #c8e3dc; }
+  #labels .content-wrapper {
+    padding: 15px 20px 5px 20px; }
+  #labels .left {
+    width: 30%;
+    float: left; }
+    #labels .left:after {
+      content: "";
+      display: table;
+      clear: both; }
+    #labels .left a {
+      display: inline-block;
+      margin-right: 20px; }
+    #labels .left img {
+      display: block;
+      max-height: 50px;
+      width: auto; }
+  #labels .right {
+    width: 70%;
+    float: left;
+    padding: 5px 0px;
+    text-align: right; }
+    #labels .right:after {
+      content: "";
+      display: table;
+      clear: both; }
+    #labels .right a {
+      display: inline-block;
+      margin-left: 20px; }
+    #labels .right img {
+      display: block;
+      max-height: 40px;
+      width: auto; }
+
 .section-intro {
   text-align: center; }
   .section-intro.intro-only {
