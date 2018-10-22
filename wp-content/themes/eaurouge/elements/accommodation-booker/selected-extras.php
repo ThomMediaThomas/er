@@ -6,6 +6,10 @@
             <?php
                 $key = get_sub_field('key');
                 $selected = $selected_extras ? in_array($key, $selected_extras) : false;
+
+                if (!$selected) {
+                    $selected = get_sub_field('default');
+                }
             ?>
             <label for="<?php echo $key; ?>" class="checkbox">
             <input type="checkbox" <?php if($selected): ?>checked="checked"<?php endif; ?> class="extras-for-stay" name="extras[]" value="<?php echo $key; ?>" id="<?php echo $key; ?>" />
