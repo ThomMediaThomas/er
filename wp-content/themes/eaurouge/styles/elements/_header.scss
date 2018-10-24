@@ -55,6 +55,7 @@ body {
   top: $topbarHeight;
   left: 0px;
   width: 100%;
+  z-index: 10;
 
   font-family: $fancyFont;
   font-weight: $fancyExtraBold;
