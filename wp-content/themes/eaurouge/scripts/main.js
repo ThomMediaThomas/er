@@ -190,10 +190,34 @@ function Slider($element) {
     self.count = self.$slides.length;
     self.currentSlide = 0;
 
+    self.autoRotate = self.$element.attr('data-auto');
+    self.rotateInterval = null;
+    self.autoRotateTiming = 7500;
+
     self.init = function () {
-        self.$slidesHolder.css('width', (100*self.count) + '%');
-        self.$slides.css('width', (100/self.count) + '%');
-        self.bindEvents();
+        self.$slidesHolder.css('width', (100 * self.count) + '%');
+        self.$slides.css('width', (100 / self.count) + '%');
+
+        if (self.count > 1) {
+            self.bindEvents();
+        } else {
+            self.$previous.hide();
+            self.$next.hide();
+        }
+
+        self.setAutoRotate();
+    };
+
+    self.setAutoRotate = function () {
+        if (self.rotateInterval) {
+            clearInterval(self.rotateInterval);
+        }
+
+        if (self.autoRotate) {
+            self.rotateInterval = setInterval(function () {
+                self.next();
+            }, self.autoRotateTiming);
+        }
     };
 
     self.bindEvents = function () {
@@ -208,6 +232,9 @@ function Slider($element) {
 
         self.currentSlide++;
         self.$slidesHolder.css('left', (-100 * self.currentSlide) + '%');
+
+        self.setAutoRotate();
+
         return false;
     };
 
@@ -218,6 +245,9 @@ function Slider($element) {
 
         self.currentSlide--;
         self.$slidesHolder.css('left', (-100 * self.currentSlide) + '%');
+
+        self.setAutoRotate();
+
         return false;
     }
 }

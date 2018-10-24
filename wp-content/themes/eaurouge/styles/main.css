@@ -793,10 +793,32 @@ ul.horizontal li, ol.horizontal li {
   margin-right: 10px; }
 
 .hero {
-  background-size: cover;
-  background-position: center center;
   text-align: center;
-  padding: 80px 0; }
+  padding: 80px 0;
+  position: relative; }
+  .hero .slider {
+    position: absolute;
+    z-index: 1;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%; }
+    .hero .slider .slide-nav {
+      color: White; }
+      .hero .slider .slide-nav.previous {
+        left: 20px; }
+      .hero .slider .slide-nav.next {
+        right: 20px; }
+    .hero .slider .slides {
+      height: 100%; }
+    .hero .slider .slide {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center center; }
+  .hero > .content-wrapper {
+    position: relative;
+    z-index: 2; }
   .hero .logo-holder {
     margin: 0 auto 20px auto;
     display: block;
@@ -1051,6 +1073,7 @@ textarea {
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
+  z-index: 10;
   margin-top: -75px; }
   #quick-booking input,
   #quick-booking select {
