@@ -5,7 +5,8 @@ function register_menus() {
 add_action('init', 'register_menus');
 
 if (function_exists('acf_add_options_page')) {
-    acf_add_options_page();
+    acf_add_options_page('Header');
+    acf_add_options_page('Footer');
 }
 
 add_theme_support('post-thumbnails');
