@@ -26,7 +26,7 @@
 			<?php endif; ?>
 			<div class="block text">
 				<div class="content-wrapper">
-					<h3 class="red"><span class="sub"><?php the_time('d-m-Y') ?> | <?php the_author() ?>:</span> <?php the_title(); ?></h3>
+					<h3 class="red"><span class="sub"><?php the_time('d-m-Y') ?> | Domaine de l' Eau Rouge:</span> <?php the_title(); ?></h3>
 					<p><?php echo get_the_excerpt(); ?></p>
 					<a href="<?php the_permalink() ?>" title="<?php the_title(); ?>" class="button red">Lees verder <i class="icon-chevron-right"></i></a>
 				</div>

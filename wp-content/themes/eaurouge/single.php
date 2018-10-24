@@ -28,7 +28,7 @@
                         }
                         ?>
                         </p>
-                        <p class="note">geplaatst op <strong><?php the_time('d-m-Y') ?></strong> door <strong><?php the_author() ?></strong></p>
+                        <p class="note">geplaatst op <strong><?php the_time('d-m-Y') ?></strong> door <strong>Domaine de l' Eau Rouge</strong></p>
                         <a class="button small red" href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" title="Nieuws"><i class="icon-chevron-left first"></i> Terug naar nieuwsoverzicht</a>
                     </div>
                 </div>
