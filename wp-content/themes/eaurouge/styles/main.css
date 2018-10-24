@@ -392,10 +392,18 @@ html, body {
   display: table;
   clear: both; }
 
+body {
+  padding-top: 42px; }
+
 #top-bar {
   background-color: #c8e3dc;
   color: #426b6f;
-  height: 42px; }
+  height: 42px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 500; }
   #top-bar .content-wrapper {
     padding-top: 10px;
     padding-bottom: 10px; }
