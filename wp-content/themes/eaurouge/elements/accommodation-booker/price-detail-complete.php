@@ -36,21 +36,41 @@
                     <?php
                     $price = $nights * floatval($currentPricePeriod['price_per_night']);
                     $total += $price;
-
+                    ?>
+                    <span><?php echo $nights; ?> x nacht</span>
+                    <strong>€ <?php echo number_format($price, 2); ?></strong>
+                </li>
+                <li>
+                    <?php
                     $price = $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
                     $total += $price;
-
+                    ?>
+                    <span><?php echo $adults; ?> x volwassene</span>
+                    <strong>€ <?php echo number_format($price, 2); ?></strong>
+                </li>
+                <li>
+                    <?php
                     $price = $nights * $children * floatval($currentPricePeriod['price_per_child']);
                     $total += $price;
-
+                    ?>
+                    <span><?php echo $children; ?> x kind (4 t/m 15 jaar)</span>
+                    <strong>€ <?php echo number_format($price, 2); ?></strong>
+                </li>
+                <li>
+                    <?php
                     $price = $nights * $babies * floatval($currentPricePeriod['price_per_baby']);
                     $total += $price;
-
+                    ?>
+                    <span><?php echo $babies; ?> x kind (0 t/m 3 jaar)</span>
+                    <strong>€ <?php echo number_format($price, 2); ?></strong>
+                </li>
+                <li>
+                    <?php
                     $price = $nights * $pets * floatval($currentPricePeriod['price_per_dog']);
                     $total += $price;
                     ?>
-                    <span><?php echo $nights; ?> x nachten</span>
-                    <strong>€ <?php echo number_format($total, 2); ?></strong>
+                    <span><?php echo $pets; ?> x huisdier</span>
+                    <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <?php
                 $extras = get_field('extras', $_GET['accommodation_id']);
