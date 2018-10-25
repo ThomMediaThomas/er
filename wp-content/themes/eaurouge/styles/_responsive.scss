@@ -1,0 +1,414 @@
+@media only screen and (max-width: 730px) {
+  body {
+    font-size: 16px;
+    padding-top: 0px;
+  }
+
+  .show-on-mobile {
+    display: block!important;
+  }
+
+  .hide-on-mobile,
+  #top-bar,
+  #quick-booking{
+    display: none;
+  }
+
+  /*region SITE*/
+  .content-wrapper {
+    padding: $baseMarginMobile;
+  }
+  /*endregion SITE*/
+
+  /*region PAGE*/
+  h1, h2, h3, h4, h5 {
+    margin-bottom: $baseMarginMobile;
+
+    .sub {
+      font-size: calculateRem(16px);
+    }
+  }
+
+  h1 {
+    font-size: calculateRem(36px);
+  }
+
+  h2 {
+    font-size: calculateRem(32px);
+  }
+
+  h3 {
+    font-size: calculateRem(28px);
+  }
+
+  h4 {
+    font-size: calculateRem(24px);
+  }
+
+  h5 {
+    font-size: calculateRem(20px);
+  }
+
+  img {
+    &.alignleft {
+      margin-right: $baseMarginMobile;
+    }
+
+    &.alignright {
+      margin-left: $baseMarginMobile;
+    }
+  }
+
+  p, ul, ol {
+    margin-bottom: $baseMarginMobile;
+  }
+  /*endregion PAGE*/
+
+  /*region SECTION*/
+  .section-intro {
+    &.intro-only {
+      padding: $baseMarginMobile;
+    }
+  }
+  /*endregion SECTION*/
+
+  /*region COLUMNS*/
+  .column-holder {
+    margin-left: 0px;
+    margin-right: 0px;
+
+    .column {
+      float: none;
+      margin-bottom: $baseMarginMobile;
+
+      &.main,
+      &.aside,
+      &.third{
+        width: 100%;
+      }
+
+      > .content-wrapper {
+        padding: 0px;
+      }
+    }
+  }
+  /*endregion COLUMNS*/
+
+  /*region BLOCKS*/
+  .section {
+    display: block;
+
+    .block {
+      width: 100%;
+      display: block;
+
+      &.image {
+        height: 25vh;
+      }
+
+      .content-wrapper {
+        padding: $baseMarginMobile;
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+  /*endregion BLOCKS*/
+
+  /*region BUTTONS*/
+  .button {
+    padding: $baseMarginMobile/2 $baseMarginMobile;
+    font-size: calculateRem(20px);
+
+    i {
+      margin-left: $baseMarginMobile;
+    }
+  }
+  /*endregion BUTTONS*/
+
+  /*region LISTS*/
+  ul.usps {
+    font-size: calculateRem(20px);
+  }
+  /*endregion LISTS*/
+
+  /*region HEADER*/
+  #show-nav, #hide-nav {
+    i {
+      margin-left: 0px;
+      position: initial;
+      top: 0px;
+    }
+  }
+
+  #show-nav {
+    position: fixed;
+    top: $baseMarginMobile;
+    left: $baseMarginMobile;
+    z-index: 500;
+  }
+
+  #nav {
+    z-index: 1000;
+    position: fixed;
+    top: 0px;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&1+50,0+100 */
+    background: -moz-linear-gradient(left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(0,0,0,1) 0%,rgba(0,0,0,1) 50%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(0,0,0,1) 0%,rgba(0,0,0,1) 50%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+
+    @include transition(all, .25s, ease-in-out);
+
+    &.open {
+      left: 0px;
+
+      #hide-nav {
+        right: $baseMarginMobile;
+      }
+    }
+
+    #hide-nav {
+      position: fixed;
+      top: $baseMarginMobile;
+      right: -100%;
+      z-index: 1001;
+      @include transition(all, .25s, ease-in-out);
+    }
+
+    > .content-wrapper {
+      background-color: $red;
+      min-height: 100vh;
+      width: 75%;
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .menu-main-container {
+      > ul {
+        > li {
+          display: block;
+          width: 100%;
+          text-align: left;
+          border-top: 1px solid darken($red, 15);
+
+          > a {
+            padding: $baseMarginMobile;
+          }
+
+          &.current-menu-item,
+          &:hover {
+            > a {
+              padding-top: $baseMarginMobile;
+              border-top: 0px;
+              background-color: $yellow;
+              color: $red;
+            }
+          }
+
+          > .sub-menu {
+            opacity: 1;
+            visibility: visible;
+            position: static;
+            width: 100%;
+            height: auto;
+            top: initial;
+            left: initial;
+            margin-left: 0px;
+            background-color: darken($red, 15);
+            @include transform(translateY(0px));
+
+            box-shadow: initial;
+            -webkit-box-shadow: initial;
+
+            &:before {
+              display: none;
+            }
+
+            li {
+              border-top: 1px solid $red;
+              border-bottom: 0px;
+
+              a {
+                color: White;
+                padding-left: $baseMarginMobile*2;
+                font-size: 1.1rem;
+              }
+
+              > .sub-menu {
+                position: static;
+                width: 100%;
+                display: block;
+                background-color: transparent;
+
+                li {
+                  a {
+                    padding-left: $baseMarginMobile*3;
+                    font-weight: normal;
+                    font-size: 1rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  /*endregion HEADER*/
+
+  /*region FOOTER*/
+  #labels {
+    .left, .right {
+      width: 100%;
+      float: none;
+      text-align: center;
+
+      a {
+        margin: $baseMarginMobile/2;
+      }
+    }
+
+    .left {
+      a img {
+        max-height: 40px;
+      }
+    }
+
+    .right {
+      a img {
+        max-height: 30px;
+      }
+    }
+  }
+
+  #footer {
+    background-size: 100% auto;
+    padding-bottom: 50px;
+
+    .footer-block, .footer-block.second{
+      width: 100%;
+      float: none;
+
+      .footer-block-row {
+        margin-bottom: $baseMarginMobile;
+      }
+
+      .footer-block-column {
+        width: 100%;
+        float: none;
+        margin-bottom: $baseMarginMobile;
+
+        &:last-child {
+          margin-bottom: 0px;
+        }
+      }
+    }
+  }
+
+  #bottom-bar {
+    font-size: calculateRem(12px);
+  }
+  /*endregion FOOTER*/
+
+  /*region SLIDER*/
+  .slider {
+    padding-bottom: 30px + 2 * $baseMarginMobile;
+
+    .slide-nav {
+      width: 30px;
+      height: 30px;
+      font-size: calculateRem(30px);
+
+      margin-top: 0px;
+      top: initial;
+      bottom: $baseMarginMobile;
+    }
+  }
+  /*endregion SLIDER*/
+
+  /*region HERO*/
+  .hero {
+    padding: 40px 0px;
+    .logo-holder {
+      margin-bottom: $baseMarginMobile;
+      max-width: 120px;
+    }
+
+    h2 {
+      font-size: calculateRem(16px);
+    }
+
+    .slider {
+      padding-bottom: 0px;
+
+      .slide-nav {
+        bottom: $baseMargin;
+      }
+    }
+  }
+  /*endregion HERO*/
+
+  /*region REVIEWS*/
+  .reviews {
+    > .content-wrapper {
+      padding-top: $baseMarginMobile*2;
+      padding-bottom: $baseMarginMobile*2;
+    }
+
+    .review {
+      .quote {
+        font-size: calculateRem(20px);
+        line-height: 1.5;
+      }
+
+      .author {
+        font-size: calculateRem(20px);
+      }
+    }
+  }
+  /*endregion REVIEWS*/
+
+  /*region ACCOMMODATION-PREVIEW*/
+  .accommodation-preview {
+    margin-bottom: $baseMarginMobile;
+    padding-bottom: $baseMarginMobile;
+
+    .left, .right {
+      width: 100%;
+      float: none;
+      padding: 0px;
+    }
+
+    .left {
+      margin-bottom: $baseMargin;
+    }
+
+    .bottom {
+      .bottom-left, .bottom-right {
+        width: 100%;
+        float: none;
+      }
+
+      .bottom-left {
+        text-align: right;
+        margin-bottom: $baseMarginMobile;
+      }
+    }
+  }
+  /*endregion ACCOMMODATION-PREVIEW*/
+
+  /*region FORMS*/
+  .period, .family{
+    .input-field {
+      width: 100%;
+      float: none;
+    }
+  }
+  /*endregion FORMS*/
+}

@@ -30,6 +30,13 @@ $(document).ready(function () {
     $('#accommodation-booker').each(function () {
         (new AccommodationBooker($(this))).init();
     });
+
+    if ($('.show-nav').length > 0) {
+        $('.show-nav').on('click', function () {
+            $('#nav').toggleClass('open');
+            return false;
+        })
+    }
 });
 
 function AccommodationFinder($element) {

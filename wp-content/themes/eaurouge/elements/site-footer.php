@@ -34,7 +34,7 @@
                     <?php the_field('contact_block_2', 'option'); ?>
                 </div>
             </div>
-            <div class="footer-block-row">
+            <div class="footer-block-row hide-on-mobile">
                 <h5 class="blue"><?php the_field('sitemap_block_title', 'options'); ?></h5>
                 <div class="footer-block-column">
                     <?php the_field('sitemap_block_1', 'option'); ?>
@@ -45,12 +45,14 @@
             </div>
         </div>
         <div class="footer-block second">
-            <h4 class="red"><?php the_field('rating_title', 'options'); ?></h4>
-            <?php $rating = (float)get_field('rating', 'options'); ?>
-            <span class="rating-holder white">
-                <span class="rating" style="width: <?php echo ($rating/5)*100; ?>%;"></span>
-            </span>
-            <?php the_field('rating_text', 'options'); ?>
+            <div class="hide-on-mobile">
+                <h4 class="red"><?php the_field('rating_title', 'options'); ?></h4>
+                <?php $rating = (float)get_field('rating', 'options'); ?>
+                <span class="rating-holder white">
+                    <span class="rating" style="width: <?php echo ($rating/5)*100; ?>%;"></span>
+                </span>
+                <?php the_field('rating_text', 'options'); ?>
+            </div>
             <h4 class="red"><?php the_field('follow_block_title', 'options'); ?></h4>
             <?php if(have_rows('follow_block_mediums', 'options')): ?>
                 <ul class="horizontal">
