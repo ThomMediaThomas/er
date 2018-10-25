@@ -722,6 +722,8 @@ body {
     opacity: 0.5; }
   .button:last-child {
     margin-bottom: 0px; }
+  .button:focus {
+    outline: 0px; }
   .button i {
     position: relative;
     top: 2px;
@@ -995,6 +997,11 @@ textarea {
   select, .box
   textarea {
     border: 0px; }
+  input.invalid,
+  select.invalid,
+  textarea.invalid {
+    color: #ca303c;
+    border-color: #ca303c; }
 
 .input-with-icon {
   position: relative; }
@@ -1034,6 +1041,7 @@ textarea {
     display: block;
     width: 22px;
     height: 100%;
+    max-height: 43px;
     text-align: center;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -1068,6 +1076,11 @@ textarea {
   -moz-border-radius: 10px;
   background-color: #c8e3dc;
   color: #426b6f; }
+
+.frm_error,
+.frm-error {
+  font-weight: 700;
+  color: #ca303c; }
 
 #quick-booking {
   width: 100%;

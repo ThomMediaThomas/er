@@ -7,14 +7,19 @@
         $babies = intval($_GET['babies']);
         $pets = intval($_GET['pets']);
 
-        $hasDates  = isset($_GET['date_from']) && isset($_GET['date_to']);
+        $hasDates  = !empty($_GET['date_from']) && !empty($_GET['date_to']);
 
         if ($hasDates) {
             $date_from = date_create_from_format('d-m-Y', $_GET['date_from']);
             $date_from_comparable = date_format($date_from,'Ymd');
             $date_to = date_create_from_format('d-m-Y', $_GET['date_to']);
             $date_to_comparable = date_format($date_to,'Ymd');
-            $nights = $date_to->diff($date_from)->format("%a");
+
+            if ($date_from && $date_to) {
+                $nights = $date_to->diff($date_from)->format("%a");
+            } else {
+                $nights = 0;
+            }
         }
 
         $price = 0;

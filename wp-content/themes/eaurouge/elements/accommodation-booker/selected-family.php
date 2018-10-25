@@ -7,7 +7,7 @@
             <span class="number-input">
                 <span class="input-with-icon">
                     <i class="adults"></i>
-                    <input name="adults" id="adults" type="number" placeholder="0" value="<?php echo $adults; ?>">
+                    <input name="adults" id="adults" class="required" type="number" placeholder="0" value="<?php echo $adults; ?>">
                 </span>
                 <i class="up">+</i>
                 <i class="down">-</i>

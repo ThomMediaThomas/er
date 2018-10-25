@@ -67,7 +67,10 @@ function AccommodationFinder($element) {
     self.filterResults = function () {
         self.$results.addClass('loading');
 
-        $.get(self.$form.attr('action') + '?' + self.$form.serialize(), function (response) {
+        var serialized = self.$form.serialize();
+        history.pushState(null, '', self.$form.attr('action') + '?' + serialized);
+
+        $.get(self.$form.attr('action') + '?' + serialized, function (response) {
             self.$results.html($(response).find('#accommodation-finder-results').html());
             self.$results.removeClass('loading');
         });
@@ -87,12 +90,25 @@ function AccommodationBooker($element) {
 
     self.bindEvents = function () {
         self.$detailsForm.find('input').on('change', debounce(self.calculatePrice, 500));
+        $('.frm-show-form').on('submit', function (event) {
+            if (!self.validateBookingDetails()) {
+                document.getElementById("booking-details-form").scrollIntoView();
+                event.preventDefault();
+                return false;
+            }
+        });
+    };
+
+    self.validateBookingDetails = function () {
+        return validateForm(self.$detailsForm);
     };
 
     self.calculatePrice = function () {
         self.$boxPriceDetail.addClass('loading');
+        var serialized = self.$detailsForm.serialize();
+        history.pushState(null, '', self.$detailsForm.attr('action') + '?' + serialized);
 
-        $.get(self.$detailsForm.attr('action') + '?' + self.$detailsForm.serialize(), function (response) {
+        $.get(self.$detailsForm.attr('action') + '?' + serialized, function (response) {
             self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
             self.$boxPriceDetail.removeClass('loading');
             self.setBookingDetails();
@@ -250,4 +266,20 @@ function Slider($element) {
 
         return false;
     }
+}
+
+function validateForm($form) {
+    $form.find('.invalid').removeClass('invalid');
+    $form.find('.frm-error').remove();
+    var errors = 0;
+
+    $form.find('.required').each(function () {
+        if ($(this).val() == '')  {
+            errors++;
+            $(this).addClass('invalid');
+            $(this).after('<div class="frm-error">Dit veld is verplicht.</div>');
+        }
+    });
+
+    return errors == 0;
 }

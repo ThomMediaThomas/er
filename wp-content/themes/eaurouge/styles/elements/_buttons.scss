@@ -23,6 +23,10 @@ $darken: 10%;
     margin-bottom: 0px;
   }
 
+  &:focus {
+    outline: 0px;
+  }
+
   @include transition(all, .2s, ease-in-out);
 
   i {
