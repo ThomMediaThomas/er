@@ -103,7 +103,6 @@
                 <div class="bottom-left">
                     <span>Prijs voor het verblijf </span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
-                    <span>incl. toeristenbelasting</span>
                 </div>
                 <a class="button yellow small" href="<?php echo $url; ?>">Verblijf boeken<i class="icon-chevron-right"></i></a>
             </div>

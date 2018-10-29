@@ -104,7 +104,7 @@
                     $price = $nights * ($adults + $children + $babies) * floatval($currentPricePeriod['tourist_tax_per_night']);
                     $total += $price;
                     ?>
-                    <span><?php echo ($adults + $children + $babies); ?> x toeristenbelasting</span>
+                    <span>milieu-heffing (pppn.)</span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <li class="">
