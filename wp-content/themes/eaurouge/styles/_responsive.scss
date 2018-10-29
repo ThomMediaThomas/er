@@ -112,6 +112,19 @@
         max-width: 100%;
       }
     }
+
+    &.with-image {
+      padding-top: 20vh;
+      position: relative;
+
+      .block.image {
+        height: 20vh;
+        width: 100%;
+        position: absolute;
+        top: 0px;
+        left:0px;
+      }
+    }
   }
   /*endregion BLOCKS*/
 

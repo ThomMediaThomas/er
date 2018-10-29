@@ -3,7 +3,7 @@
         $block_type = get_sub_field('block_type');
         $intro = get_sub_field('intro');
         ?>
-        <section class="section">
+        <section class="section <?php if ($block_type == 'double-half'): ?>with-image<?php endif; ?>">
             <?php if( have_rows('sub_blocks') ): ?>
                 <?php if ($block_type == 'double-half'): ?>
                     <?php while( have_rows('sub_blocks') ): the_row();

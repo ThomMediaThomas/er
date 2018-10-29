@@ -1622,6 +1622,15 @@ ul.price-detail {
         padding: 10px;
         width: 100%;
         max-width: 100%; }
+    .section.with-image {
+      padding-top: 20vh;
+      position: relative; }
+      .section.with-image .block.image {
+        height: 20vh;
+        width: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px; }
   /*endregion BLOCKS*/
   /*region BUTTONS*/
   .button {
