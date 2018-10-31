@@ -3,6 +3,10 @@ $(document).ready(function () {
         (new Slider($(this))).init();
     });
 
+    $('.same-height-parent').each(function () {
+        (new SameHeight($(this))).init();
+    });
+
     $('#quick-booking').each(function () {
         (new QuickBooking($(this))).init();
     });
@@ -289,4 +293,30 @@ function validateForm($form) {
     });
 
     return errors == 0;
+}
+
+
+function SameHeight($element) {
+    var self = this;
+    self.$parent = $element;
+    self.$elements = self.$parent.find('.same-height');
+
+    self.init = function () {
+        self.setHeight();
+        self.bindEvents();
+    };
+
+    self.bindEvents = function () {
+        $(window).on('resize', debounce(self.setHeight, 500));
+    };
+
+    self.setHeight = function () {
+        self.$elements.css('height', 'auto');
+        setTimeout(self.setHeightAgain, 50);
+
+    };
+
+    self.setHeightAgain = function () {
+        self.$elements.css('height', self.$parent.innerHeight());
+    };
 }

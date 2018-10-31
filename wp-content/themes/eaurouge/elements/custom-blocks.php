@@ -58,13 +58,13 @@
                         <div class="section-intro">
                             <?php echo $intro; ?>
                         </div>
-                        <div class="column-holder">
+                        <div class="column-holder same-height-parent">
                             <?php while( have_rows('sub_blocks') ): the_row();
                                 $sub_block_type = get_sub_field('sub_block_type');
                                 $color = get_sub_field('color'); ?>
                                 <div class="column third">
                                     <div class="content-wrapper">
-                                        <div class="box <?php echo $color; ?>">
+                                        <div class="box <?php echo $color; ?> same-height">
                                             <img src="<?php echo get_sub_field('image'); ?>" />
                                             <div class="content-wrapper">
                                                 <?php echo get_sub_field('text'); ?>
