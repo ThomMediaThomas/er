@@ -1,3 +1,5 @@
+var MOBILE_BREAKPOINT = 730;
+
 $(document).ready(function () {
     $('.slider').each(function () {
         (new Slider($(this))).init();
@@ -317,6 +319,8 @@ function SameHeight($element) {
     };
 
     self.setHeightAgain = function () {
-        self.$elements.css('height', self.$parent.innerHeight());
+        if ($(window).width() > MOBILE_BREAKPOINT) {
+            self.$elements.css('height', self.$parent.innerHeight());
+        }
     };
 }

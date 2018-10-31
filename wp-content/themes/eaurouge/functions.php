@@ -7,6 +7,7 @@ add_action('init', 'register_menus');
 if (function_exists('acf_add_options_page')) {
     acf_add_options_page('Header');
     acf_add_options_page('Footer');
+    acf_add_options_page('Follow-us floater');
 }
 
 add_theme_support('post-thumbnails');

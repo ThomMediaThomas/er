@@ -1,3 +1,20 @@
+<div id="follow">
+    <div id="follow-inner">
+        <?php if(have_rows('followers', 'options')): ?>
+            <ul>
+                <?php $label = get_field('follow_us_on_title', 'options'); ?>
+                <?php while( have_rows('followers', 'options') ): the_row(); ?>
+                    <li style="background-color:<?php the_sub_field('social_color'); ?>;">
+                        <a href="<?php the_sub_field('link'); ?>" title="<?php the_sub_field('text'); ?>" target="_blank">
+                            <img src="<?php the_sub_field('social_image'); ?>" alt="<?php the_sub_field('text'); ?>" title="<?php the_sub_field('text'); ?>" />
+                            <strong><span><?php echo $label; ?></span><?php the_sub_field('text'); ?></strong>
+                        </a>
+                    </li>
+                <?php endwhile; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+</div>
 <div id="labels">
     <div class="inner">
         <div class="content-wrapper">
