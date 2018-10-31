@@ -1369,6 +1369,9 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1; }
   h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub, h6 .sub {
     color: #525252; }
+  h1.handwritten, h2.handwritten, h3.handwritten, h4.handwritten, h5.handwritten, h6.handwritten {
+    font-family: "Caveat Brush", cursive;
+    font-weight: normal; }
   h1.turqoise, h1 .sub.turqoise, h2.turqoise, h2 .sub.turqoise, h3.turqoise, h3 .sub.turqoise, h4.turqoise, h4 .sub.turqoise, h5.turqoise, h5 .sub.turqoise, h6.turqoise, h6 .sub.turqoise {
     color: #c8e3dc; }
   h1.red, h1 .sub.red, h2.red, h2 .sub.red, h3.red, h3 .sub.red, h4.red, h4 .sub.red, h5.red, h5 .sub.red, h6.red, h6 .sub.red {
@@ -1652,6 +1655,12 @@ ul.price-detail {
     -ms-transform: translateY(100px);
     -webkit-transform: translateY(100px);
     transform: translateY(100px); }
+
+.kids-page .box {
+  padding: 10px; }
+  .kids-page .box > .content-wrapper {
+    padding: 20px 10px;
+    border: 6px dotted White; }
 
 @media only screen and (max-width: 730px) {
   body {
