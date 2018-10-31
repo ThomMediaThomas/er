@@ -83,5 +83,24 @@
       padding-bottom: 0px;
       padding-top: 0px;
     }
+
+    .column {
+      @include transition(all, .25s, ease-in-out);
+      @include transform(scale(1));
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    .column-holder:hover .column {
+      opacity: 0.8;
+      @include transform(scale(0.9));
+
+      &:hover {
+        opacity: 1;
+        @include transform(scale(1));
+      }
+    }
+
+
   }
 }

@@ -588,10 +588,7 @@ body {
 #labels {
   background-color: white;
   position: relative;
-  padding: 2px 0px;
-  -webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
-  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5); }
+  padding: 4px 0px; }
   #labels .inner {
     border-top: 2px dashed #c8e3dc;
     border-bottom: 2px dashed #c8e3dc; }
@@ -685,6 +682,32 @@ body {
   .section.blocktype_three-panes .column > .content-wrapper {
     padding-bottom: 0px;
     padding-top: 0px; }
+  .section.blocktype_three-panes .column {
+    -o-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+    cursor: pointer; }
+  .section.blocktype_three-panes .column-holder:hover .column {
+    opacity: 0.8;
+    -moz-transform: scale(0.9);
+    -o-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9); }
+    .section.blocktype_three-panes .column-holder:hover .column:hover {
+      opacity: 1;
+      -moz-transform: scale(1);
+      -o-transform: scale(1);
+      -ms-transform: scale(1);
+      -webkit-transform: scale(1);
+      transform: scale(1); }
 
 .box {
   border-radius: 10px;
@@ -737,10 +760,17 @@ body {
   .button i {
     position: relative;
     top: 2px;
-    margin-left: 20px; }
+    margin-left: 20px;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    left: 0px; }
     .button i.first {
       margin-left: 0px;
       margin-right: 20px; }
+  .button:hover i {
+    left: 5px; }
   .button.small {
     padding: 10px;
     font-size: 1rem; }
@@ -1261,10 +1291,8 @@ textarea {
       background-color: #c8e3dc;
       margin-bottom: 5px;
       width: 150px;
+      height: 50px;
       border-radius: 10px 0px 0px 10px;
-      -webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
-      -moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
-      box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.5);
       -o-transition: all 0.25s ease-in-out;
       transition: all 0.25s ease-in-out;
       -webkit-transition: all 0.25s ease-in-out;

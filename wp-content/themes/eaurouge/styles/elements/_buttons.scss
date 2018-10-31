@@ -33,11 +33,17 @@ $darken: 10%;
     position: relative;
     top: 2px;
     margin-left: $baseMargin;
+    @include transition(all, .1s, ease-in-out);
+    left: 0px;
 
     &.first {
       margin-left: 0px;
       margin-right: $baseMargin;
     }
+  }
+
+  &:hover i {
+    left: 5px;
   }
 
   &.small {
