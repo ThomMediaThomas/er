@@ -1450,19 +1450,19 @@ img {
     float: right;
     margin-left: 20px; }
 
-p, ul, ol {
+p, ul, ol, table {
   margin-bottom: 20px; }
-  p:last-child, p.no-margin, ul:last-child, ul.no-margin, ol:last-child, ol.no-margin {
+  p:last-child, p.no-margin, ul:last-child, ul.no-margin, ol:last-child, ol.no-margin, table:last-child, table.no-margin {
     margin-bottom: 0px; }
-  p strong, p a, ul strong, ul a, ol strong, ol a {
+  p strong, p a, ul strong, ul a, ol strong, ol a, table strong, table a {
     font-weight: 800; }
-  p.aligncenter, ul.aligncenter, ol.aligncenter {
+  p.aligncenter, ul.aligncenter, ol.aligncenter, table.aligncenter {
     text-align: center; }
-  p.alignleft, ul.alignleft, ol.alignleft {
+  p.alignleft, ul.alignleft, ol.alignleft, table.alignleft {
     text-align: left; }
-  p.alignright, ul.alignright, ol.alignright {
+  p.alignright, ul.alignright, ol.alignright, table.alignright {
     text-align: right; }
-  p a, ul a, ol a {
+  p a, ul a, ol a, table a {
     text-decoration: underline; }
 
 em, .note {
@@ -1661,6 +1661,22 @@ ul.price-detail {
   .kids-page .box > .content-wrapper {
     padding: 20px 10px;
     border: 6px dotted White; }
+
+.kids-page .block.image {
+  position: relative; }
+  .kids-page .block.image:before {
+    content: '';
+    width: 90%;
+    height: 90%;
+    border: 8px dotted White;
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    -moz-transform: rotate(-0.5deg);
+    -o-transform: rotate(-0.5deg);
+    -ms-transform: rotate(-0.5deg);
+    -webkit-transform: rotate(-0.5deg);
+    transform: rotate(-0.5deg); }
 
 @media only screen and (max-width: 730px) {
   body {

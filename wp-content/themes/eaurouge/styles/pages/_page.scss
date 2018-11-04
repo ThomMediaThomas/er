@@ -127,7 +127,7 @@ img {
   }
 }
 
-p, ul, ol {
+p, ul, ol, table {
   margin-bottom: $baseMargin;
 
   &:last-child, &.no-margin {

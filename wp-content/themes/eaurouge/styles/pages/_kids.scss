@@ -7,4 +7,20 @@
       border: 6px dotted White;
     }
   }
+
+  .block.image{
+    position: relative;
+
+    &:before {
+      content: '';
+      width: 90%;
+      height: 90%;
+      border: 8px dotted White;
+      position: absolute;
+      top: 5%;
+      left: 5%;
+      @include transform(rotate(-0.5deg));
+    }
+  }
 }
+
