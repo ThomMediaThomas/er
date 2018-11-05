@@ -532,11 +532,40 @@ body {
           width: 250px;
           left: 100%;
           margin: 0px;
+          border-left: 5px solid transparent;
           top: 0px;
-          display: none;
-          background-color: #eec633; }
+          visiblity: hidden;
+          opacity: 0;
+          -moz-transform: translateX(40px);
+          -o-transform: translateX(40px);
+          -ms-transform: translateX(40px);
+          -webkit-transform: translateX(40px);
+          transform: translateX(40px);
+          -o-transition: all 0.25s ease-in-out;
+          transition: all 0.25s ease-in-out;
+          -webkit-transition: all 0.25s ease-in-out;
+          -moz-transition: all 0.25s ease-in-out;
+          -webkit-box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.5);
+          -moz-box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.5); }
+          #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu > li {
+            border-bottom: 1px solid #eec633; }
+            #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu > li:last-child {
+              border-bottom: 0px; }
+            #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu > li a {
+              color: #eec633;
+              background-color: #ca303c; }
+              #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu > li a:hover {
+                background-color: #eec633;
+                color: #ca303c; }
         #nav .menu-main-container > ul > li > .sub-menu li:hover > .sub-menu {
-          display: block; }
+          visibility: visible;
+          opacity: 1;
+          -moz-transform: translateX(0px);
+          -o-transform: translateX(0px);
+          -ms-transform: translateX(0px);
+          -webkit-transform: translateX(0px);
+          transform: translateX(0px); }
     #nav .menu-main-container > ul > li:hover .sub-menu {
       visibility: visible;
       opacity: 1;
@@ -1835,9 +1864,7 @@ ul.price-detail {
         padding: 10px; }
       #nav .menu-main-container > ul > li.current-menu-item > a, #nav .menu-main-container > ul > li:hover > a {
         padding-top: 10px;
-        border-top: 0px;
-        background-color: #eec633;
-        color: #ca303c; }
+        border-top: 0px; }
       #nav .menu-main-container > ul > li > .sub-menu {
         opacity: 1;
         visibility: visible;
@@ -1868,11 +1895,29 @@ ul.price-detail {
             position: static;
             width: 100%;
             display: block;
-            background-color: transparent; }
-            #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu li a {
-              padding-left: 30px;
-              font-weight: normal;
-              font-size: 1rem; }
+            visibility: visible;
+            opacity: 1;
+            background-color: transparent;
+            -moz-transform: translateX(0px);
+            -o-transform: translateX(0px);
+            -ms-transform: translateX(0px);
+            -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+            border-left: 0px;
+            box-shadow: initial;
+            -webkit-box-shadow: initial; }
+            #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu li {
+              border-top: 1px solid #ca303c;
+              border-bottom: 0px; }
+              #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu li a {
+                background-color: transparent;
+                padding-left: 30px;
+                font-weight: normal;
+                font-size: 1rem;
+                color: White; }
+                #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu li a:hover {
+                  background-color: #ca303c;
+                  color: White; }
   /*endregion HEADER*/
   /*region FOOTER*/
   #labels .left, #labels .right {

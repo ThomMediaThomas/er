@@ -220,8 +220,6 @@
             > a {
               padding-top: $baseMarginMobile;
               border-top: 0px;
-              background-color: $yellow;
-              color: $red;
             }
           }
 
@@ -258,13 +256,30 @@
                 position: static;
                 width: 100%;
                 display: block;
+                visibility: visible;
+                opacity: 1;
                 background-color: transparent;
+                @include transform(translateX(0px));
+                border-left: 0px;
+
+                box-shadow: initial;
+                -webkit-box-shadow: initial;
 
                 li {
+                  border-top: 1px solid $red;
+                  border-bottom: 0px;
+
                   a {
+                    background-color: transparent;
                     padding-left: $baseMarginMobile*3;
                     font-weight: normal;
                     font-size: 1rem;
+                    color: White;
+
+                    &:hover {
+                      background-color: $red;
+                      color: White;
+                    }
                   }
                 }
               }
