@@ -1333,6 +1333,16 @@ textarea {
           line-height: 1;
           font-weight: normal; }
 
+.breadcrumbs {
+  font-size: 0.77778rem; }
+  .breadcrumbs > .content-wrapper {
+    border-bottom: 1px solid #b8b8b8;
+    padding: 10px 0px; }
+  .breadcrumbs a {
+    font-weight: bold; }
+  .breadcrumbs .breadcrumb_last {
+    font-weight: bold; }
+
 .reviews > .content-wrapper {
   padding-top: 60px;
   padding-bottom: 60px; }

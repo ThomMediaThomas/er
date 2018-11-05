@@ -24,3 +24,4 @@
 <?php if (get_field('show_quick_booker')) : ?>
     <?php get_template_part('/elements/quick-booking'); ?>
 <?php endif; ?>
+<?php get_template_part('/elements/breadcrumbs'); ?>

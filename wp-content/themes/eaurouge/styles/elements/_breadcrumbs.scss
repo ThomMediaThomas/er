@@ -1,0 +1,16 @@
+.breadcrumbs {
+  > .content-wrapper {
+    border-bottom: 1px solid $lightGrey;
+    padding: 10px 0px;
+  }
+
+  font-size: calculateRem(14px);
+
+  a {
+    font-weight: bold;
+  }
+
+  .breadcrumb_last{
+    font-weight: bold;
+  }
+}
