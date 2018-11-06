@@ -93,6 +93,22 @@
       }
     }
   }
+
+  .section.blocktype_three-panes {
+    .column {
+      @include transition(all, 0s, linear);
+    }
+
+    .column-holder:hover {
+      .column {
+        opacity: 1;
+        @include transform(scale(1));
+
+        &:hover {
+        }
+      }
+    }
+  }
   /*endregion COLUMNS*/
 
   /*region BLOCKS*/

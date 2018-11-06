@@ -1769,6 +1769,18 @@ ul.price-detail {
         width: 100%; }
       .column-holder .column > .content-wrapper {
         padding: 0px; }
+  .section.blocktype_three-panes .column {
+    -o-transition: all 0s linear;
+    transition: all 0s linear;
+    -webkit-transition: all 0s linear;
+    -moz-transition: all 0s linear; }
+  .section.blocktype_three-panes .column-holder:hover .column {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1); }
   /*endregion COLUMNS*/
   /*region BLOCKS*/
   .section {
