@@ -143,6 +143,88 @@ table {
 .icon-warning:before {
   content: "\f071"; }
 
+.button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  font-size: 1.44444rem;
+  display: inline-block;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: White;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-family: "Dosis", sans-serif;
+  border: 0px;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out; }
+  .button.disabled {
+    cursor: default;
+    opacity: 0.5; }
+  .button:last-child {
+    margin-bottom: 0px; }
+  .button:focus {
+    outline: 0px; }
+  .button i {
+    position: relative;
+    top: 2px;
+    margin-left: 20px;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    left: 0px; }
+    .button i.first {
+      margin-left: 0px;
+      margin-right: 20px; }
+  .button:hover i {
+    left: 5px; }
+  .button.small {
+    padding: 10px;
+    font-size: 1rem; }
+    .button.small i {
+      margin-left: 10px; }
+      .button.small i.first {
+        margin-left: 0px;
+        margin-right: 10px; }
+  .button.tiny {
+    padding: 3px 10px;
+    font-size: 0.88889rem; }
+    .button.tiny i {
+      margin-left: 10px; }
+      .button.tiny i.first {
+        margin-left: 0px;
+        margin-right: 10px; }
+  .button.red {
+    background-color: #ca303c; }
+    .button.red:hover {
+      background-color: #a12630; }
+  .button.yellow {
+    background-color: #eec633; }
+    .button.yellow:hover {
+      background-color: #dcb112; }
+  .button.turqoise {
+    background-color: #c8e3dc;
+    color: #426b6f; }
+    .button.turqoise:hover {
+      background-color: #a6d2c6; }
+  .button.green {
+    background-color: #a0a433; }
+    .button.green:hover {
+      background-color: #7a7d27; }
+  .button.blue {
+    background-color: #426b6f; }
+    .button.blue:hover {
+      background-color: #2f4c4f; }
+  .button.white {
+    background-color: white; }
+    .button.white:hover {
+      background-color: #e6e6e6; }
+
 html, body {
   font-size: 18px;
   font-family: "Roboto", sans-serif;

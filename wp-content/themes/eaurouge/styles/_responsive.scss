@@ -383,6 +383,17 @@
   }
   /*endregion HERO*/
 
+  /*region BREADCRUMBS*/
+  .breadcrumbs {
+    > .content-wrapper {
+      padding: 5px $baseMarginMobile;
+      background-color: $turqoise;
+      color: $blue;
+      border-bottom: 0px;
+    }
+  }
+  /*endregion BREADCRUMBS*/
+
   /*region REVIEWS*/
   .reviews {
     > .content-wrapper {

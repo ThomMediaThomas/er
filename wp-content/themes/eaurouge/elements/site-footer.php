@@ -61,15 +61,13 @@
                 </div>
             </div>
         </div>
-        <div class="footer-block second">
-            <div class="hide-on-mobile">
-                <h4 class="red"><?php the_field('rating_title', 'options'); ?></h4>
-                <?php $rating = (float)get_field('rating', 'options'); ?>
-                <span class="rating-holder white">
-                    <span class="rating" style="width: <?php echo ($rating/5)*100; ?>%;"></span>
-                </span>
-                <?php the_field('rating_text', 'options'); ?>
-            </div>
+        <div class="footer-block second hide-on-mobile">
+            <h4 class="red"><?php the_field('rating_title', 'options'); ?></h4>
+            <?php $rating = (float)get_field('rating', 'options'); ?>
+            <span class="rating-holder white">
+                <span class="rating" style="width: <?php echo ($rating/5)*100; ?>%;"></span>
+            </span>
+            <?php the_field('rating_text', 'options'); ?>
             <h4 class="red"><?php the_field('follow_block_title', 'options'); ?></h4>
             <?php if(have_rows('follow_block_mediums', 'options')): ?>
                 <ul class="horizontal">

@@ -1971,6 +1971,13 @@ ul.price-detail {
       .hero .slider .slide-nav {
         bottom: 20px; }
   /*endregion HERO*/
+  /*region BREADCRUMBS*/
+  .breadcrumbs > .content-wrapper {
+    padding: 5px 10px;
+    background-color: #c8e3dc;
+    color: #426b6f;
+    border-bottom: 0px; }
+  /*endregion BREADCRUMBS*/
   /*region REVIEWS*/
   .reviews > .content-wrapper {
     padding-top: 20px;
