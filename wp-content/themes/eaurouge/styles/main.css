@@ -1794,11 +1794,11 @@ ul.price-detail {
         padding: 10px;
         width: 100%;
         max-width: 100%; }
-    .section.blocktype_with-image {
-      padding-top: 20vh;
+    .section.blocktype_double-half {
+      padding-top: 22vh;
       position: relative; }
-      .section.blocktype_with-image .block.image {
-        height: 20vh;
+      .section.blocktype_double-half .block.image {
+        height: 22vh;
         width: 100%;
         position: absolute;
         top: 0px;
