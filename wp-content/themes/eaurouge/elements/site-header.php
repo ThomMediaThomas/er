@@ -9,7 +9,7 @@
     </div>
 </div>
 <header id="header">
-    <a id="show-nav" href="#" class="show-nav button yellow show-on-mobile"><i class="icon-menu"></i></a>
+    <a id="show-nav" href="#" class="show-nav button yellow show-on-mobile"><i class="icon-menu"></i> Menu</a>
     <nav id="nav">
         <div class="content-wrapper">
             <?php wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); ?>
