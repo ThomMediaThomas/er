@@ -1725,7 +1725,6 @@ ul.price-detail {
     display: block !important; }
   .hide-on-mobile,
   #top-bar,
-  #quick-booking,
   #follow {
     display: none; }
   /*region SITE*/
@@ -2021,4 +2020,15 @@ ul.price-detail {
   .period .input-field, .family .input-field {
     width: 100%;
     float: none; }
-  /*endregion FORMS*/ }
+  /*endregion FORMS*/
+  /*region QUICKBOOKER*/
+  #quick-booking {
+    margin-top: 0px; }
+    #quick-booking .button {
+      border-radius: 0px;
+      -webkit-border-radius: 0px;
+      -moz-border-radius: 0px;
+      width: 100%;
+      margin: 0 auto;
+      text-align: center; }
+  /*endregion QUICKBOOKER*/ }

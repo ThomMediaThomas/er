@@ -10,7 +10,6 @@
 
   .hide-on-mobile,
   #top-bar,
-  #quick-booking,
   #follow{
     display: none;
   }
@@ -467,4 +466,17 @@
     }
   }
   /*endregion FORMS*/
+
+  /*region QUICKBOOKER*/
+  #quick-booking {
+    margin-top: 0px;
+
+    .button {
+      @include border-radius(0px);
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
+  }
+  /*endregion QUICKBOOKER*/
 }
