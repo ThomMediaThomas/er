@@ -220,6 +220,16 @@
       margin: 0px;
     }
 
+    .logo-holder {
+      display: block;
+      padding: $baseMarginMobile;
+
+      img {
+        max-width: 50%;
+        margin: 0 auto;
+      }
+    }
+
     .menu-main-container {
       > ul {
         > li {

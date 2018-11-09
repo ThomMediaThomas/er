@@ -1152,6 +1152,9 @@ textarea {
   font-weight: 800;
   color: #ca303c; }
 
+.frm_submit {
+  margin-bottom: 20px; }
+
 #quick-booking {
   width: 100%;
   max-width: 1200px;
@@ -1868,6 +1871,12 @@ ul.price-detail {
       width: 75%;
       padding: 0px;
       margin: 0px; }
+    #nav .logo-holder {
+      display: block;
+      padding: 10px; }
+      #nav .logo-holder img {
+        max-width: 50%;
+        margin: 0 auto; }
     #nav .menu-main-container > ul > li {
       display: block;
       width: 100%;
@@ -2036,6 +2045,8 @@ ul.price-detail {
   .period .input-field, .family .input-field {
     width: 100%;
     float: none; }
+  .frm_submit {
+    margin-bottom: 10px; }
   /*endregion FORMS*/
   /*region QUICKBOOKER*/
   #quick-booking {
