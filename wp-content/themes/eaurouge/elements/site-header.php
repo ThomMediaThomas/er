@@ -12,7 +12,7 @@
     <a id="show-nav" href="#" class="show-nav button yellow show-on-mobile"><i class="icon-menu"></i> Menu</a>
     <nav id="nav">
         <div class="content-wrapper">
-            <a href="/" title="Camping de l'eau rouge" class="logo-holder" id="show-on-mobile">
+            <a href="/" title="Camping de l'eau rouge" class="logo-holder show-on-mobile">
                 <img class="logo" src="<?php echo get_template_directory_uri(); ?>/img/logo.png" title="Domaine de l'eau rouge" alt="Domaine de l'eau rouge" />
             </a>
             <?php wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); ?>
