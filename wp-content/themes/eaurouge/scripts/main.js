@@ -58,6 +58,11 @@ function AccommodationFinder($element) {
     self.bindEvents = function () {
         self.$form.find('input, select').on('change', debounce(self.filterResults, 500));
 
+        self.$form.on('submit', function () {
+            self.filterResults();
+            return false;
+        });
+
         $('#stay_type').on('change', function () {
             if ($(this).val() == 'chalet') {
                 $('#stay_type_chalet').show();
@@ -86,6 +91,7 @@ function AccommodationFinder($element) {
         $.get(self.$form.attr('action') + '?' + serialized, function (response) {
             self.$results.html($(response).find('#accommodation-finder-results').html());
             self.$results.removeClass('loading');
+            document.getElementById("accommodation-finder-results").scrollIntoView();
         });
     }
 }
