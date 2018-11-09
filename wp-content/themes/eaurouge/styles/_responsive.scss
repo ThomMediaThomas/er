@@ -148,6 +148,7 @@
   .button {
     padding: $baseMarginMobile/2 $baseMarginMobile;
     font-size: calculateRem(20px);
+    margin-bottom: 10px;
 
     i {
       margin-left: $baseMarginMobile;

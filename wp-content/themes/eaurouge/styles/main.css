@@ -1806,7 +1806,8 @@ ul.price-detail {
   /*region BUTTONS*/
   .button {
     padding: 5px 10px;
-    font-size: 1.11111rem; }
+    font-size: 1.11111rem;
+    margin-bottom: 10px; }
     .button i {
       margin-left: 10px; }
   /*endregion BUTTONS*/
