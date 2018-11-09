@@ -1746,10 +1746,11 @@ ul.price-detail {
     font-size: 1.33333rem; }
   h5 {
     font-size: 1.11111rem; }
-  img.alignleft {
-    margin-right: 10px; }
-  img.alignright {
-    margin-left: 10px; }
+  img.alignleft, img.alignright, img.aligncenter {
+    margin: 0px 0px 10px 0px;
+    float: none;
+    width: auto;
+    max-width: 100%; }
   p, ul, ol {
     margin-bottom: 10px; }
   /*endregion PAGE*/
@@ -1944,7 +1945,7 @@ ul.price-detail {
       float: none; }
     #top-bar h5 {
       font-size: 0.77778rem; }
-  /*neregion TOPBAR*/
+  /*endregion TOPBAR*/
   /*region FOOTER*/
   #labels .left, #labels .right {
     width: 100%;

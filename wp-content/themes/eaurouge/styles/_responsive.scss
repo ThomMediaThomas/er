@@ -50,12 +50,13 @@
   }
 
   img {
-    &.alignleft {
-      margin-right: $baseMarginMobile;
-    }
-
-    &.alignright {
-      margin-left: $baseMarginMobile;
+    &.alignleft,
+    &.alignright,
+    &.aligncenter {
+      margin: 0px 0px $baseMarginMobile 0px;
+      float: none;
+      width: auto;
+      max-width: 100%;
     }
   }
 
@@ -329,7 +330,7 @@
       font-size: calculateRem(14px);
     }
   }
-  /*neregion TOPBAR*/
+  /*endregion TOPBAR*/
 
   /*region FOOTER*/
   #labels {
