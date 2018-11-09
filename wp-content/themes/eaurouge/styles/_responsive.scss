@@ -239,13 +239,14 @@
           border-top: 1px solid darken($red, 15);
 
           > a {
-            padding: $baseMarginMobile;
+            font-size: calculateRem(16px);
+            padding: $baseMarginMobile/2 $baseMarginMobile;
           }
 
           &.current-menu-item,
           &:hover {
             > a {
-              padding-top: $baseMarginMobile;
+              padding-top: $baseMarginMobile/2;
               border-top: 0px;
             }
           }
@@ -275,8 +276,8 @@
 
               a {
                 color: White;
-                padding-left: $baseMarginMobile*2;
-                font-size: 1.1rem;
+                font-size: calculateRem(16px);
+                padding: $baseMarginMobile/2 $baseMarginMobile $baseMarginMobile/2 $baseMarginMobile*2;
               }
 
               > .sub-menu {
@@ -298,10 +299,10 @@
 
                   a {
                     background-color: transparent;
-                    padding-left: $baseMarginMobile*3;
                     font-weight: normal;
-                    font-size: 1rem;
                     color: White;
+                    font-size: calculateRem(14px);
+                    padding: $baseMarginMobile/2 $baseMarginMobile $baseMarginMobile/2 $baseMarginMobile*3;
 
                     &:hover {
                       background-color: $red;

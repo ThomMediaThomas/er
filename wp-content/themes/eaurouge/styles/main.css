@@ -1883,9 +1883,10 @@ ul.price-detail {
       text-align: left;
       border-top: 1px solid #8c212a; }
       #nav .menu-main-container > ul > li > a {
-        padding: 10px; }
+        font-size: 0.88889rem;
+        padding: 5px 10px; }
       #nav .menu-main-container > ul > li.current-menu-item > a, #nav .menu-main-container > ul > li:hover > a {
-        padding-top: 10px;
+        padding-top: 5px;
         border-top: 0px; }
       #nav .menu-main-container > ul > li > .sub-menu {
         opacity: 1;
@@ -1911,8 +1912,8 @@ ul.price-detail {
           border-bottom: 0px; }
           #nav .menu-main-container > ul > li > .sub-menu li a {
             color: White;
-            padding-left: 20px;
-            font-size: 1.1rem; }
+            font-size: 0.88889rem;
+            padding: 5px 10px 5px 20px; }
           #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu {
             position: static;
             width: 100%;
@@ -1933,10 +1934,10 @@ ul.price-detail {
               border-bottom: 0px; }
               #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu li a {
                 background-color: transparent;
-                padding-left: 30px;
                 font-weight: normal;
-                font-size: 1rem;
-                color: White; }
+                color: White;
+                font-size: 0.77778rem;
+                padding: 5px 10px 5px 30px; }
                 #nav .menu-main-container > ul > li > .sub-menu li > .sub-menu li a:hover {
                   background-color: #ca303c;
                   color: White; }
