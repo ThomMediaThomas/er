@@ -1149,7 +1149,7 @@ textarea {
 
 .frm_error,
 .frm-error {
-  font-weight: 700;
+  font-weight: 800;
   color: #ca303c; }
 
 #quick-booking {
@@ -1930,6 +1930,20 @@ ul.price-detail {
                   background-color: #ca303c;
                   color: White; }
   /*endregion HEADER*/
+  /*region TOPBAR*/
+  #top-bar {
+    height: auto; }
+    #top-bar .content-wrapper {
+      padding-top: 5px;
+      padding-bottom: 5px; }
+    #top-bar .left {
+      display: none; }
+    #top-bar .right {
+      width: 100%;
+      float: none; }
+    #top-bar h5 {
+      font-size: 0.77778rem; }
+  /*neregion TOPBAR*/
   /*region FOOTER*/
   #labels .left, #labels .right {
     width: 100%;
