@@ -199,10 +199,7 @@ function QuickBooking($element) {
 
         self.$submit.on('click', function (event) {
             event.preventDefault();
-            var $form = $(this).parents('form.quick-booking-form');
-            if ($form.find('#stay_date_from').val() && $form.find('#stay_date_to').val()) {
-                $form.submit();
-            }
+            $(this).parents('form.quick-booking-form').submit();
         });
     };
 
