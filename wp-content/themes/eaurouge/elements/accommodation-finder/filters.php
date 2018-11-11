@@ -51,12 +51,12 @@
             </div>
         </div>
     </div>
-    <div class="box turqoise">
+    <div class="box green">
         <div class="content-wrapper">
             <h3 class="blue">Reisgezelschap</h3>
             <div class="input-field">
                 <?php $adults = isset($_GET['adults']) ? $_GET['adults'] : null; ?>
-                <label for="adults" class="white">Aantal volwassenen:</label>
+                <label for="adults" class="yellow">Aantal volwassenen:</label>
                 <div class="counter">
                     <span class="number-input">
                         <span class="input-with-icon">
