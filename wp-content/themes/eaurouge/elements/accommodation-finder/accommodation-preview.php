@@ -14,6 +14,9 @@
     $price = 0;
     $pricePeriods = get_field('price_periods');
 
+    $url = '/boeken/gegevens';
+    $url .= '?accommodation_id=' . get_the_ID();
+
     if ($pricePeriods) {
         $currentPricePeriod = array_filter($pricePeriods, function ($period) use ($date_from_comparable) {
             return $date_from_comparable >= $period['period_from'] && $date_from_comparable <= $period['period_to'];
@@ -52,8 +55,6 @@
 
             }
 
-            $url = '/boeken/gegevens';
-            $url .= '?accommodation_id=' . get_the_ID();
             $url .= '&date_from=' . $_GET['stay_date_from'];
             $url .= '&date_to=' . $_GET['stay_date_to'];
             $url .= '&adults=' . $_GET['adults'];
@@ -98,21 +99,16 @@
                 <li><i class="icon-check"></i><?php the_sub_field('usp'); ?></li>
             <?php endwhile; ?>
         </ul>
-        <?php if ($hasPrice) { ?>
             <div class="bottom">
                 <div class="bottom-left">
-                    <span>Prijs voor het verblijf </span>
-                    <strong>€ <?php echo number_format($price, 2); ?></strong>
+                    <?php if ($hasPrice) { ?>
+                        <span>Prijs voor het verblijf </span>
+                        <strong>€ <?php echo number_format($price, 2); ?></strong>
+                    <?php } else { ?>
+                        <span>We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen.</span>
+                    <?php } ?>
                 </div>
                 <a class="button yellow small" href="<?php echo $url; ?>">Verblijf boeken<i class="icon-chevron-right"></i></a>
             </div>
-        <?php } else { ?>
-            <div class="bottom">
-                <div class="bottom-left">
-                    <span>We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen.</span>
-                </div>
-                <a class="button yellow small disabled">Verblijf boeken<i class="icon-chevron-right"></i></a>
-            </div>
-        <?php } ?>
     </div>
 </div>
