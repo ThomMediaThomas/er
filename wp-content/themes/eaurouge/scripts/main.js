@@ -73,7 +73,7 @@ function AccommodationFinder($element) {
             }
         }).trigger('change');
 
-        $('a.set-image').on('click', function () {
+        $('body').on('click', 'a.set-image', function () {
             var $left = $(this).parents('.left');
             $left.find('a.set-image.active').removeClass('active');
             $left.find('img.image-larger').attr('src', $(this).attr('href'));
