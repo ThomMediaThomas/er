@@ -34,15 +34,12 @@
       padding: $baseMargin;
       color: White;
       text-decoration: none;
-      border-top: 0px solid $red;
       @include transition(all, .2s, ease-in-out);
       display: block;
     }
 
     &.current-menu-item > a, > a:hover{
       color: $yellow;
-      padding-top: $baseMargin - 4px;
-      border-top: 4px solid $yellow;
     }
 
     > .sub-menu {
