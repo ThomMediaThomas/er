@@ -109,13 +109,6 @@ function AccommodationBooker($element) {
 
     self.bindEvents = function () {
         self.$detailsForm.find('input').on('change', debounce(self.calculatePrice, 500));
-        $('.frm-show-form').on('submit', function (event) {
-            if (!self.validateBookingDetails()) {
-                document.getElementById("booking-details-form").scrollIntoView();
-                event.preventDefault();
-                return false;
-            }
-        });
     };
 
     self.validateBookingDetails = function () {
