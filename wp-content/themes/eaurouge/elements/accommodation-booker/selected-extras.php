@@ -16,7 +16,7 @@
             <span class="check"></span>
             <?php $per_night = get_sub_field('price_is_per_night'); ?>
             <?php the_sub_field('title'); ?> (+ € <?php echo number_format(get_sub_field('price'), 2); ?> <?php if ($per_night): ?>per nacht<?php else: ?>per verblijf<?php endif; ?>)
-            <span class="checkbox-info">(<?php the_sub_field('info'); ?> )</span></label>
+            <span class="checkbox-info"><?php the_sub_field('info'); ?></span></label>
     </div>
 <?php endwhile; ?>
 <?php else: ?>

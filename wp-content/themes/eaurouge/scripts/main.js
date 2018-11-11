@@ -227,7 +227,8 @@ function Slider($element) {
 
     self.autoRotate = self.$element.attr('data-auto');
     self.rotateInterval = null;
-    self.autoRotateTiming = 7500;
+    self.autoRotateTiming = 75000;
+    self.autoRotateDirection = 'next';
 
     self.init = function () {
         self.$slidesHolder.css('width', (100 * self.count) + '%');
@@ -244,13 +245,25 @@ function Slider($element) {
     };
 
     self.setAutoRotate = function () {
+        if (self.currentSlide == 0) {
+            self.autoRotateDirection = 'next';
+        }
+
+        if (self.currentSlide == self.count-1) {
+            self.autoRotateDirection = 'prev';
+        }
+
         if (self.rotateInterval) {
             clearInterval(self.rotateInterval);
         }
 
         if (self.autoRotate) {
             self.rotateInterval = setInterval(function () {
-                self.next();
+                if (self.autoRotateDirection == 'next') {
+                    self.next();
+                } else {
+                    self.previous();
+                }
             }, self.autoRotateTiming);
         }
     };
