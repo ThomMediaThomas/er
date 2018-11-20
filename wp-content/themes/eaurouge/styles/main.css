@@ -1302,6 +1302,10 @@ textarea {
     .accommodation-preview .bottom .bottom-left strong {
       font-size: 2rem;
       color: #426b6f; }
+      .accommodation-preview .bottom .bottom-left strong.original-price {
+        font-size: 1.22222rem;
+        text-decoration: line-through;
+        color: #ca303c; }
   .accommodation-preview .bottom .button {
     float: right; }
 

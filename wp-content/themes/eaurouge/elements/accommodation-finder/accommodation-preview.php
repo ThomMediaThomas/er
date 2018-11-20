@@ -103,7 +103,24 @@
                 <div class="bottom-left">
                     <?php if ($hasPrice) { ?>
                         <span>Prijs voor het verblijf </span>
+
+                    <?php if ($currentPricePeriod['has_discount']): ?>
+                        <?php 
+                            $discount = 0; 
+
+                            if ($currentPricePeriod['discount_type'] == 'percentage') {
+                                $discount = ($price/100) * $currentPricePeriod['discount'];
+                            } else {
+                                $discount = $currentPricePeriod['discount'];
+                            }
+                        ?>
+                        <strong class="original-price">€ <?php echo number_format($price, 2); ?></strong>
+                        <strong>€ <?php echo number_format($price - $discount, 2); ?></strong>
+                    <?php else: ?>
                         <strong>€ <?php echo number_format($price, 2); ?></strong>
+                    <?php endif; ?>
+
+
                     <?php } else { ?>
                         <span>We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen.</span>
                     <?php } ?>

@@ -85,6 +85,12 @@
       strong {
         font-size: calculateRem(36px);
         color: $blue;
+
+        &.original-price {
+          font-size: calculateRem(22px);
+          text-decoration: line-through;
+          color: $red;
+        }
       }
     }
 
