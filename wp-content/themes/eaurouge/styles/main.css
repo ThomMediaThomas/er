@@ -1648,14 +1648,23 @@ ul.price-detail {
       border-top: 1px dashed white; }
     ul.price-detail li.hidden {
       display: none; }
+    ul.price-detail li.discount {
+      border-top: 1px dashed white;
+      font-weight: bold;
+      text-transform: uppercase; }
     ul.price-detail li.total {
       border-top: 1px solid white;
       font-weight: bold;
       text-transform: uppercase;
       font-size: 1rem;
       color: #eec633; }
-      ul.price-detail li.total span, ul.price-detail li.total strong {
+      ul.price-detail li.total > span, ul.price-detail li.total > strong {
         width: 50%; }
+      ul.price-detail li.total #original-price, ul.price-detail li.total #total-price {
+        width: 100%; }
+      ul.price-detail li.total #original-price {
+        text-decoration: line-through;
+        color: #ca303c; }
     ul.price-detail li.info {
       text-align: right;
       font-size: 0.6em;

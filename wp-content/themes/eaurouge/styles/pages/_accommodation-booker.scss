@@ -35,6 +35,12 @@ ul.price-detail {
       display: none;
     }
 
+    &.discount {
+      border-top: 1px dashed white;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
     &.total {
       border-top: 1px solid white;
       font-weight: bold;
@@ -42,8 +48,17 @@ ul.price-detail {
       font-size: 1rem;
       color: $yellow;
 
-      span, strong {
+      > span, > strong {
         width: 50%;
+      }
+
+      #original-price, #total-price {
+        width: 100%;
+      }
+
+      #original-price {
+        text-decoration: line-through;
+        color: $red;
       }
     }
 

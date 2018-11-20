@@ -100,10 +100,33 @@
                     <span>1 x reserveringskosten</span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
-                <li class="total">
-                    <span>Totaal:</span>
-                    <strong id="total-price">€ <?php echo number_format($total, 2); ?><br /></strong>
-                </li>
+                <?php if ($currentPricePeriod['has_discount']): ?>
+                    <?php 
+                        $discount = 0; 
+
+                        if ($currentPricePeriod['discount_type'] == 'percentage') {
+                            $discount = ($total/100) * $currentPricePeriod['discount'];
+                        } else {
+                            $discount = $currentPricePeriod['discount'];
+                        }
+                    ?>
+                    <li class="total">
+                        <span>Totaal:</span>
+                        <strong>
+                            <span id="original-price">€ <?php echo number_format($total, 2); ?></span>
+                            <span id="total-price">€ <?php echo number_format($total - $discount, 2); ?></span>
+                        </strong>
+                    </li>
+                    <li class="discount">
+                        <span>Korting:</span>
+                        <strong id="total-price">€ <?php echo number_format($discount, 2); ?><br /></strong>
+                    </li>
+                <?php else: ?>
+                    <li class="total">
+                        <span>Totaal:</span>
+                        <strong id="total-price">€ <?php echo number_format($total, 2); ?><br /></strong>
+                    </li>
+                <?php endif; ?>
                 <li class="info">
                     <?php the_field('note_below_price'); ?>
                 </li>
