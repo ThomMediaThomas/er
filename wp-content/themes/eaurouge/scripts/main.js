@@ -75,6 +75,10 @@ function AccommodationFinder($element) {
             } else if ($(this).val() == 'camping') {
                 $('#stay_type_camping').show();
                 $('#stay_type_chalet').hide();
+            } else {
+                $('#stay_type_camping').hide();
+                $('#stay_type_chalet').hide();
+                
             }
         }).trigger('change');
 
