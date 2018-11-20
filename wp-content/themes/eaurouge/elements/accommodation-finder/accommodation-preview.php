@@ -38,7 +38,17 @@
                 });
             }
 
-            $price += $nights * floatval($currentPricePeriod['price_per_night']);
+            $pricePerNight = $currentPricePeriod['price_per_night'];
+
+            if ($currentPricePeriod['has_bundle_discount']) {
+                foreach($currentPricePeriod['bundles'] as $bundle) {
+                    if ($bundle['amount_nights'] <= $nights) {
+                        $pricePerNight = $bundle['bundle_price_per_night'];
+                    }
+                }
+            }
+
+            $price += $nights * floatval($pricePerNight);
             $price += $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
             $price += $nights * $children * floatval($currentPricePeriod['price_per_child']);
             $price += $nights * $babies * floatval($currentPricePeriod['price_per_baby']);

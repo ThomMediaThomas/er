@@ -32,6 +32,16 @@
             });
 
             $currentPricePeriod = reset($currentPricePeriod);
+
+            $pricePerNight = $currentPricePeriod['price_per_night'];
+
+            if ($currentPricePeriod['has_bundle_discount']) {
+                foreach($currentPricePeriod['bundles'] as $bundle) {
+                    if ($bundle['amount_nights'] <= $nights) {
+                        $pricePerNight = $bundle['bundle_price_per_night'];
+                    }
+                }
+            }
         }
         ?>
         <?php if($pricePeriods && $currentPricePeriod): ?>
@@ -39,7 +49,7 @@
                 <?php $total = 0; ?>
                 <li>
                     <?php
-                    $price = $nights * floatval($currentPricePeriod['price_per_night']);
+                    $price = $nights * floatval($pricePerNight);
                     $total += $price;
 
                     $price = $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
