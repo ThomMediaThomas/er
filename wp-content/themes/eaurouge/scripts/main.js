@@ -78,7 +78,7 @@ function AccommodationFinder($element) {
             } else {
                 $('#stay_type_camping').hide();
                 $('#stay_type_chalet').hide();
-                
+
             }
         }).trigger('change');
 
@@ -100,7 +100,6 @@ function AccommodationFinder($element) {
         $.get(self.$form.attr('action') + '?' + serialized, function (response) {
             self.$results.html($(response).find('#accommodation-finder-results').html());
             self.$results.removeClass('loading');
-            document.getElementById("accommodation-finder-results").scrollIntoView();
         });
     }
 }
