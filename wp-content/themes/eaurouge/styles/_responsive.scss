@@ -1,3 +1,168 @@
+@media only screen and (max-width: 1024px) {
+/*region HEADER*/
+  #show-nav, #hide-nav {
+    display: block!important;
+
+    i {
+      margin-left: 0px;
+      position: initial;
+      top: 0px;
+    }
+  }
+
+  #show-nav {
+    position: fixed;
+    top: 60px;
+    left: $baseMargin;
+    z-index: 500;
+  }
+
+  #nav {
+    z-index: 1000;
+    position: fixed;
+    top: 0px;
+    left: -100%;
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    overflow-y: auto;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&1+50,0+100 */
+    background: -moz-linear-gradient(left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(0,0,0,1) 0%,rgba(0,0,0,1) 50%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(0,0,0,1) 0%,rgba(0,0,0,1) 50%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+
+    @include transition(all, .25s, ease-in-out);
+
+    &.open {
+      left: 0px;
+
+      #hide-nav {
+        right: $baseMarginMobile;
+      }
+    }
+
+    #hide-nav {
+      position: absolute;
+      top: 20px;
+      right: -100%;
+      z-index: 1001;
+      @include transition(all, .25s, ease-in-out);
+    }
+
+    > .content-wrapper {
+      background-color: $red;
+      min-height: 100vh;
+      width: 75%;
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .logo-holder {
+      display: block;
+      padding: $baseMarginMobile;
+
+      img {
+        max-width: 50%;
+        margin: 0 auto;
+      }
+    }
+
+    .menu-main-container {
+      > ul {
+        > li {
+          display: block;
+          width: 100%;
+          text-align: left;
+          border-top: 1px solid darken($red, 15);
+
+          > a {
+            font-size: calculateRem(16px);
+            padding: $baseMarginMobile/2 $baseMarginMobile;
+          }
+
+          &.current-menu-item,
+          &:hover {
+            > a {
+              padding-top: $baseMarginMobile/2;
+              border-top: 0px;
+            }
+          }
+
+          > .sub-menu {
+            opacity: 1;
+            visibility: visible;
+            position: static;
+            width: 100%;
+            height: auto;
+            top: initial;
+            left: initial;
+            margin-left: 0px;
+            background-color: darken($red, 15);
+            @include transform(translateY(0px));
+
+            box-shadow: initial;
+            -webkit-box-shadow: initial;
+
+            &:before {
+              display: none;
+            }
+
+            > li {
+              border-top: 1px solid darken($red, 15);              
+            }
+
+            li {
+              border-top: 1px solid $red;
+              border-bottom: 0px;
+
+              a {
+                color: White;
+                font-size: calculateRem(16px);
+                padding: $baseMarginMobile/2 $baseMarginMobile $baseMarginMobile/2 $baseMarginMobile*2;
+              }
+
+              > .sub-menu {
+                position: static;
+                width: 100%;
+                display: block;
+                visibility: visible;
+                opacity: 1;
+                background-color: transparent;
+                @include transform(translateX(0px));
+                border-left: 0px;
+
+                box-shadow: initial;
+                -webkit-box-shadow: initial;
+
+                li {
+                  border-top: 1px solid $red;
+                  border-bottom: 0px;
+
+                  a {
+                    background-color: transparent;
+                    font-weight: normal;
+                    color: White;
+                    font-size: calculateRem(14px);
+                    padding: $baseMarginMobile/2 $baseMarginMobile $baseMarginMobile/2 $baseMarginMobile*3;
+
+                    &:hover {
+                      background-color: $red;
+                      color: White;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  /*endregion HEADER*/
+}
+
 @media only screen and (max-width: 730px) {
   body {
     font-size: 16px;
@@ -163,162 +328,6 @@
   }
   /*endregion LISTS*/
 
-  /*region HEADER*/
-  #show-nav, #hide-nav {
-    i {
-      margin-left: 0px;
-      position: initial;
-      top: 0px;
-    }
-  }
-
-  #show-nav {
-    position: fixed;
-    top: $baseMarginMobile;
-    left: $baseMarginMobile;
-    z-index: 500;
-  }
-
-  #nav {
-    z-index: 1000;
-    position: fixed;
-    top: 0px;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&1+50,0+100 */
-    background: -moz-linear-gradient(left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(left, rgba(0,0,0,1) 0%,rgba(0,0,0,1) 50%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to right, rgba(0,0,0,1) 0%,rgba(0,0,0,1) 50%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
-
-    @include transition(all, .25s, ease-in-out);
-
-    &.open {
-      left: 0px;
-
-      #hide-nav {
-        right: $baseMarginMobile;
-      }
-    }
-
-    #hide-nav {
-      position: fixed;
-      top: $baseMarginMobile;
-      right: -100%;
-      z-index: 1001;
-      @include transition(all, .25s, ease-in-out);
-    }
-
-    > .content-wrapper {
-      background-color: $red;
-      min-height: 100vh;
-      width: 75%;
-      padding: 0px;
-      margin: 0px;
-    }
-
-    .logo-holder {
-      display: block;
-      padding: $baseMarginMobile;
-
-      img {
-        max-width: 50%;
-        margin: 0 auto;
-      }
-    }
-
-    .menu-main-container {
-      > ul {
-        > li {
-          display: block;
-          width: 100%;
-          text-align: left;
-          border-top: 1px solid darken($red, 15);
-
-          > a {
-            font-size: calculateRem(16px);
-            padding: $baseMarginMobile/2 $baseMarginMobile;
-          }
-
-          &.current-menu-item,
-          &:hover {
-            > a {
-              padding-top: $baseMarginMobile/2;
-              border-top: 0px;
-            }
-          }
-
-          > .sub-menu {
-            opacity: 1;
-            visibility: visible;
-            position: static;
-            width: 100%;
-            height: auto;
-            top: initial;
-            left: initial;
-            margin-left: 0px;
-            background-color: darken($red, 15);
-            @include transform(translateY(0px));
-
-            box-shadow: initial;
-            -webkit-box-shadow: initial;
-
-            &:before {
-              display: none;
-            }
-
-            li {
-              border-top: 1px solid $red;
-              border-bottom: 0px;
-
-              a {
-                color: White;
-                font-size: calculateRem(16px);
-                padding: $baseMarginMobile/2 $baseMarginMobile $baseMarginMobile/2 $baseMarginMobile*2;
-              }
-
-              > .sub-menu {
-                position: static;
-                width: 100%;
-                display: block;
-                visibility: visible;
-                opacity: 1;
-                background-color: transparent;
-                @include transform(translateX(0px));
-                border-left: 0px;
-
-                box-shadow: initial;
-                -webkit-box-shadow: initial;
-
-                li {
-                  border-top: 1px solid $red;
-                  border-bottom: 0px;
-
-                  a {
-                    background-color: transparent;
-                    font-weight: normal;
-                    color: White;
-                    font-size: calculateRem(14px);
-                    padding: $baseMarginMobile/2 $baseMarginMobile $baseMarginMobile/2 $baseMarginMobile*3;
-
-                    &:hover {
-                      background-color: $red;
-                      color: White;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  /*endregion HEADER*/
-
   /*region TOPBAR*/
   #top-bar {
     height: auto;
@@ -342,6 +351,20 @@
     }
   }
   /*endregion TOPBAR*/
+
+  /*region HEADER*/
+  #show-nav {
+    top: $baseMarginMobile;
+    left: $baseMarginMobile;
+  }
+
+  #nav {
+    #hide-nav {
+      top: $baseMarginMobile;
+      right: $baseMarginMobile;
+    }
+  }
+  /*endregion HEADER*/
 
   /*region FOOTER*/
   #labels {
