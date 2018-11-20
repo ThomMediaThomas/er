@@ -1,4 +1,14 @@
 @media only screen and (max-width: 1024px) {
+  .section, .breadcrumbs {
+    > .content-wrapper {
+      max-width: 984px;    
+    }    
+  }
+
+  #quick-booking {
+    max-width: 984px;
+  }
+
 /*region HEADER*/
   #show-nav, #hide-nav {
     display: block!important;
