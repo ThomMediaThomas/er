@@ -17,6 +17,11 @@ $(document).ready(function () {
         (new NumberInput($(this))).init();
     });
 
+
+    $('.stick-in-parent').each(function () {
+        (new StickyInParent($(this))).init();
+    });
+
     $('.datepicker').datepicker({
         format: 'dd-mm-yyyy',
         language: 'nl-NL',
@@ -331,5 +336,55 @@ function SameHeight($element) {
         if ($(window).width() > MOBILE_BREAKPOINT) {
             self.$elements.css('height', self.$parent.innerHeight());
         }
+    };
+}
+
+function StickyInParent($element) {
+    var self = this;
+    self.$element = $element;
+    self.$parent = self.$element.parents('.stick-in-parent-parent');
+    self.parentPositionTop = self.$parent.offset().top;
+    self.offset = 62;
+
+    self.init = function () {
+        if ($(window).width() > MOBILE_BREAKPOINT) {
+            self.bindEvents();
+            $(window).trigger('scroll');
+        }
+    };
+
+    self.bindEvents = function () {
+        $(window).scroll(function (e) { 
+            var currentScroll = $(window).scrollTop();
+
+            if (currentScroll >= self.parentPositionTop - self.offset) {
+                var newPosition = currentScroll - self.parentPositionTop + self.offset;
+
+                self.$parent.css({
+                    'position': 'relative'
+                });
+
+                if (newPosition + self.$element.height() < self.$parent.height()) {
+                    self.$element.css({
+                        'position': 'absolute',
+                        'top': newPosition,
+                        'bottom': 'initial'
+                    });
+                } else {
+                    self.$element.css({
+                        'position': 'absolute',
+                        'top': 'initial',
+                        'bottom': 0
+                    });
+
+                }
+            } else {
+                self.$element.css({
+                    'position': 'relative',
+                    'top': 'initial'
+                });                
+            }
+
+        });
     };
 }

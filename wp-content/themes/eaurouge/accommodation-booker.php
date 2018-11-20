@@ -5,7 +5,7 @@
 		<?php get_template_part('/elements/hero'); ?>
 		<section class="section" id="accommodation-booker">
 			<div class="content-wrapper">
-				<div class="column-holder">
+				<div class="column-holder stick-in-parent-parent">
                     <div class="column main">
 						<div class="content-wrapper">
                             <?php the_field('page_intro'); ?>
@@ -24,7 +24,9 @@
                         </div>
                     </div>
 					<div class="column aside">
-						<?php get_template_part('/elements/accommodation-booker/price-detail'); ?>
+						<div class="stick-in-parent">
+							<?php get_template_part('/elements/accommodation-booker/price-detail'); ?>
+						</div>
 					</div>
 		        </div>
 			</div>
