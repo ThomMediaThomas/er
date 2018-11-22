@@ -56,7 +56,7 @@
             <h3 class="yellow">Reisgezelschap</h3>
             <div class="input-field">
                 <?php $adults = isset($_GET['adults']) ? $_GET['adults'] : null; ?>
-                <label for="adults" class="white">Aantal volwassenen:</label>
+                <label for="adults" class="white">Volwassenen:</label>
                 <div class="counter">
                     <span class="number-input">
                         <span class="input-with-icon">
@@ -70,7 +70,7 @@
             </div>
             <div class="input-field">
                 <?php $children = isset($_GET['children']) ? $_GET['children'] : null; ?>
-                <label for="children" class="white">Aantal kinderen (4 t/m 15 jaar):</label>
+                <label for="children" class="white">Kinderen (4 t/m 15 jaar):</label>
                 <div class="counter">
                     <span class="number-input">
                         <span class="input-with-icon">
@@ -84,7 +84,7 @@
             </div>
             <div class="input-field">
                 <?php $babies = isset($_GET['babies']) ? $_GET['babies'] : null; ?>
-                <label for="babies" class="white">Aantal kinderen (0 t/m 3 jaar):</label>
+                <label for="babies" class="white">Kinderen (0 t/m 3 jaar):</label>
                 <div class="counter">
                     <span class="number-input">
                         <span class="input-with-icon">
@@ -98,7 +98,7 @@
             </div>
             <div class="input-field">
                 <?php $pets = isset($_GET['pets']) ? $_GET['pets'] : null; ?>
-                <label for="pets" class="white">Aantal huisdieren:</label>
+                <label for="pets" class="white">Huisdieren:</label>
                 <div class="counter">
                     <span class="number-input">
                         <span class="input-with-icon">
