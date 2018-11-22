@@ -1586,16 +1586,20 @@ table {
   table td, table th {
     padding: 10px 20px; }
 
+#bwg_container1_0 {
+  margin-bottom: 20px; }
+  #bwg_container1_0 #bwg_container2_0 .bwg-container-0.bwg-album-thumbnails {
+    width: 100% !important;
+    padding: 0px !important;
+    -webkit-box-pack: left !important;
+    -ms-flex-pack: left !important;
+    justify-content: left !important; }
+  #bwg_container1_0 #bwg_container2_0 .bwg-container-0.bwg-album-thumbnails .bwg-title2 {
+    color: #426b6f !important; }
+
 .bwg_thumbnail.bwg_container {
   margin: 0;
   padding: 0; }
-
-#bwg_container1_0 #bwg_container2_0 .bwg-container-0.bwg-album-thumbnails {
-  width: 100% !important;
-  padding: 0px !important;
-  -webkit-box-pack: left !important;
-  -ms-flex-pack: left !important;
-  justify-content: left !important; }
 
 .bwg-item a {
   background-color: #c8e3dc;
@@ -1610,9 +1614,6 @@ table {
     font-weight: 800;
     text-transform: uppercase;
     padding: 10px; }
-
-#bwg_container1_0 #bwg_container2_0 .bwg-container-0.bwg-album-thumbnails .bwg-title2 {
-  color: #426b6f !important; }
 
 #accommodation-finder-results {
   -o-transition: all 0.3s ease-in-out;
