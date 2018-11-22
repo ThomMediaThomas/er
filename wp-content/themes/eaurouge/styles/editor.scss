@@ -186,7 +186,7 @@ a:not(.button) {
   color: $red;
 }
 
-a:not(.button), p, ul, ol, strong, span {
+a:not(.button), p, ul, ol, strong, span, em {
   &.smaller {
     font-size: 0.8em;
     font-style: italic;
@@ -267,7 +267,7 @@ table {
   }
 
   td, th {
-    padding: $baseMargin;
+    padding: $baseMargin/2 $baseMargin;
   }
 }
 

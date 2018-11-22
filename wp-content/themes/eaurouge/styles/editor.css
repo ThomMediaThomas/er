@@ -344,26 +344,26 @@ a:not(.button) {
   text-decoration: none;
   color: #ca303c; }
 
-a:not(.button).smaller, p.smaller, ul.smaller, ol.smaller, strong.smaller, span.smaller {
+a:not(.button).smaller, p.smaller, ul.smaller, ol.smaller, strong.smaller, span.smaller, em.smaller {
   font-size: 0.8em;
   font-style: italic; }
 
-a:not(.button).red, p.red, ul.red, ol.red, strong.red, span.red {
+a:not(.button).red, p.red, ul.red, ol.red, strong.red, span.red, em.red {
   color: #ca303c; }
 
-a:not(.button).blue, p.blue, ul.blue, ol.blue, strong.blue, span.blue {
+a:not(.button).blue, p.blue, ul.blue, ol.blue, strong.blue, span.blue, em.blue {
   color: #426b6f; }
 
-a:not(.button).turqoise, p.turqoise, ul.turqoise, ol.turqoise, strong.turqoise, span.turqoise {
+a:not(.button).turqoise, p.turqoise, ul.turqoise, ol.turqoise, strong.turqoise, span.turqoise, em.turqoise {
   color: #c8e3dc; }
 
-a:not(.button).white, p.white, ul.white, ol.white, strong.white, span.white {
+a:not(.button).white, p.white, ul.white, ol.white, strong.white, span.white, em.white {
   color: White; }
 
-a:not(.button).yellow, p.yellow, ul.yellow, ol.yellow, strong.yellow, span.yellow {
+a:not(.button).yellow, p.yellow, ul.yellow, ol.yellow, strong.yellow, span.yellow, em.yellow {
   color: #eec633; }
 
-a:not(.button).green, p.green, ul.green, ol.green, strong.green, span.green {
+a:not(.button).green, p.green, ul.green, ol.green, strong.green, span.green, em.green {
   color: #a0a433; }
 
 hr {
@@ -402,7 +402,7 @@ table {
     text-transform: uppercase;
     font-weight: 800; }
   table td, table th {
-    padding: 20px; }
+    padding: 10px 20px; }
 
 ul.usps {
   font-size: 1.44444rem;

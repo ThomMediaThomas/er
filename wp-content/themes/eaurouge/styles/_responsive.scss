@@ -1,3 +1,21 @@
+@media only screen and (max-width: 1200px) {
+  .hero {
+    padding: 60px 0px;
+
+    .logo-holder {
+      max-width: 180px;
+    }
+
+    h1 {
+      font-size: calculateRem(52px);
+    }
+
+    h2 {
+      font-size: calculateRem(32px);
+    }
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   .section, .breadcrumbs {
     > .content-wrapper {
