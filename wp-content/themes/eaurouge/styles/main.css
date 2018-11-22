@@ -1035,6 +1035,7 @@ textarea {
   background-color: White;
   padding: 10px;
   font-size: 1rem;
+  font-family: "Roboto", sans-serif;
   color: #525252;
   border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -1073,6 +1074,11 @@ textarea {
   textarea.invalid {
     color: #ca303c;
     border-color: #ca303c; }
+
+input::-webkit-inner-spin-button,
+input::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none; }
 
 .input-with-icon {
   position: relative;

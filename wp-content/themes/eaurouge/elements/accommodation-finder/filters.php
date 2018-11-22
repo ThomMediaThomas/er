@@ -38,7 +38,7 @@
                 <label for="stay_date_from" class="white">Van:</label>
                 <span class="input-with-icon">
                     <i class="date"></i>
-                    <input name="stay_date_from" value="<?php echo $stayDateFrom; ?>" class="datepicker" id="stay_date_from" type="text" placeholder="dd-mm-jjjj">
+                    <input name="stay_date_from" value="<?php echo $stayDateFrom; ?>" class="datepicker" autocomplete="off" id="stay_date_from" type="text" placeholder="dd-mm-jjjj">
                 </span>
             </div>
             <div class="input-field">
@@ -46,7 +46,7 @@
                 <label for="stay_date_to" class="white">Tot:</label>
                 <span class="input-with-icon">
                     <i class="date"></i>
-                    <input name="stay_date_to" value="<?php echo $stayDateTo; ?>" class="datepicker" id="stay_date_to" type="text" placeholder="dd-mm-jjjj" />
+                    <input name="stay_date_to" value="<?php echo $stayDateTo; ?>" class="datepicker" autocomplete="off" id="stay_date_to" type="text" placeholder="dd-mm-jjjj" />
                 </span>
             </div>
         </div>

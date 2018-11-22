@@ -68,6 +68,7 @@ textarea{
   background-color: White;
   padding: 10px;
   font-size: calculateRem(18px);
+  font-family: $bodyFont;
   color: $bodyFontColor;
   @include border-radius($inputRadius);
   border: 1px solid $lightGrey;
@@ -89,6 +90,12 @@ textarea{
     color: $red;
     border-color: $red;
   }
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
 }
 
 .input-with-icon {
