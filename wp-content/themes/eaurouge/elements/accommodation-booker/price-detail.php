@@ -64,7 +64,7 @@
                     $price = $nights * $pets * floatval($currentPricePeriod['price_per_dog']);
                     $total += $price;
                     ?>
-                    <span><?php echo $nights; ?> x nachten</span>
+                    <span><?php echo $nights; ?> x <?php _e('nachten', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($total, 2); ?></strong>
                 </li>
                 <?php
@@ -88,7 +88,7 @@
                                 $price = $amount * floatval($extra['price']);
                                 $total += $price;
                                 ?>
-                                <span><?php echo $amount; ?> x <?php echo strtolower($extra['title']); ?></span>
+                                <span><?php echo $amount; ?> x <?php _e(strtolower($extra['title']), 'eaurouge'); ?></span>
                                 <strong>€ <?php echo number_format($price, 2); ?></strong>
                             </li>
                         <?php endif;
@@ -99,7 +99,7 @@
                     $price = $nights * ($adults + $children + $babies) * floatval($currentPricePeriod['tourist_tax_per_night']);
                     $total += $price;
                     ?>
-                    <span>milieu-heffing (pppn.)</span>
+                    <span><?php _e('milieu-heffing (pppn.)', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <li class="">
@@ -107,7 +107,7 @@
                     $price = floatval($currentPricePeriod['booking_costs_per_stay']);
                     $total += $price;
                     ?>
-                    <span>1 x reserveringskosten</span>
+                    <span>1 x <?php _e('reserveringskosten', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <?php if ($currentPricePeriod['has_discount']): ?>
@@ -121,19 +121,19 @@
                         }
                     ?>
                     <li class="total">
-                        <span>Totaal:</span>
+                        <span><?php _e('Totaal', 'eaurouge'); ?>:</span>
                         <strong>
                             <span id="original-price">€ <?php echo number_format($total, 2); ?></span>
                             <span id="total-price">€ <?php echo number_format($total - $discount, 2); ?></span>
                         </strong>
                     </li>
                     <li class="discount">
-                        <span>Korting:</span>
+                        <span><?php _e('Korting', 'eaurouge'); ?>:</span>
                         <strong id="total-price">€ <?php echo number_format($discount, 2); ?><br /></strong>
                     </li>
                 <?php else: ?>
                     <li class="total">
-                        <span>Totaal:</span>
+                        <span><?php _e('Totaal', 'eaurouge'); ?>:</span>
                         <strong id="total-price">€ <?php echo number_format($total, 2); ?><br /></strong>
                     </li>
                 <?php endif; ?>

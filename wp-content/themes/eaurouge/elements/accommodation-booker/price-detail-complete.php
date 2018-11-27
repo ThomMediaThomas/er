@@ -37,7 +37,7 @@
                     $price = $nights * floatval($currentPricePeriod['price_per_night']);
                     $total += $price;
                     ?>
-                    <span><?php echo $nights; ?> x nacht</span>
+                    <span><?php echo $nights; ?> x <?php _e('nacht', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <li>
@@ -45,7 +45,7 @@
                     $price = $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
                     $total += $price;
                     ?>
-                    <span><?php echo $adults; ?> x volwassene</span>
+                    <span><?php echo $adults; ?> x <?php _e('volwassene', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <li>
@@ -53,7 +53,7 @@
                     $price = $nights * $children * floatval($currentPricePeriod['price_per_child']);
                     $total += $price;
                     ?>
-                    <span><?php echo $children; ?> x kind (4 t/m 15 jaar)</span>
+                    <span><?php echo $children; ?> x <?php _e('kind (4 t/m 15 jaar)', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <li>
@@ -61,7 +61,7 @@
                     $price = $nights * $babies * floatval($currentPricePeriod['price_per_baby']);
                     $total += $price;
                     ?>
-                    <span><?php echo $babies; ?> x kind (0 t/m 3 jaar)</span>
+                    <span><?php echo $babies; ?> x <?php _e('kind  (0 t/m 3 jaar)', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <li>
@@ -69,7 +69,7 @@
                     $price = $nights * $pets * floatval($currentPricePeriod['price_per_dog']);
                     $total += $price;
                     ?>
-                    <span><?php echo $pets; ?> x huisdier</span>
+                    <span><?php echo $pets; ?> x <?php _e('huisdier', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <?php
@@ -93,7 +93,7 @@
                                 $price = $amount * floatval($extra['price']);
                                 $total += $price;
                                 ?>
-                                <span><?php echo $amount; ?> x <?php echo strtolower($extra['title']); ?></span>
+                                <span><?php echo $amount; ?> x <?php <?php _e(strtolower($extra['title']), 'eaurouge');; ?></span>
                                 <strong>€ <?php echo number_format($price, 2); ?></strong>
                             </li>
                         <?php endif;
@@ -104,7 +104,7 @@
                     $price = $nights * ($adults + $children + $babies) * floatval($currentPricePeriod['tourist_tax_per_night']);
                     $total += $price;
                     ?>
-                    <span>milieu-heffing (pppn.)</span>
+                    <span><?php _e('milieu-heffing (pppn.)', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <li class="">
@@ -112,11 +112,11 @@
                     $price = floatval($currentPricePeriod['booking_costs_per_stay']);
                     $total += $price;
                     ?>
-                    <span>1 x reserveringskosten</span>
+                    <span>1 x <?php _e('reserveringskosten', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($price, 2); ?></strong>
                 </li>
                 <li class="total">
-                    <span>Totaal:</span>
+                    <span><?php _e('Totaal', 'eaurouge'); ?>:</span>
                     <strong id="total-price">€ <?php echo number_format($total, 2); ?><br /></strong>
                 </li>
                 <li class="info">

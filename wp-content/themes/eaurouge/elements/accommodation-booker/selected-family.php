@@ -2,7 +2,7 @@
 <div class="family">
     <div class="input-field">
         <?php $adults = isset($_GET['adults']) ? $_GET['adults'] : null; ?>
-        <label for="adults">Volwassenen:</label>
+        <label for="adults"><?php _e('Volwassenen', 'eaurouge'); ?>:</label>
         <div class="counter">
             <span class="number-input">
                 <span class="input-with-icon">
@@ -16,7 +16,7 @@
     </div>
     <div class="input-field">
         <?php $children = isset($_GET['children']) ? $_GET['children'] : null; ?>
-        <label for="children">Kinderen (4 t/m 15 jaar):</label>
+        <label for="children"><?php _e('Kinderen (4 t/m 15 jaar)', 'eaurouge'); ?>:</label>
         <div class="counter">
             <span class="number-input">
                 <span class="input-with-icon">
@@ -30,7 +30,7 @@
     </div>
     <div class="input-field">
         <?php $babies = isset($_GET['babies']) ? $_GET['babies'] : null; ?>
-        <label for="babies">Kinderen (0 t/m 3 jaar):</label>
+        <label for="babies"><?php _e('Kinderen (0 t/m 3 jaar)', 'eaurouge'); ?>:</label>
         <div class="counter">
             <span class="number-input">
                 <span class="input-with-icon">
@@ -44,7 +44,7 @@
     </div>
     <div class="input-field">
         <?php $pets = isset($_GET['pets']) ? $_GET['pets'] : null; ?>
-        <label for="pets">Huisdieren:</label>
+        <label for="pets"><?php _e('Huisdieren', 'eaurouge'); ?>:</label>
         <div class="counter">
             <span class="number-input">
                 <span class="input-with-icon">

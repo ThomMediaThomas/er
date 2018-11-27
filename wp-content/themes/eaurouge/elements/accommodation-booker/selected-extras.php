@@ -15,7 +15,7 @@
             <input type="checkbox" <?php if($selected): ?>checked="checked"<?php endif; ?> class="extras-for-stay" name="extras[]" value="<?php echo $key; ?>" id="<?php echo $key; ?>" />
             <span class="check"></span>
             <?php $per_night = get_sub_field('price_is_per_night'); ?>
-            <?php the_sub_field('title'); ?> (+ € <?php echo number_format(get_sub_field('price'), 2); ?> <?php if ($per_night): ?>per nacht<?php else: ?>per verblijf<?php endif; ?>)
+            <?php the_sub_field('title'); ?> (+ € <?php echo number_format(get_sub_field('price'), 2); ?> <?php if ($per_night): ?><?php _e('per nacht', 'eaurouge'); ?><?php else: ?><?php _e('per verblijf', 'eaurouge'); ?><?php endif; ?>)
             <span class="checkbox-info"><?php the_sub_field('info'); ?></span></label>
     </div>
 <?php endwhile; ?>

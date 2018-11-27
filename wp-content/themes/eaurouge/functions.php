@@ -1,4 +1,6 @@
 <?php
+load_theme_textdomain('eaurouge', get_template_directory() . '/languages'); 
+
 function register_menus() {
     register_nav_menu('header-menu', __('Header Menu'));
 }

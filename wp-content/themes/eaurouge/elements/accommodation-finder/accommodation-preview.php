@@ -112,7 +112,7 @@
             <div class="bottom">
                 <div class="bottom-left">
                     <?php if ($hasPrice) { ?>
-                        <span>Prijs voor het verblijf </span>
+                        <span><?php _e('Prijs voor het verblijf', 'eaurouge'); ?> </span>
 
                     <?php if ($currentPricePeriod['has_discount']): ?>
                         <?php 
@@ -132,10 +132,10 @@
 
 
                     <?php } else { ?>
-                        <span>We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen.</span>
+                        <span><?php _e('We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></span>
                     <?php } ?>
                 </div>
-                <a class="button yellow small" href="<?php echo $url; ?>">Verblijf boeken<i class="icon-chevron-right"></i></a>
+                <a class="button yellow small" href="<?php echo $url; ?>"><?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i></a>
             </div>
     </div>
 </div>
