@@ -50,10 +50,11 @@ ul.price-detail {
 
       > span, > strong {
         width: 50%;
-      }
 
-      #original-price, #total-price {
-        width: 100%;
+        > #original-price, 
+        > #total-price {
+          width: 100%;
+        }
       }
 
       #original-price {

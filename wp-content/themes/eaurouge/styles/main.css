@@ -1671,8 +1671,10 @@ ul.price-detail {
       color: #eec633; }
       ul.price-detail li.total > span, ul.price-detail li.total > strong {
         width: 50%; }
-      ul.price-detail li.total #original-price, ul.price-detail li.total #total-price {
-        width: 100%; }
+        ul.price-detail li.total > span > #original-price,
+        ul.price-detail li.total > span > #total-price, ul.price-detail li.total > strong > #original-price,
+        ul.price-detail li.total > strong > #total-price {
+          width: 100%; }
       ul.price-detail li.total #original-price {
         text-decoration: line-through;
         color: #ca303c; }
