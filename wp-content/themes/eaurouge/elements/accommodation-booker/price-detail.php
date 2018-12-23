@@ -27,11 +27,27 @@
 
 
         if ($pricePeriods) {
-            $currentPricePeriod = array_filter($pricePeriods, function ($period) use ($date_from_comparable) {
-                return $date_from_comparable >= $period['period_from'] && $date_from_comparable <= $period['period_to'];
+            $currentPricePeriods = array_filter($pricePeriods, function ($period) use ($date_from_comparable, $date_to_comparable) {
+                return 
+                    ($date_from_comparable >= $period['period_from'] && $date_from_comparable <= $period['period_to']) ||
+                    ($date_to_comparable >= $period['period_from'] && $date_to_comparable <= $period['period_to']);
             });
 
-            $currentPricePeriod = reset($currentPricePeriod);
+            $currentPricePeriod = null;
+
+            foreach ($currentPricePeriods as $period) {
+                if (!isset($currentPricePeriod['priority'])) {
+                    $currentPricePeriod = $period;
+                }
+
+                if (
+                    $period['priority'] > $currentPricePeriod['priority']
+                ) {
+                    $currentPricePeriod = $period;
+                }
+            }
+
+
 
             $pricePerNight = $currentPricePeriod['price_per_night'];
 
