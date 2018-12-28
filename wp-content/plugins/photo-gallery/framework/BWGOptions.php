@@ -18,6 +18,7 @@ class WD_BWG_Options {
   public $save_ip = 1;
   public $image_right_click = 0;
   public $use_inline_stiles_and_scripts = 0;
+  public $enable_google_fonts = 1;
   public $enable_wp_editor = 0;
   public $enable_seo = 1;
   public $read_metadata = 1;
@@ -210,12 +211,13 @@ class WD_BWG_Options {
   public $album_masonry_ecommerce_icon_show_hover = 'none';
 
   // Album extended
-  public $extended_album_height = 200;
-  public $album_extended_thumb_width = 250;
-  public $album_extended_thumb_height = 140;
+  public $extended_album_column_number = 2;
+  public $extended_album_height = 160;
+  public $album_extended_thumb_width = 357;
+  public $album_extended_thumb_height = 201;
   public $album_extended_image_column_number = 5;
-  public $album_extended_image_thumb_width = 250;
-  public $album_extended_image_thumb_height = 140;
+  public $album_extended_image_thumb_width = 357;
+  public $album_extended_image_thumb_height = 201;
   public $album_extended_enable_page = 1;
   public $albums_extended_per_page = 30;
   public $album_extended_images_per_page = 30;

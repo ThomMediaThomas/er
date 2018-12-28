@@ -1748,6 +1748,48 @@ function frmAdminBuildJS(){
 		}, 2000);
 	}
 
+	function openUpgradeModal() {
+		var $info = jQuery('#frm_upgrade_modal');
+		if ( $info.length < 1 ) {
+			return;
+		}
+
+		$info.dialog({
+			dialogClass: 'wp-dialog',
+			modal: true,
+			autoOpen: false,
+			closeOnEscape: true,
+			width: '550px',
+			resizable: false,
+			draggable: false,
+			open: function( event ) {
+				jQuery('.ui-dialog-titlebar').addClass('frm_hidden').removeClass('ui-helper-clearfix');
+				jQuery('#wpwrap').addClass('frm_overlay');
+				jQuery('.wp-dialog').removeClass('ui-widget ui-widget-content ui-corner-all');
+				jQuery('#frm_upgrade_modal').removeClass('ui-dialog-content ui-widget-content');
+
+				// close dialog by clicking the overlay behind it
+				jQuery('.ui-widget-overlay, a.dismiss').bind('click', function() {
+					$info.dialog('close');
+				});
+			},
+			close: function() {
+				jQuery('#wpwrap').removeClass('frm_overlay');
+			}
+		});
+
+		jQuery('.frm_show_upgrade').click( function( event ) {
+			event.preventDefault();
+			jQuery('.frm_feature_label').html( jQuery(this).data('upgrade') );
+			$info.dialog('open');
+
+			// set the utm medium
+			var button = $info.find('.button-primary');
+			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + jQuery(this).data('medium') );
+			button.attr( 'href', link );
+		} );
+	}
+
 	/* Form settings */
 	function showSuccessOpt(){
 		/*jshint validthis:true */
@@ -2675,16 +2717,15 @@ function frmAdminBuildJS(){
 		/*jshint validthis:true */
 		var button = jQuery(this);
 		var pluginSlug = button.data('plugin');
-		var license = document.getElementById('edd_'+pluginSlug+'_license_key').value;
+		var input = document.getElementById('edd_'+pluginSlug+'_license_key');
+		var license = input.value;
 		var wpmu = document.getElementById('proplug-wpmu');
 		if ( wpmu === null ) {
 			wpmu = 0;
+		} else if ( wpmu.checked ) {
+			wpmu = 1;
 		} else {
-			if ( wpmu.checked ) {
-				wpmu = 1;
-			} else {
-				wpmu = 0;
-			}
+			wpmu = 0;
 		}
 
 		jQuery.ajax({
@@ -2693,19 +2734,20 @@ function frmAdminBuildJS(){
 			success:function(msg){
 				var messageBox = jQuery('.frm_pro_license_msg');
 				if ( msg.success === true ) {
-					document.getElementById('frm_license_top').style.display = 'none';
 					document.getElementById('frm_license_bottom').style.display = 'block';
-					messageBox.removeClass('frm_error_style').addClass('frm_message');
+					messageBox.removeClass('frm_error_style').addClass('frm_message frm_updated_message');
+					input.value = '•••••••••••••••••••';
 				}else{
-					messageBox.addClass('frm_error_style').removeClass('frm_message');
+					messageBox.addClass('frm_error_style').removeClass('frm_message frm_updated_message');
 				}
 
+				messageBox.removeClass('frm_hidden');
 				messageBox.html(msg.message);
 				if ( msg.message !== '' ){
 					setTimeout(function(){
 						messageBox.html('');
-						messageBox.removeClass('frm_error_style frm_message');
-					},5000);
+						messageBox.addClass('frm_hidden').removeClass('frm_error_style frm_message frm_updated_message');
+					},10000);
 				}
 			}
 		});
@@ -2719,29 +2761,18 @@ function frmAdminBuildJS(){
 		var $link = jQuery(this);
 		$link.next('.spinner').show();
 		var pluginSlug = $link.data('plugin');
-		var license = document.getElementById('edd_'+pluginSlug+'_license_key').value;
+		var input = document.getElementById('edd_'+pluginSlug+'_license_key');
+		var license = input.value;
 		jQuery.ajax({
 			type:'POST',url:ajaxurl,
 			data:{action:'frm_addon_deactivate',license:license,plugin:pluginSlug,nonce:frmGlobal.nonce},
 			success:function(msg){
-				jQuery('.spinner').fadeOut('slow');
+				jQuery('.spinner, #frm_license_bottom').fadeOut('slow');
+				input.value = '';
 				$link.fadeOut('slow');
-				showAuthForm();
 			}
 		});
 		return false;
-	}
-
-	function showAuthForm(){
-		var form = document.getElementById('frm_license_top');
-		var cred = jQuery('#frm_license_bottom');
-		if(cred.is(':visible')){
-			cred.hide();
-			form.style.display = 'block';
-		}else{
-			cred.show();
-			form.style.display = 'none';
-		}
 	}
 
 	function saveAddonLicense() {
@@ -3003,6 +3034,132 @@ function frmAdminBuildJS(){
         });
     }
 
+	/* Addons page */
+	function installAddon( e ) {
+		e.preventDefault();
+
+		// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
+		jQuery('.frm-addon-error').remove();
+		var button  = jQuery(this);
+		var plugin  = button.attr('rel');
+		var el      = button.parent();
+		var message = el.parent().find('.addon-status-label');
+		var loader  = button.next();
+
+		button.html( frm_admin_js.installing );
+		loader.css({ 'visibility': 'visible', 'display': 'inline-block' });
+
+		// Process the Ajax to perform the activation.
+		jQuery.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			async: true,
+			cache: false,
+			dataType: 'json',
+			data: {
+				action: 'frm_install_addon',
+				nonce:  frmGlobal.nonce,
+				plugin: plugin
+			},
+			success: function(response) {
+				// If there is a WP Error instance, output it here and quit the script.
+				if ( response.error ) {
+					addonError( response, el, button, loader );
+					return;
+				}
+
+				// If we need more credentials, output the form sent back to us.
+				if ( response.form ) {
+					// Display the form to gather the users credentials.
+
+					button.append('<div class="frm-addon-error frm_error_style">' + response.form + '</div>');
+					loader.hide();
+
+					// Add a disabled attribute the install button if the creds are needed.
+					button.attr('disabled', true);
+
+					el.on( 'click', '#upgrade', 'installAddonWithCreds' );
+
+					// No need to move further if we need to enter our creds.
+					return;
+				}
+
+				// The Ajax request was successful, so let's update the output.
+				button.css({ 'visibility': 'hidden' });
+				message.text( frm_admin_js.active );
+
+				// Proceed with CSS changes
+				el.parent().removeClass('frm-addon-not-installed').addClass('frm-addon-active');
+				loader.hide();
+			},
+			error: function(xhr, textStatus, e) {
+				loader.hide();
+			}
+		});
+	}
+
+	function installAddonWithCreds( e ) {
+		// Prevent the default action, let the user know we are attempting to install again and go with it.
+		e.preventDefault();
+
+		// Now let's make another Ajax request once the user has submitted their credentials.
+		var proceed   = jQuery(this);
+		var el        = proceed.parent().parent();
+		var loader    = proceed.next();
+
+		proceed.html( frm_admin_js.installing );
+		loader.css({ 'visibility': 'visible', 'display': 'inline-block' });
+
+		jQuery.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			async: true,
+			cache: false,
+			dataType: 'json',
+			data: {
+				action: 'frm_install_addon',
+				nonce:  frm_admin_js.nonce,
+				plugin: plugin,
+				hostname: el.find('#hostname').val(),
+				username: el.find('#username').val(),
+				password: el.find('#password').val()
+			},
+			success: function(response) {
+				// If there is a WP Error instance, output it here and quit the script.
+				if ( response.error ) {
+					addonError( response, el, button, loader );
+					return;
+				}
+
+				if ( response.form ) {
+					loader.hide();
+					jQuery('.frm-inline-error').remove();
+					//proceed.val(monsterinsights_admin.proceed);
+					//proceed.after('<span class="frm-inline-error">' + monsterinsights_admin.connect_error + '</span>');
+					return;
+				}
+
+				// The Ajax request was successful, so let's update the output.
+				button.hide();
+				jQuery(message).text( frm_admin_js.active );
+
+				// Proceed with CSS changes
+				jQuery(el).removeClass('frm-addon-not-installed').addClass('frm-addon-active');
+				loader.hide();
+			},
+			error: function(xhr, textStatus ,e) {
+				loader.hide();
+			}
+		});
+	}
+
+	function addonError( response, el, button, loader ) {
+		el.append('<div class="frm-addon-error frm_error_style"><p><strong>' + response.error + '</strong></p></div>');
+		button.html( frm_admin_js.install );
+		loader.hide();
+		jQuery('.frm-addon-error').delay(4000).fadeOut();
+	}
+
 	/* Helpers */
 	function toggle( cname, id ) {
 		if(id === '#'){
@@ -3120,6 +3277,8 @@ function frmAdminBuildJS(){
 			jQuery(document.getElementById('frm_deauthorize_link')).click(deauthorize);
 			jQuery('.frm_authorize_link').click(authorize);
 
+			jQuery('.frm-install-addon').click( installAddon );
+
 			// prevent annoying confirmation message from WordPress
 			jQuery('button, input[type=submit]').on('click', removeWPUnload);
 		},
@@ -3223,6 +3382,8 @@ function frmAdminBuildJS(){
 			$newFields.on('change', 'select.conf_field', addConf);
 
 			$newFields.on('change', '.frm_get_field_selection', getFieldSelection);
+
+			openUpgradeModal();
 		},
 		
 		settingsInit: function(){
@@ -3337,6 +3498,8 @@ function frmAdminBuildJS(){
 					jQuery('.edit_action_message_box').fadeOut('slow');//Hide On Update message box
 				}
 			});
+
+			openUpgradeModal();
 		},
 		
 		panelInit: function(){
@@ -3572,7 +3735,6 @@ function frmAdminBuildJS(){
 
 		globalSettingsInit: function(){
 			var $globalForm = jQuery(document.getElementById('form_global_settings'));
-			$globalForm.on('click', '.frm_show_auth_form', showAuthForm);
 			jQuery(document.getElementById('frm_uninstall_now')).click(uninstallNow);
             initiateMultiselect();
 
@@ -3580,6 +3742,14 @@ function frmAdminBuildJS(){
 			var licenseTab = document.getElementById('licenses_settings');
 			jQuery(licenseTab).on('click', '.edd_frm_save_license', saveAddonLicense);
 			jQuery(licenseTab).on('click', '.edd_frm_fill_license', fillLicenses);
+
+			jQuery('.settings-lite-cta .dismiss').click( function( event ) {
+				event.preventDefault();
+				jQuery.post( ajaxurl, {
+					action: 'frm_lite_settings_upgrade'
+				} );
+				jQuery( '.settings-lite-cta' ).remove();
+			} );
 		},
 
 		exportInit: function(){

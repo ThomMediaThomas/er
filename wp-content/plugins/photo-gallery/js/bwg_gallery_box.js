@@ -426,6 +426,11 @@ function bwg_remove_comment( id_comment ) {
 }
 
 function bwg_gallery_box( image_id, bwg_container, openEcommerce, gallery_id ) {
+  jQuery(".bwg-validate").each(function() {
+    jQuery(this).on("keypress change", function () {
+      jQuery(this).parent().next().find(".bwg_comment_error").html("");
+    });
+  });
   if ( typeof openEcommerce == "undefined" ) {
     openEcommerce = false;
   }
@@ -797,7 +802,6 @@ function bwg_popup_sidebar_open(obj){
 
 /* Open/close comments.*/
 function bwg_comment() {
-
   jQuery(".bwg_watermark").css({display: 'none'});
   jQuery(".bwg_ecommerce_wrap").css("z-index","-1");
   jQuery(".bwg_comment_wrap").css("z-index","25");
@@ -858,7 +862,7 @@ function bwg_ecommerce() {
     bwg_popup_sidebar_close(jQuery(".bwg_comment_container"));
     jQuery(".bwg_comment_container").attr("class", "bwg_comment_container bwg_close");
     // Must be translatable
-    jQuery(".bwg_comment").attr("title", bwg_objectsL10n.bwg_how_comments);
+    jQuery(".bwg_comment").attr("title", bwg_objectsL10n.bwg_show_comments);
   }
   if (jQuery(".bwg_ecommerce_container").hasClass("bwg_open")) {
     /* Close ecommerce.*/

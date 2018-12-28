@@ -2,8 +2,8 @@
 Contributors: webdorado,wdsupport,photogallerysupport,10web
 Tags: gallery, photo gallery, image gallery, responsive gallery, wordpress gallery plugin, photo albums, gallery slider, gallery lightbox, wordpress photo gallery plugin, fullscreen gallery, watermarking, video gallery
 Requires at least: 3.4
-Tested up to: 4.9 
-Stable tag: 1.5.6
+Tested up to: 5.0 
+Stable tag: 1.5.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,10 +14,10 @@ Photo Gallery is a powerful image gallery plugin with a list of advanced options
 https://www.youtube.com/watch?v=VDKtGHAJVpc
 
 = Useful Links: =  
-[Special Offer for all Premium Plugins](https://10web.io/pricing/) 
+[Special Offer for all Premium Plugins](https://10web.io/plugins-bundle-pricing/) 
 [WordPress Photo Gallery](https://10web.io/plugins/wordpress-photo-gallery/)  
 [Demo](https://demo.10web.io/photo-gallery/)  
-[User Manual](https://docs.10web.io/docs/photo-gallery/introduction.html)  
+[User Manual](https://help.10web.io/hc/en-us/sections/360002159111-Photo-Gallery)  
 [Support Forum](https://wordpress.org/support/plugin/photo-gallery)  
  
 
@@ -278,6 +278,53 @@ Choose whether to display random or the first/last specific number of images.
 
 
 == Changelog ==
+
+= 1.5.14 =
+* Changed: 10WEB Manager plugin banner.   
+
+= 1.5.13 =
+* Fixed: Bug on Gutenberg block functionality.   
+
+= 1.5.12 =
+* Added: Number of columns option for Extended Gallery Group view.   
+* Added: Title/description vertical alignment option for Extended Gallery Group view.   
+* Added: Backend notification if php-xml library is not installed.   
+* Changed: Extended Gallery Group view theme default values.   
+* Changed: Bulk-editing image info.   
+* Improved: Extended Gallery Group view responsiveness.   
+* Improved: Decreased load time in Image uploader and working with a large number of images.   
+* Fixed: Bug on inserting media from Youtube.   
+* Fixed: Crop popup dimensions for a newly added image.  
+* Fixed: Image uploader popup dimensions in Bridge theme.  
+* Fixed: Gutenberg block edit functionality.   
+* Fixed: JS before doctype on Gutenberg edit page.    
+* Added: Free plugin flow: When installing Manager, store plugin name or slug in a WP option.   
+
+= 1.5.11 =
+* Fixed: Upload image when there is a qoute in the image metadata.   
+* Fixed: Bug on slideshow autoplay.   
+* Fixed: Bug when you put album after a gallery with scroll load.   
+* Fixed: Conflict with "BigSlam" theme.
+* Fixed: Conflict with some ajax themes.   
+* Fixed: PNG and GIF crop.   
+* Fixed: JS error in Elementor editor page.    
+
+= 1.5.10 =
+* Fixed: Closing notification.  
+
+= 1.5.9 =
+* Changed: Pages of Notification to install 10WEB Manager plugin.
+
+= 1.5.8 =
+* Added: Notification to install 10WEB Manager plugin.    
+
+= 1.5.7 =
+* Fixed: Link in gallery/gallery group description.    
+* Fixed: Compatibility with Elementor tabs.    
+* Fixed: Compatibility with ajax load.    
+* Fixed: Sorting images on gallery edit page before saving gallery.    
+* Added: Disable Google fonts.   
+* Added: Get title from image metadata.  
 
 = 1.5.6 =
 * Fixed: Page scroll doesn't work after closing the lightbox on Edge browser.   
@@ -1314,7 +1361,7 @@ This vulnerability was discovered by Fortinet's FortiGuard Labs.
 1.  Photo Gallery - Popup View   
 2.  Photo Gallery - Thumbnails View   
 3.  Photo Gallery - Image Browser View 
-4.  Photo Gallery - Mansory View   
-5.  Photo Gallery - Mosaic View   
+4.  Photo Gallery - Mansory View (Premium version)   
+5.  Photo Gallery - Mosaic View (Premium version) 
 6.  Photo Gallery - Edit Global Options   
 7.  Photo Gallery - Edit Watermark   
