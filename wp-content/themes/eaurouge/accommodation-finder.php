@@ -17,10 +17,10 @@
                             <?php
                             $meta_query = array('relation' => 'AND');
 
-                            if (isset($_GET['forced_type']) && !empty($_GET['forced_type'])) {
+                            if (isset($_GET['forced_type'])) {
                                 $meta_query[] = array(
                                     'key'       => 'forced_type',
-                                    'value'     => $_GET['forced_type'],
+                                    'value'     => !empty($_GET['forced_type']) ? $_GET['forced_type'] : 'none',
                                     'compare'   => 'LIKE',
                                 );
                             }
