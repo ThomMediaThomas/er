@@ -47,8 +47,6 @@
                 }
             }
 
-
-
             $pricePerNight = $currentPricePeriod['price_per_night'];
 
             if ($currentPricePeriod['has_bundle_discount']) {
