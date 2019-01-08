@@ -3,6 +3,10 @@
     <div class="box yellow">
         <div class="content-wrapper">
             <h3 class="red"><?php _e('Verblijf', 'eaurouge'); ?></h3>
+
+            <?php $forcedType = isset($_GET['forced_type']) ? $_GET['forced_type'] : null; ?>
+            <input type="hidden" name="forced_type" id="forced_type" value="<?php echo $forcedType; ?>" />
+            
             <div class="input-field">
                 <?php $stayType = isset($_GET['stay_type']) ? $_GET['stay_type'] : null; ?>
                 <label for="stay_type" class="white"><?php _e('Type', 'eaurouge'); ?>:</label>
