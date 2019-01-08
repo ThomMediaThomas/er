@@ -249,3 +249,9 @@ table {
     padding: $baseMargin/2 $baseMargin;
   }
 }
+
+iframe {
+  display: block;
+  margin: 0 auto $baseMargin auto;
+  max-width: 100%;
+}
