@@ -97,6 +97,6 @@
 </footer>
 <div id="bottom-bar">
     <div class="content-wrapper">
-        Domaine de l'eau rouge - Cheneux 25 - 4970 Stavelot (België)
+        Domaine de l'Eau Rouge - Cheneux 25 - 4970 Stavelot (België)
     </div>
 </div>
