@@ -2140,6 +2140,10 @@ ul.price-detail {
     font-size: 20pt; }
   h6 {
     font-size: 18pt; }
+  img {
+    max-width: 100pt;
+    margin-left: auto;
+    margin-right: auto; }
   .hero {
     background-image: none;
     padding: 0px; }
@@ -2148,6 +2152,8 @@ ul.price-detail {
     .hero .logo-holder {
       width: 100px;
       float: left; }
+      .hero .logo-holder img {
+        max-width: 100%; }
     .hero h1, .hero h2 {
       text-shadow: 0px 0px 10px rgba(0, 0, 0, 0);
       text-align: left;
@@ -2168,8 +2174,12 @@ ul.price-detail {
       max-width: 100%; }
   .button {
     border: 1px solid Black; }
+    .button i {
+      display: none; }
   .box.blue, .box.red, .box.yellow, .box.white, .box.turqoise, .box.green, .block.blue, .block.red, .block.yellow, .block.white, .block.turqoise, .block.green {
     background-color: transparent !important; }
+  .box.same-height, .block.same-height {
+    height: auto !important; }
   .section .block .content-wrapper {
     padding-top: 20px;
     padding-bottom: 20px; }
@@ -2177,4 +2187,7 @@ ul.price-detail {
     padding-left: 0px;
     padding-right: 0px;
     padding-top: 5px;
-    padding-bottom: 5px; } }
+    padding-bottom: 5px; }
+  #bottom-bar {
+    background-color: transparent;
+    border-top: 1px solid Black; } }

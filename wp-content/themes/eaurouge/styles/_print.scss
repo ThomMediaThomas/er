@@ -42,6 +42,12 @@
 		font-size: 18pt;
 	}
 
+	img {
+		max-width: 100pt;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
 	.hero {
 		background-image: none;
 		padding: 0px;
@@ -53,6 +59,10 @@
 		.logo-holder {
 			width: 100px;
 			float: left;
+
+			img {
+				max-width: 100%;
+			}
 		}
 
 		h1, h2 {
@@ -94,11 +104,19 @@
 
 	.button {
 		border: 1px solid Black;
+
+		i {
+			display: none;
+		}
 	}
 
 	.box, .block {
 		&.blue, &.red, &.yellow, &.white, &.turqoise, &.green {
 			background-color: transparent!important;
+		}
+
+		&.same-height {
+			height: auto!important;
 		}
 	}
 
@@ -116,5 +134,10 @@
 		padding-right: 0px;
 		padding-top: 5px;
 		padding-bottom: 5px;
+	}
+
+	#bottom-bar {
+		background-color: transparent;
+		border-top: 1px solid Black;
 	}
 }
