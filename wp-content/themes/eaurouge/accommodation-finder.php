@@ -7,9 +7,6 @@
 		<section class="section" id="accommodation-finder">
 			<div class="content-wrapper">
 				<div class="column-holder">
-                    <div class="column aside">
-                        <?php get_template_part('/elements/accommodation-finder/filters'); ?>
-                    </div>
                     <div class="column main" id="accommodation-finder-results">
                         <div class="content-wrapper">
 							<?php the_Field('above_search_results'); ?>
@@ -70,6 +67,9 @@
                                 <?php get_template_part('/elements/accommodation-finder/accommodation-preview'); ?>
                             <?php endwhile; endif; ?>
                         </div>
+                    </div>
+                    <div class="column aside">
+                        <?php get_template_part('/elements/accommodation-finder/filters'); ?>
                     </div>
 		        </div>
 			</div>
