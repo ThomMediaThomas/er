@@ -1,6 +1,19 @@
 <div class="box green" id="box-price-detail">
     <div class="content-wrapper">
         <?php the_field('price_intro'); ?>
+        <p class="smaller white">
+            Hieronder vind je een detail van de prijs voor jouw verblijf
+            <?php if(!empty($_GET['date_from']) && !empty($_GET['date_to'])): ?>
+                van <strong><?php echo $_GET['date_from']; ?></strong> tot <strong><?php echo $_GET['date_to']; ?></strong>
+            <?php endif; ?>
+            <?php if(!empty($_GET['adults']) || !empty($_GET['children']) || !empty($_GET['babies']) || !empty($_GET['pets'])): ?>
+                met <?php if (!empty(($_GET['adults']))) : ?><strong><?php echo $_GET['adults']; ?> volwassenen</strong><?php endif; ?>
+                <?php if (!empty(($_GET['children']))) : ?>, <strong><?php echo $_GET['children']; ?> kinderen</strong><?php endif; ?>
+                <?php if (!empty(($_GET['babies']))) : ?>, <strong><?php echo $_GET['babies']; ?> baby's</strong><?php endif; ?>
+                <?php if (!empty(($_GET['pets']))) : ?>, <strong><?php echo $_GET['pets']; ?> huisdieren</strong><?php endif; ?>  
+            <?php endif; ?>
+            .
+        </p>
         <?php
         $adults = intval($_GET['adults']);
         $children = intval($_GET['children']);
