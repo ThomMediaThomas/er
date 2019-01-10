@@ -431,6 +431,16 @@ body {
     position: relative;
     top: -5px;
     margin-right: 10px; }
+  #top-bar #language-picker {
+    position: relative;
+    top: -2px; }
+    #top-bar #language-picker li {
+      display: inline-block;
+      margin-left: 10px; }
+      #top-bar #language-picker li a {
+        font-weight: normal; }
+        #top-bar #language-picker li a.active {
+          font-weight: bold; }
 
 #nav {
   position: absolute;
