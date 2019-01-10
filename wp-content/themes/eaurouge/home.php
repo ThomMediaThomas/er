@@ -18,7 +18,7 @@
 		$counter = 0;
 		if (is_home() && have_posts()) : while ( have_posts() ) : the_post();
 	?>
-		<section class="section">
+		<section class="section blocktype_double-half">
 			<?php if($counter%2 == 0): ?>
 				<div class="block image turqoise" style="background-image: url('<?php echo get_the_post_thumbnail_url(); ?>')">
 					<?php echo the_post_thumbnail(); ?>
