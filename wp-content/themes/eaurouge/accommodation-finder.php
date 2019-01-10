@@ -9,7 +9,7 @@
 				<div class="column-holder">
                     <div class="column main" id="accommodation-finder-results">
                         <div class="content-wrapper">
-							<?php the_Field('above_search_results'); ?>
+							<?php the_field('above_search_results'); ?>
 							<hr />
                             <?php
                             $meta_query = array('relation' => 'AND');

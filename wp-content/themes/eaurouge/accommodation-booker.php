@@ -26,6 +26,10 @@
 					<div class="column aside">
 						<div class="stick-in-parent">
 							<?php get_template_part('/elements/accommodation-booker/price-detail'); ?>
+							<a class="button red" href="javascript:$('form.frm-show-form').submit()">
+								<?php _e('Verzenden', 'eaurouge'); ?> 
+								<i class="icon-chevron-right"></i>
+							</a>							
 						</div>
 					</div>
 		        </div>
