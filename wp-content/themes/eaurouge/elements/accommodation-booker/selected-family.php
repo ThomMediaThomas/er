@@ -1,7 +1,7 @@
 <?php the_field('family_intro'); ?>
 <div class="family">
     <div class="input-field">
-        <?php $adults = isset($_GET['adults']) ? $_GET['adults'] : null; ?>
+        <?php $adults = isset($_GET['adults']) ? $_GET['adults'] : 1; ?>
         <label for="adults"><?php _e('Volwassenen', 'eaurouge'); ?>:</label>
         <div class="counter">
             <span class="number-input">
