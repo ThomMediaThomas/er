@@ -141,6 +141,7 @@ function AccommodationBooker($element) {
         $('#field_date_to').val($('#date_to').val());
         $('#field_adults').val($('#adults').val());
         $('#field_children').val($('#children').val());
+        $('#field_babies').val($('#babies').val());
         $('#field_pets').val($('#pets').val());
         $('#field_calculated_price').val($('#total-price').text());
 
