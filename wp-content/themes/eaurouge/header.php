@@ -14,6 +14,8 @@
 		<link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/img/favicon.ico">
 
 		<?php wp_head(); ?>
+		
+		<meta name="theme-color" content="#c8e3dc" />
 
 	</head>
 	<body <?php body_class(); ?>>
