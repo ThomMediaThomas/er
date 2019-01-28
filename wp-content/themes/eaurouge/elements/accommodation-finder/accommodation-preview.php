@@ -94,9 +94,11 @@
                 $url .= '&extras[]=' . $joinedExtras;
             }
         }
+
+        $isAvailable = (isset($currentPricePeriod['available']) && $currentPricePeriod['available']) || !isset($currentPricePeriod['available']);
     }
 ?>
-<div class="accommodation-preview <?php if (!$currentPricePeriod['available']): ?>disabled<?php endif; ?>">
+<div class="accommodation-preview <?php if (!$isAvailable): ?>disabled<?php endif; ?>">
     <div class="left">
         <img class="image-larger" src="<?php echo get_the_post_thumbnail_url(); ?>" title="<?php echo $title; ?>" alt="<?php echo $title; ?>" />
         <ul class="images">
@@ -125,7 +127,7 @@
         </ul>
             <div class="bottom">
                 <div class="bottom-left">
-                    <?php if ($currentPricePeriod['available'] && $hasPrice) { ?>
+                    <?php if ($isAvailable && $hasPrice) { ?>
                         <span><?php _e('Prijs voor het verblijf', 'eaurouge'); ?> </span>
                         <?php if ($currentPricePeriod['has_discount']): ?>
                             <?php 
@@ -142,17 +144,15 @@
                         <?php else: ?>
                             <strong>€ <?php echo number_format($price, 2); ?></strong>
                         <?php endif; ?>
-                    <?php } elseif (!$currentPricePeriod['available']) { ?>
+                    <?php } elseif (!$isAvailable) { ?>
                         <span><?php _e('Niet beschikbaar <br />voor de door jullie <br />gekozen periode.', 'eaurouge'); ?></span>
                     <?php } else { ?>
                         <span><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></span>
                     <?php } ?>
                 </div>
-                <?php if ($currentPricePeriod['available']): ?>
-                    <a class="button yellow small" href="<?php echo $url; ?>">
-                        <?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i>
-                    </a>
-                <?php endif; ?>
+                <a class="button yellow small" href="<?php echo $url; ?>">
+                    <?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i>
+                </a>
             </div>
     </div>
 </div>
