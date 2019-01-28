@@ -1265,6 +1265,8 @@ input::-webkit-calendar-picker-indicator {
     border-bottom: 0px;
     margin-bottom: 0px;
     padding-bottom: 0px; }
+  .accommodation-preview.disabled {
+    opacity: 0.4; }
   .accommodation-preview:last-child {
     border-bottom: 0px;
     padding-bottom: 0px; }

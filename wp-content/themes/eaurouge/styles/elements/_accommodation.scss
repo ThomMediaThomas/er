@@ -11,6 +11,10 @@
     padding-bottom: 0px;
   }
 
+  &.disabled {
+    opacity: 0.4;
+  }
+
   &:last-child {
     border-bottom: 0px;
     padding-bottom: 0px;
