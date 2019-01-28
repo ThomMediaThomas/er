@@ -42,7 +42,7 @@
                 <label for="stay_date_from" class="white"><?php _e('Van', 'eaurouge'); ?>:</label>
                 <span class="input-with-icon">
                     <i class="date"></i>
-                    <input name="stay_date_from" value="<?php echo $stayDateFrom; ?>" class="datepicker" autocomplete="off" id="stay_date_from" type="text" placeholder="dd-mm-jjjj">
+                    <input name="stay_date_from" value="<?php echo $stayDateFrom; ?>" class="datepicker from-related-to" autocomplete="off" id="stay_date_from" type="text" placeholder="dd-mm-jjjj">
                 </span>
             </div>
             <div class="input-field">
@@ -50,7 +50,7 @@
                 <label for="stay_date_to" class="white"><?php _e('Tot', 'eaurouge'); ?>:</label>
                 <span class="input-with-icon">
                     <i class="date"></i>
-                    <input name="stay_date_to" value="<?php echo $stayDateTo; ?>" class="datepicker" autocomplete="off" id="stay_date_to" type="text" placeholder="dd-mm-jjjj" />
+                    <input name="stay_date_to" value="<?php echo $stayDateTo; ?>" class="datepicker to-related-from" autocomplete="off" id="stay_date_to" type="text" placeholder="dd-mm-jjjj" />
                 </span>
             </div>
         </div>

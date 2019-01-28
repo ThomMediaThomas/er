@@ -48,6 +48,27 @@ $(document).ready(function () {
             return false;
         })
     }
+
+    if ($('.from-related-to').length > 0) {
+        $('.from-related-to').on('change', function () {
+            $(this).datepicker('close');
+            
+            var from = $(this).val(),
+                to = $('.to-related-from').val(),
+                from_date = new Date(from.split('-').reverse().join('-')),
+                to_date = new Date(to.split('-').reverse().join('-'));
+
+            var newTo = from_date;
+            newTo.setDate(newTo.getDate() + 1);
+
+            if (from && to && to_date > from_date) {
+                newTo = to_date;
+            }
+
+
+            $('.to-related-from').val(newTo.format('dd-mm-yyyy')).trigger('change').datepicker('update');
+        });
+    }
 });
 
 function AccommodationFinder($element) {

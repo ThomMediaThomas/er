@@ -12,14 +12,14 @@
                         <label for="stay_date_from" class="white"><?php _e('Van', 'eaurouge'); ?>:</label>
                         <span class="input-with-icon">
                             <i class="date"></i>
-                            <input name="stay_date_from" class="datepicker" id="stay_date_from" type="text" autocomplete="off" placeholder="dd-mm-jjjj" />
+                            <input name="stay_date_from" class="datepicker from-related-to" id="stay_date_from" type="text" autocomplete="off" placeholder="dd-mm-jjjj" />
                         </span>
                     </div>
                     <div class="input-field date">
                         <label for="stay_date_to" class="white"><?php _e('Tot', 'eaurouge'); ?>:</label>
                         <span class="input-with-icon">
                             <i class="date"></i>
-                            <input name="stay_date_to" class="datepicker" id="stay_date_to" type="text" autocomplete="off" placeholder="dd-mm-jjjj" />
+                            <input name="stay_date_to" class="datepicker to-related-from" id="stay_date_to" type="text" autocomplete="off" placeholder="dd-mm-jjjj" />
                         </span>
                     </div>
                     <div class="input-field vehicle">
@@ -68,14 +68,14 @@
                         <label for="stay_date_from" class="white"><?php _e('Van', 'eaurouge'); ?>:</label>
                         <span class="input-with-icon">
                             <i class="date"></i>
-                            <input name="stay_date_from" class="datepicker" id="stay_date_from" type="text" placeholder="dd-mm-jjjj" />
+                            <input name="stay_date_from" class="datepicker from-related-to" id="stay_date_from" type="text" placeholder="dd-mm-jjjj" />
                         </span>
                     </div>
                     <div class="input-field date">
                         <label for="stay_date_to" class="white"><?php _e('Tot', 'eaurouge'); ?>:</label>
                         <span class="input-with-icon">
                             <i class="date"></i>
-                            <input name="stay_date_to" class="datepicker" id="stay_date_to" type="text" placeholder="dd-mm-jjjj" />
+                            <input name="stay_date_to" class="datepicker to-related-from" id="stay_date_to" type="text" placeholder="dd-mm-jjjj" />
                         </span>
                     </div>
                     <div class="input-field accommodation">
