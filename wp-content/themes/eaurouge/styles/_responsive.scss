@@ -97,7 +97,10 @@
       }
     }
 
-    .menu-main-container {
+    .menu-main-container,
+    .menu-main_en-container,
+    .menu-main_fr-container,
+    .menu-main_de-container {
       > ul {
         > li {
           display: block;

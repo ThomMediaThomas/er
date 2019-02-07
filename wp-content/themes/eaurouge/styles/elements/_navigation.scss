@@ -26,7 +26,10 @@
     margin-left: 0px;
   }
 
-  .menu-main-container > ul > li {
+  .menu-main-container > ul > li,
+  .menu-main_en-container > ul > li,
+  .menu-main_fr-container > ul > li,
+  .menu-main_de-container > ul > li {
     display: inline-block;
     position: relative;
 
