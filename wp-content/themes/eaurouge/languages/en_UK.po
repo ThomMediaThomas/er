@@ -1,0 +1,228 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Domaine de l'eau rouge\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-26 18:01+0000\n"
+"PO-Revision-Date: 2018-12-28 21:29+0100\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Loco-Version: 2.2.0; wp-4.9.8\n"
+"Last-Translator: \n"
+"Language: en\n"
+
+#: elements/quick-booking.php:85 elements/accommodation-finder/filters.php:32
+msgid "4-persoons chalet"
+msgstr "4-person chalet"
+
+#: elements/quick-booking.php:86 elements/accommodation-finder/filters.php:33
+msgid "6-persoons chalet"
+msgstr "6-person chalet"
+
+#: elements/quick-booking.php:37
+msgid "Aantal personen"
+msgstr "Amount of persons"
+
+#: elements/quick-booking.php:33 elements/accommodation-finder/filters.php:24
+msgid "Anders"
+msgstr "Other"
+
+#. Name of the template
+msgid "Book-accommodation-page"
+msgstr "Book-accommodation-page"
+
+#: elements/quick-booking.php:31 elements/accommodation-finder/filters.php:22
+msgid "Camper"
+msgstr "Camper"
+
+#: elements/quick-booking.php:30 elements/accommodation-finder/filters.php:21
+msgid "Caravan"
+msgstr "Caravan"
+
+#: elements/accommodation-finder/filters.php:11
+msgid "Chalet"
+msgstr "Chalet"
+
+#: elements/quick-booking.php:5
+msgid "Chalet huren"
+msgstr "Rent a chalet"
+
+#: elements/quick-booking.php:97
+msgid "Direct reserveren"
+msgstr "Book directly"
+
+#. Name of the theme
+msgid "Domaine de l'eau rouge"
+msgstr "Domaine de l'eau rouge"
+
+#. Name of the template
+msgid "Find-accommodation-page"
+msgstr "Find-accommodation-page"
+
+#. Name of the template
+msgid "Homepage"
+msgstr "Homepage"
+
+#. URI of the theme
+#. Author URI of the theme
+msgid "http://thommedia.nl"
+msgstr "http://thommedia.nl"
+
+#: elements/accommodation-booker/price-detail-complete.php:72
+msgid "huisdier"
+msgstr "pet"
+
+#: elements/accommodation-booker/selected-family.php:47
+#: elements/accommodation-finder/filters.php:101
+msgid "Huisdieren"
+msgstr "Pets"
+
+#: elements/quick-booking.php:26 elements/accommodation-finder/filters.php:17
+msgid "Kampeermiddel"
+msgstr "Camping equipment"
+
+#: elements/accommodation-finder/filters.php:12
+msgid "Kampeerplaats"
+msgstr "Camping pitch"
+
+#: elements/quick-booking.php:4
+msgid "Kamperen"
+msgstr "Camping"
+
+#. Name of the template
+msgid "Kids corner"
+msgstr "Kids corner"
+
+#: elements/accommodation-booker/price-detail-complete.php:64
+msgid "kind  (0 t/m 3 jaar"
+msgstr "child (0 to 3 years)"
+
+#: elements/accommodation-booker/price-detail-complete.php:56
+msgid "kind (4 t/m 15 jaar)"
+msgstr "child (4 to 15 years)"
+
+#: elements/accommodation-booker/selected-family.php:33
+#: elements/accommodation-finder/filters.php:87
+msgid "Kinderen (0 t/m 3 jaar)"
+msgstr "Children (0 to 3 years)"
+
+#: elements/accommodation-booker/selected-family.php:19
+#: elements/accommodation-finder/filters.php:73
+msgid "Kinderen (4 t/m 15 jaar)"
+msgstr "Children (4 to 15 years)"
+
+#: elements/accommodation-booker/price-detail.php:131
+msgid "Korting"
+msgstr "Discount"
+
+#: elements/quick-booking.php:28 elements/quick-booking.php:84
+#: elements/accommodation-finder/filters.php:10
+#: elements/accommodation-finder/filters.php:19
+#: elements/accommodation-finder/filters.php:31
+msgid "Maak een keuze"
+msgstr "Make a choice"
+
+#: elements/accommodation-booker/price-detail-complete.php:107
+#: elements/accommodation-booker/price-detail.php:102
+msgid "milieu-heffing (pppn.)"
+msgstr "environmental levy (pppn.)"
+
+#: elements/accommodation-booker/price-detail-complete.php:40
+msgid "nacht"
+msgstr "night"
+
+#: elements/accommodation-booker/price-detail.php:67
+msgid "nachten"
+msgstr "nights"
+
+#. Name of the template
+msgid "Page"
+msgstr "Page"
+
+#: elements/accommodation-booker/selected-extras.php:18
+msgid "per nacht"
+msgstr "per night"
+
+#: elements/accommodation-booker/selected-extras.php:18
+msgid "per verblijf"
+msgstr "per stay"
+
+#: elements/accommodation-finder/accommodation-preview.php:115
+msgid "Prijs voor het verblijf"
+msgstr "Price for your stay"
+
+#: elements/accommodation-booker/price-detail-complete.php:115
+#: elements/accommodation-booker/price-detail.php:110
+msgid "reserveringskosten"
+msgstr "booking fee"
+
+#: elements/quick-booking.php:82 elements/accommodation-finder/filters.php:29
+msgid "Soort verblijf"
+msgstr "Type of stay"
+
+#: elements/quick-booking.php:29 elements/accommodation-finder/filters.php:20
+msgid "Tent"
+msgstr "Tent"
+
+#. Description of the theme
+msgid "Theme for camping \"Domaine de l'eau rouge\""
+msgstr "Theme for camping \"Domaine de l'eau rouge\""
+
+#. Author of the theme
+msgid "Thomas Bartels"
+msgstr "Theme for camping \"Domaine de l'eau rouge\""
+
+#: elements/quick-booking.php:19 elements/quick-booking.php:75
+#: elements/accommodation-booker/selected-period.php:13
+#: elements/accommodation-finder/filters.php:46
+msgid "Tot"
+msgstr "To"
+
+#: elements/accommodation-booker/price-detail-complete.php:119
+#: elements/accommodation-booker/price-detail.php:124
+#: elements/accommodation-booker/price-detail.php:136
+msgid "Totaal"
+msgstr "Total"
+
+#: elements/accommodation-finder/filters.php:8
+msgid "Type"
+msgstr "Type"
+
+#: elements/quick-booking.php:12 elements/quick-booking.php:68
+#: elements/accommodation-booker/selected-period.php:5
+#: elements/accommodation-finder/filters.php:38
+msgid "Van"
+msgstr "From"
+
+#: elements/accommodation-finder/filters.php:5
+msgid "Verblijf"
+msgstr "Stay"
+
+#: elements/accommodation-finder/accommodation-preview.php:138
+msgid "Verblijf boeken"
+msgstr "Book your stay"
+
+#: elements/accommodation-booker/price-detail-complete.php:48
+msgid "volwassene"
+msgstr "adult"
+
+#: elements/accommodation-booker/selected-family.php:5
+#: elements/accommodation-finder/filters.php:59
+msgid "Volwassenen"
+msgstr "Adults"
+
+#: elements/quick-booking.php:32 elements/accommodation-finder/filters.php:23
+msgid "Vouwwagen"
+msgstr "Folding car"
+
+#: elements/accommodation-finder/accommodation-preview.php:135
+msgid "We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen."
+msgstr "We need more details<br />to calculate an <br />accurate price."
+
+#: elements/quick-booking.php:60 elements/quick-booking.php:90
+#: elements/accommodation-finder/filters.php:117
+msgid "Zoeken"
+msgstr "Search"
