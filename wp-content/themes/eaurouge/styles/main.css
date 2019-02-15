@@ -1228,6 +1228,24 @@ input::-webkit-calendar-picker-indicator {
 .frm_submit {
   margin-bottom: 20px; }
 
+.frm_form_field.vertical_radio > .frm_primary_label {
+  display: none; }
+
+.frm_form_field.vertical_radio .frm_checkbox > label {
+  font-family: "Roboto", sans-serif;
+  text-transform: none;
+  font-weight: normal; }
+  .frm_form_field.vertical_radio .frm_checkbox > label:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .frm_form_field.vertical_radio .frm_checkbox > label input {
+    float: left;
+    padding: 0px;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px; }
+
 #quick-booking {
   width: 100%;
   max-width: 1200px;

@@ -209,3 +209,25 @@ input::-webkit-calendar-picker-indicator {
 .frm_submit {
   margin-bottom: $baseMargin;
 }
+
+
+.frm_form_field.vertical_radio {
+  > .frm_primary_label {
+    display: none;
+  }
+
+  .frm_checkbox > label {
+    @include clearfix;
+    font-family: $bodyFont;
+    text-transform: none;
+    font-weight: normal;
+
+    input {
+      float: left;
+      padding: 0px;
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+    }
+  }
+}
