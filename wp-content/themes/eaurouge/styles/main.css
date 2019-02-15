@@ -1355,6 +1355,9 @@ input::-webkit-calendar-picker-indicator {
     padding: 0px 20px; }
     .accommodation-preview .right h4 {
       margin-bottom: 10px; }
+  .accommodation-preview .discover-accommodation {
+    margin-bottom: 5px;
+    margin-top: -5px; }
   .accommodation-preview .bottom:after {
     content: "";
     display: table;

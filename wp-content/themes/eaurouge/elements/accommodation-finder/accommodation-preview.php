@@ -120,39 +120,44 @@
     <div class="right">
         <h3 class="red no-margin"><?php the_title(); ?></h3>
         <h4 class=""><?php the_field('subtitle'); ?></h4>
+        <?php if (get_field('more_link')): ?>
+            <a class="button green tiny discover-accommodation" title="<?php the_field('more_text'); ?>" href="<?php the_field('more_link'); ?>" target="_blank">
+                <?php the_field('more_text'); ?> <i class="icon-chevron-right"></i>
+            </a>
+        <?php endif; ?> 
         <ul class="usps small">
             <?php while( have_rows('usps') ): the_row(); ?>
                 <li><i class="icon-check"></i><?php the_sub_field('usp'); ?></li>
             <?php endwhile; ?>
         </ul>
-            <div class="bottom">
-                <div class="bottom-left">
-                    <?php if ($isAvailable && $hasPrice) { ?>
-                        <span><?php _e('Prijs voor het verblijf', 'eaurouge'); ?> </span>
-                        <?php if ($currentPricePeriod['has_discount']): ?>
-                            <?php 
-                                $discount = 0; 
+        <div class="bottom">
+            <div class="bottom-left">
+                <?php if ($isAvailable && $hasPrice) { ?>
+                    <span><?php _e('Prijs voor het verblijf', 'eaurouge'); ?> </span>
+                    <?php if ($currentPricePeriod['has_discount']): ?>
+                        <?php 
+                            $discount = 0; 
 
-                                if ($currentPricePeriod['discount_type'] == 'percentage') {
-                                    $discount = ($price/100) * $currentPricePeriod['discount'];
-                                } else {
-                                    $discount = $currentPricePeriod['discount'];
-                                }
-                            ?>
-                            <strong class="original-price">€ <?php echo number_format($price, 2); ?></strong>
-                            <strong>€ <?php echo number_format($price - $discount, 2); ?></strong>
-                        <?php else: ?>
-                            <strong>€ <?php echo number_format($price, 2); ?></strong>
-                        <?php endif; ?>
-                    <?php } elseif (!$isAvailable) { ?>
-                        <span><?php _e('Niet beschikbaar <br />voor de door jullie <br />gekozen periode.', 'eaurouge'); ?></span>
-                    <?php } else { ?>
-                        <span><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></span>
-                    <?php } ?>
-                </div>
-                <a class="button yellow small" href="<?php echo $url; ?>">
-                    <?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i>
-                </a>
+                            if ($currentPricePeriod['discount_type'] == 'percentage') {
+                                $discount = ($price/100) * $currentPricePeriod['discount'];
+                            } else {
+                                $discount = $currentPricePeriod['discount'];
+                            }
+                        ?>
+                        <strong class="original-price">€ <?php echo number_format($price, 2); ?></strong>
+                        <strong>€ <?php echo number_format($price - $discount, 2); ?></strong>
+                    <?php else: ?>
+                        <strong>€ <?php echo number_format($price, 2); ?></strong>
+                    <?php endif; ?>
+                <?php } elseif (!$isAvailable) { ?>
+                    <span><?php _e('Niet beschikbaar <br />voor de door jullie <br />gekozen periode.', 'eaurouge'); ?></span>
+                <?php } else { ?>
+                    <span><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></span>
+                <?php } ?>
             </div>
+            <a class="button yellow small" href="<?php echo $url; ?>">
+                <?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i>
+            </a>
+        </div>
     </div>
 </div>
