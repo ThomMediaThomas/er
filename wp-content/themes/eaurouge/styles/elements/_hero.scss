@@ -45,7 +45,7 @@
   .logo-holder {
     margin: 0 auto $baseMargin auto;
     display: block;
-    width: 300px;
+    width: 200px;
   }
 
   .logo {
@@ -63,8 +63,14 @@
     text-shadow: 0px 0px 10px rgba(0,0,0, 0.8);
   }
 
+  h1 {
+    font-size: calculateRem(72px);    
+    margin-bottom: $baseMargin/2;
+  }
+
   h2 {
     font-weight: $fancyRegular;
+    font-size: calculateRem(36px);    
   }
 }
 
