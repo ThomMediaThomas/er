@@ -157,14 +157,14 @@ function AccommodationBooker($element) {
     };
 
     self.setBookingDetails = function () {
-        $('#field_accommodation_id').val($('#accommodation_id').val());
-        $('#field_date_from').val($('#date_from').val());
-        $('#field_date_to').val($('#date_to').val());
-        $('#field_adults').val($('#adults').val());
-        $('#field_children').val($('#children').val());
-        $('#field_babies').val($('#babies').val());
-        $('#field_pets').val($('#pets').val());
-        $('#field_calculated_price').val($('#total-price').text());
+        $('input[id*="field_accommodation_id"]').val($('#accommodation_id').val());
+        $('input[id*="field_date_from"]').val($('#date_from').val());
+        $('input[id*="field_date_to"]').val($('#date_to').val());
+        $('input[id*="field_adults"]').val($('#adults').val());
+        $('input[id*="field_children"]').val($('#children').val());
+        $('input[id*="field_babies"]').val($('#babies').val());
+        $('input[id*="field_pets"]').val($('#pets').val());
+        $('input[id*="field_calculated_price"]').val($('#total-price').text());
 
         //extras
         var $checkedExtras = $('input[name="extras[]"]:checked'),
@@ -174,7 +174,7 @@ function AccommodationBooker($element) {
             extrasValue.push($(this).val());
         });
 
-        $('#field_extras').val(extrasValue.join(','));
+        $('input[id*="field_extras"]').val(extrasValue.join(','));
     }
 }
 
