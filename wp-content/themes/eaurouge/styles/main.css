@@ -1139,6 +1139,10 @@ textarea {
   textarea.invalid {
     color: #ca303c;
     border-color: #ca303c; }
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    background-color: #ebebeb; }
 
 input::-webkit-inner-spin-button,
 input::-webkit-calendar-picker-indicator {

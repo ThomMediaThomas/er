@@ -5,7 +5,7 @@
         <label for="stay_date_from"><?php _e('Van', 'eaurouge'); ?>:</label>
         <span class="input-with-icon">
             <i class="date"></i>
-            <input name="date_from" value="<?php echo $stayDateFrom; ?>" class="datepicker required from-related-to" id="date_from" autocomplete="off" type="text" placeholder="dd-mm-jjjj">
+            <input name="date_from" value="<?php echo $stayDateFrom; ?>" class="datepicker required from-related-to" id="date_from" autocomplete="off" type="text" placeholder="dd-mm-jjjj" disabled="disabled">
         </span>
     </div>
     <div class="input-field">
@@ -13,7 +13,7 @@
         <label for="stay_date_to"><?php _e('Tot', 'eaurouge'); ?>:</label>
         <span class="input-with-icon">
             <i class="date"></i>
-            <input name="date_to" value="<?php echo $stayDateTo; ?>" class="datepicker required to-related-from" id="date_to" autocomplete="off" type="text" placeholder="dd-mm-jjjj" />
+            <input name="date_to" value="<?php echo $stayDateTo; ?>" class="datepicker required to-related-from" id="date_to" autocomplete="off" type="text" placeholder="dd-mm-jjjj" disabled="disabled" />
         </span>
     </div>
 </div>

@@ -90,6 +90,10 @@ textarea{
     color: $red;
     border-color: $red;
   }
+
+  &:disabled{
+    background-color: lighten($lightGrey,20%);
+  }
 }
 
 input::-webkit-inner-spin-button,
