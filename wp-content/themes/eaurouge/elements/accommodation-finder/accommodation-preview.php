@@ -62,6 +62,11 @@
                 }
             }
 
+            $disabled_extras_for_period = null;
+            if ($currentPricePeriod && $currentPricePeriod["disabled_extras_for_period"]) {
+                $disabled_extras_for_period = $currentPricePeriod["disabled_extras_for_period"];
+            }
+
             $price += $nights * floatval($pricePerNight);
             $price += $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
             $price += $nights * $children * floatval($currentPricePeriod['price_per_child']);
@@ -73,8 +78,11 @@
 
             if ($extras && $defaultExtras) {
                 foreach ($defaultExtras as $defaultExtra) {
-                    $amount = $defaultExtra['price_is_per_night'] ? $nights : 1;
-                    $price += $amount * $defaultExtra['price'];
+                    $extra_key = $defaultExtra["key"];
+                    if (($disabled_extras_for_period && !in_array($extra_key, $disabled_extras_for_period)) || !$disabled_extras_for_period) {
+                        $amount = $defaultExtra['price_is_per_night'] ? $nights : 1;
+                        $price += $amount * $defaultExtra['price'];
+                    }
                 }
 
             }
