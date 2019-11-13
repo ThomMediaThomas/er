@@ -164,7 +164,9 @@
                 <?php } ?>
             </div>
             <a class="button yellow small" href="<?php echo $url; ?>">
-                <?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i>
+                <?php if ($isAvailable) { ?>
+                    <?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i>
+                <?php } ?>
             </a>
         </div>
     </div>
