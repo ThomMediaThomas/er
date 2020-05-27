@@ -169,6 +169,10 @@ a:not(.button), p, ul, ol, strong, span, em {
   &.smaller {
     font-size: 0.8em;
     font-style: italic;
+
+    &.regular {
+      font-style: normal;
+    }
   }
 
   &.red {

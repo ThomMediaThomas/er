@@ -55,5 +55,9 @@
                 <i class="down">-</i>
             </span>
         </div>
+        <span class="smaller input-sub regular">
+            <?php _e('Kamperen: maximaal 2', 'eaurouge'); ?><br />
+            <?php _e('Chalet: maximaal 1', 'eaurouge'); ?>
+        </span>
     </div>
 </div>

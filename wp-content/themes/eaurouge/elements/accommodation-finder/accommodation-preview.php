@@ -138,6 +138,13 @@
                 <li><i class="icon-check"></i><?php the_sub_field('usp'); ?></li>
             <?php endwhile; ?>
         </ul>
+        <?php if ($currentPricePeriod['notes_for_period']): ?>
+            <div class="period-notes box turqoise">
+                <div class="content-wrapper">
+                    <p class="blue smaller"><?php echo $currentPricePeriod['notes_for_period']; ?></p>
+                </div>
+            </div>
+        <?php endif; ?> 
         <div class="bottom">
             <div class="bottom-left">
                 <?php if ($isAvailable && $hasPrice) { ?>

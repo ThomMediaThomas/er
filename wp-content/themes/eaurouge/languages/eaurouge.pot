@@ -228,3 +228,9 @@ msgstr ""
 #: elements/accommodation-finder/filters.php:117
 msgid "Zoeken"
 msgstr ""
+
+msgid "Chalet: maximaal 1"
+msgstr ""
+
+msgid "Kamperen: maximaal 2"
+msgstr ""

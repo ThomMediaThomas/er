@@ -1,19 +1,7 @@
 <div class="box green" id="box-price-detail">
     <div class="content-wrapper">
         <?php the_field('price_intro'); ?>
-        <p class="smaller white">
-            Hieronder vind je een detail van de prijs voor jouw verblijf
-            <?php if(!empty($_GET['date_from']) && !empty($_GET['date_to'])): ?>
-                van <strong><?php echo $_GET['date_from']; ?></strong> tot <strong><?php echo $_GET['date_to']; ?></strong>
-            <?php endif; ?>
-            <?php if(!empty($_GET['adults']) || !empty($_GET['children']) || !empty($_GET['babies']) || !empty($_GET['pets'])): ?>
-                met <?php if (!empty(($_GET['adults']))) : ?><strong><?php echo $_GET['adults']; ?> volwassenen</strong><?php endif; ?>
-                <?php if (!empty(($_GET['children']))) : ?>, <strong><?php echo $_GET['children']; ?> kinderen</strong><?php endif; ?>
-                <?php if (!empty(($_GET['babies']))) : ?>, <strong><?php echo $_GET['babies']; ?> baby's</strong><?php endif; ?>
-                <?php if (!empty(($_GET['pets']))) : ?>, <strong><?php echo $_GET['pets']; ?> huisdieren</strong><?php endif; ?>  
-            <?php endif; ?>
-            .
-        </p>
+        
         <?php
         $adults = intval($_GET['adults']);
         $children = intval($_GET['children']);
@@ -76,7 +64,22 @@
             }
         }
         ?>
-        <?php if($pricePeriods && $currentPricePeriod): ?>
+
+        <?php if($pricePeriods && $currentPricePeriod): ?>                
+            <div class="box yellow booking-summary">
+                <div class="content-wrapper narrow">
+                    <h4 class="red"><?php echo get_the_title($_GET['accommodation_id']); ?></h3>
+                    <?php if(!empty($_GET['date_from']) && !empty($_GET['date_to'])): ?>
+                        <ul>
+                            <li><strong><?php _e('Van', 'eaurouge'); ?>:</strong> <?php echo $_GET['date_from']; ?></li>
+                            <li><strong><?php _e('Tot', 'eaurouge'); ?>:</strong> <?php echo $_GET['date_to']; ?></li>
+                        </ul>
+                    <?php endif; ?>  
+                </div>
+            </div>
+            <?php if ($currentPricePeriod['notes_for_period']): ?>
+                <p class="yellow smaller"><?php echo $currentPricePeriod['notes_for_period']; ?></p>
+            <?php endif; ?> 
             <ul class="price-detail white">
                 <?php $total = 0; ?>
                 <li>
@@ -98,6 +101,22 @@
                     ?>
                     <span><?php echo $nights; ?> x <?php _e('nachten', 'eaurouge'); ?></span>
                     <strong>€ <?php echo number_format($total, 2); ?></strong>
+                    <?php if(!empty($_GET['adults']) || !empty($_GET['children']) || !empty($_GET['babies']) || !empty($_GET['pets'])): ?>
+                        <ul>
+                            <?php if (!empty(($_GET['adults']))) : ?>
+                                <li><?php echo $_GET['adults']; ?> <?php _e('Volwassenen', 'eaurouge'); ?></li>
+                            <?php endif; ?>
+                            <?php if (!empty(($_GET['children']))) : ?>    
+                                <li><?php echo $_GET['children']; ?> <?php _e('Kinderen (4 t/m 15 jaar)', 'eaurouge'); ?></li>
+                            <?php endif; ?>
+                            <?php if (!empty(($_GET['babies']))) : ?>
+                                <li><?php echo $_GET['babies']; ?> <?php _e('Kinderen (0 t/m 3 jaar)', 'eaurouge'); ?></li>
+                            <?php endif; ?>
+                            <?php if (!empty(($_GET['pets']))) : ?>
+                                <li><?php echo $_GET['pets']; ?> <?php _e('Huisdieren', 'eaurouge'); ?></li>
+                            <?php endif; ?>
+                        </ul> 
+                <?php endif; ?> 
                 </li>
                 <?php
                 $extras = get_field('extras', $_GET['accommodation_id']);

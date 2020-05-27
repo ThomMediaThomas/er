@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: Domaine de l'eau rouge\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 18:01+0000\n"
-"PO-Revision-Date: 2018-11-27 18:08+0000\n"
+"PO-Revision-Date: 2020-02-17 20:14+0100\n"
 "Last-Translator: thomas <bartels_thomas@hotmail.com>\n"
 "Language-Team: Nederlands\n"
 "Language: nl_NL\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.2.0; wp-4.9.8"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.2\n"
+"X-Loco-Version: 2.2.0; wp-4.9.8\n"
 
 #: elements/quick-booking.php:85 elements/accommodation-finder/filters.php:32
 msgid "4-persoons chalet"
@@ -219,12 +219,16 @@ msgid "Vouwwagen"
 msgstr "Vouwwagen"
 
 #: elements/accommodation-finder/accommodation-preview.php:135
-msgid ""
-"We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen."
-msgstr ""
-"We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen."
+msgid "We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen."
+msgstr "We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen."
 
 #: elements/quick-booking.php:60 elements/quick-booking.php:90
 #: elements/accommodation-finder/filters.php:117
 msgid "Zoeken"
 msgstr "Zoeken"
+
+msgid "Chalet: maximaal 1"
+msgstr "Chalet: maximaal 1"
+
+msgid "Kamperen: maximaal 2"
+msgstr "Kamperen: maximaal 2"
