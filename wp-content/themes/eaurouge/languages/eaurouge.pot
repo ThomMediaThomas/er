@@ -234,3 +234,9 @@ msgstr ""
 
 msgid "Kamperen: maximaal 2"
 msgstr ""
+
+msgid "Oeps"
+msgstr ""
+
+msgid "Pagina niet gevonden"
+msgstr ""

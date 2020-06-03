@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Domaine de l'eau rouge\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 18:01+0000\n"
-"PO-Revision-Date: 2020-02-17 20:16+0100\n"
+"PO-Revision-Date: 2020-06-03 14:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -232,3 +232,9 @@ msgstr "Chalet: maximal 1"
 
 msgid "Kamperen: maximaal 2"
 msgstr "Camping: maximal 2"
+
+msgid "Oeps"
+msgstr "Oops"
+
+msgid "Pagina niet gevonden"
+msgstr "Wir haben diesen Inhalt nicht gefunden"
