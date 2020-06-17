@@ -1,6 +1,6 @@
 		<?php get_template_part('/elements/site-footer'); ?>
 		<?php wp_footer(); ?>
-		<?php $scriptVersion = 2; ?>
+		<?php $scriptVersion = 3; ?>
 		<script src="<?php echo get_template_directory_uri(); ?>/scripts/vendor/jquery.2.2.4.min.js"></script>
 		<script src="<?php echo get_template_directory_uri(); ?>/scripts/vendor/datepicker.1.0.0.js"></script>
 		<script src="<?php echo get_template_directory_uri(); ?>/scripts/vendor/datepicker.nl-NL.js"></script>
