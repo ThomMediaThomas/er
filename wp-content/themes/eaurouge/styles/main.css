@@ -800,6 +800,15 @@ body {
       -webkit-transform: scale(1);
       transform: scale(1); }
 
+.section-ribbon {
+  background-color: white;
+  position: relative;
+  padding: 4px 0px; }
+  .section-ribbon .inner {
+    border-top: 2px dashed #c8e3dc;
+    border-bottom: 2px dashed #c8e3dc;
+    padding: 4px 0px; }
+
 .box {
   border-radius: 10px;
   -webkit-border-radius: 10px;

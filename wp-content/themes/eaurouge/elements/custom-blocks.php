@@ -85,6 +85,13 @@
                     </div>
                 </div>
             <?php endif; ?>
+            <?php if ($block_type == 'full-width-ribbon'): ?>
+                <div class="section-ribbon">
+                    <div class="inner">
+                        <?php echo $intro; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
         </section>
     <?php endwhile; ?>
 <?php endif; ?>

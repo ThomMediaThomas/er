@@ -104,3 +104,15 @@
 
   }
 }
+
+.section-ribbon {
+  background-color: white;
+  position:relative;
+  padding: 4px 0px;
+
+  .inner{
+    border-top: 2px dashed $turqoise;
+    border-bottom: 2px dashed $turqoise;
+    padding: 4px 0px;
+  }  
+}
