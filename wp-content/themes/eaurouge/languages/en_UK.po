@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Domaine de l'eau rouge\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 18:01+0000\n"
-"PO-Revision-Date: 2020-06-03 14:14+0100\n"
+"PO-Revision-Date: 2020-09-29 15:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -98,21 +98,21 @@ msgstr "Kids corner"
 
 #: elements/accommodation-booker/price-detail-complete.php:64
 msgid "kind  (0 t/m 3 jaar"
-msgstr "child (0 to 3 years)"
+msgstr "child (0 to 2 years)"
 
 #: elements/accommodation-booker/price-detail-complete.php:56
 msgid "kind (4 t/m 15 jaar)"
-msgstr "child (4 to 15 years)"
+msgstr "child (3 to 15 years)"
 
 #: elements/accommodation-booker/selected-family.php:33
 #: elements/accommodation-finder/filters.php:87
 msgid "Kinderen (0 t/m 3 jaar)"
-msgstr "Children (0 to 3 years)"
+msgstr "Children (0 to 2 years)"
 
 #: elements/accommodation-booker/selected-family.php:19
 #: elements/accommodation-finder/filters.php:73
 msgid "Kinderen (4 t/m 15 jaar)"
-msgstr "Children (4 to 15 years)"
+msgstr "Children (3 to 15 years)"
 
 #: elements/accommodation-booker/price-detail.php:131
 msgid "Korting"
