@@ -205,7 +205,6 @@
   }
 
   .hide-on-mobile,
-  #top-bar,
   #follow{
     display: none;
   }
@@ -362,10 +361,11 @@
   /*region TOPBAR*/
   #top-bar {
     height: auto;
+    position: static;
 
     .content-wrapper {
-      padding-top: 5px;
-      padding-bottom: 5px;
+      padding-top: 2px;
+      padding-bottom: 2px;
     }
 
     .left {
@@ -379,6 +379,14 @@
 
     h5 {
       font-size: calculateRem(14px);
+    }
+
+    #language-picker{
+      top: 0px;
+
+      li{
+        margin-left: 5px;
+      }
     }
   }
   /*endregion TOPBAR*/

@@ -2077,7 +2077,6 @@ ul.price-detail {
   .show-on-mobile {
     display: block !important; }
   .hide-on-mobile,
-  #top-bar,
   #follow {
     display: none; }
   /*region SITE*/
@@ -2171,10 +2170,11 @@ ul.price-detail {
   /*endregion LISTS*/
   /*region TOPBAR*/
   #top-bar {
-    height: auto; }
+    height: auto;
+    position: static; }
     #top-bar .content-wrapper {
-      padding-top: 5px;
-      padding-bottom: 5px; }
+      padding-top: 2px;
+      padding-bottom: 2px; }
     #top-bar .left {
       display: none; }
     #top-bar .right {
@@ -2182,6 +2182,10 @@ ul.price-detail {
       float: none; }
     #top-bar h5 {
       font-size: 0.77778rem; }
+    #top-bar #language-picker {
+      top: 0px; }
+      #top-bar #language-picker li {
+        margin-left: 5px; }
   /*endregion TOPBAR*/
   /*region HEADER*/
   #show-nav {
