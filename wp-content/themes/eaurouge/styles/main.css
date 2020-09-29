@@ -1821,6 +1821,9 @@ ul.price-detail {
       ul.price-detail > li.total #original-price {
         text-decoration: line-through;
         color: #ca303c; }
+    ul.price-detail > li.caution {
+      font-style: italic;
+      border-top: 1px solid white; }
     ul.price-detail > li.info {
       text-align: right;
       font-size: 0.6em;

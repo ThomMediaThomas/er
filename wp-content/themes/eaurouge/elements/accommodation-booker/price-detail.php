@@ -190,6 +190,12 @@
                         <strong id="total-price">€ <?php echo number_format($total, 2); ?><br /></strong>
                     </li>
                 <?php endif; ?>
+                <?php if(get_field('caution', $_GET['accommodation_id'])): ?>
+                    <li class="caution">
+                        <span><?php _e('Waarborg', 'eaurouge'); ?>:</span>
+                        <strong>€ <?php echo number_format(get_field('caution', $_GET['accommodation_id']), 2); ?><br /></strong>
+                    </li>
+                <?php endif; ?>
                 <li class="info">
                     <?php the_field('note_below_price'); ?>
                 </li>
