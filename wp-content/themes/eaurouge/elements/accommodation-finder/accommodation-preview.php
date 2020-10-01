@@ -18,6 +18,38 @@
     $url .= '?accommodation_id=' . get_the_ID();
 
     if ($pricePeriods) {
+        $accommodation_id = $post->ID;
+        
+        //GET BUNDLES
+        $bundles;
+
+        $meta_query = array(
+            'key'       => 'for_accommodations',
+            'value'     => $post->ID,
+            'compare'   => 'LIKE',
+        );
+
+        $bundles = new WP_query(); 
+        $bundles->query(array(
+            'post_type' => array('bundle'),
+            'meta_query' => array($meta_query)
+        )); 
+
+        $current_bundles = array_filter($bundles->posts, function ($bundle) use ($date_from_comparable, $date_to_comparable) {
+            return 
+                ($date_from_comparable >= $bundle->start_bundle && $date_from_comparable <= $bundle->end_bundle) ||
+                ($date_to_comparable >= $bundle->start_bundle && $date_to_comparable <= $bundle->end_bundle);
+        });
+
+        $current_bundle = reset($current_bundles);
+
+        if ($current_bundle) {
+            if ($nights < $current_bundle->min_nights) {
+                $nights = $current_bundle->min_nights;
+            }
+        }
+        //END GET BUNDLES
+
         $currentPricePeriods = array_filter($pricePeriods, function ($period) use ($date_from_comparable, $date_to_comparable) {
             return 
                 ($date_from_comparable >= $period['period_from'] && $date_from_comparable <= $period['period_to']) ||
@@ -138,13 +170,6 @@
                 <li><i class="icon-check"></i><?php the_sub_field('usp'); ?></li>
             <?php endwhile; ?>
         </ul>
-        <?php if ($currentPricePeriod['notes_for_period']): ?>
-            <div class="period-notes box turqoise">
-                <div class="content-wrapper">
-                    <p class="blue smaller"><?php echo $currentPricePeriod['notes_for_period']; ?></p>
-                </div>
-            </div>
-        <?php endif; ?> 
         <div class="bottom">
             <div class="bottom-left">
                 <?php if ($isAvailable && $hasPrice) { ?>
@@ -176,5 +201,23 @@
                 </a>
             <?php } ?>
         </div>
+        <?php if ($currentPricePeriod['notes_for_period']): ?>
+            <div class="period-notes">
+                <div class="period-notes-content">
+                    <?php echo $currentPricePeriod['notes_for_period']; ?>
+                </div>
+            </div>
+        <?php endif; ?> 
+        <?php if ($current_bundle): ?>
+            <div class="bundle">
+                <div class="bundle-header">
+                    <img src="<?php echo get_the_post_thumbnail_url($current_bundle->ID); ?>" tilte="<?php echo $current_bundle->post_title; ?>" alt="<?php echo $current_bundle->post_title; ?>" />
+                    <span><?php echo $current_bundle->post_title; ?></span>
+                </div>
+                <div class="bundle-content">
+                    <?php echo $current_bundle->post_content; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

@@ -1422,6 +1422,39 @@ input::-webkit-calendar-picker-indicator {
         color: #ca303c; }
   .accommodation-preview .bottom .button {
     float: right; }
+  .accommodation-preview .bundle, .accommodation-preview .period-notes {
+    background-color: #c8e3dc;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px; }
+    .accommodation-preview .bundle .bundle-header, .accommodation-preview .period-notes .bundle-header {
+      position: relative;
+      min-height: 30px;
+      padding-left: 40px;
+      margin-bottom: 5px; }
+      .accommodation-preview .bundle .bundle-header img, .accommodation-preview .period-notes .bundle-header img {
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        top: 0px;
+        left: 0px; }
+      .accommodation-preview .bundle .bundle-header span, .accommodation-preview .period-notes .bundle-header span {
+        display: inline;
+        margin: 0px;
+        font-size: 1rem;
+        line-height: 30px;
+        font-family: "Dosis", sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #ca303c; }
+    .accommodation-preview .bundle .bundle-content, .accommodation-preview .bundle .period-notes-content, .accommodation-preview .period-notes .bundle-content, .accommodation-preview .period-notes .period-notes-content {
+      text-transform: none;
+      font-family: "Roboto", sans-serif;
+      font-weight: normal;
+      font-size: 0.77778rem;
+      color: #426b6f; }
 
 #follow {
   position: fixed;

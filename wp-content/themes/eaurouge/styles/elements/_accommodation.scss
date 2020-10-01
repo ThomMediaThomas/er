@@ -107,4 +107,46 @@
       float: right;
     }
   }
+
+  .bundle, .period-notes {
+    $titleheight: 30px;
+    background-color: $turqoise;
+    margin-top: 10px;
+    padding: 10px;
+    @include border-radius(5px);
+
+    .bundle-header {
+      position: relative;
+      min-height: $titleheight;
+      padding-left: $titleheight + 10px;
+      margin-bottom: 5px;
+
+      img {
+        height: $titleheight;
+        width: $titleheight;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+
+      span {
+        display: inline;
+        margin: 0px;
+        font-size: 1rem;
+        line-height: $titleheight;
+        font-family: $fancyFont;
+        font-weight: $fancyExtraBold;
+        text-transform: uppercase;
+        color: $red;
+      }
+    }
+
+    .bundle-content, .period-notes-content {
+        text-transform: none;
+        font-family: $bodyFont;
+        font-weight: normal;
+        font-size: calculateRem(14px);
+        color: $blue;
+    }
+  }
 }
