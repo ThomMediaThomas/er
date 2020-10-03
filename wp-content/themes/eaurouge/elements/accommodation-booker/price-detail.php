@@ -28,6 +28,36 @@
 
 
         if ($pricePeriods) {
+            //GET BUNDLES
+            $bundles;
+
+            $meta_query = array(
+                'key'       => 'for_accommodations',
+                'value'     => $_GET['accommodation_id'],
+                'compare'   => 'LIKE',
+            );
+
+            $bundles = new WP_query(); 
+            $bundles->query(array(
+                'post_type' => array('bundle'),
+                'meta_query' => array($meta_query)
+            )); 
+
+            $current_bundles = array_filter($bundles->posts, function ($bundle) use ($date_from_comparable, $date_to_comparable) {
+                return 
+                    ($date_from_comparable >= $bundle->start_bundle && $date_from_comparable <= $bundle->end_bundle) ||
+                    ($date_to_comparable >= $bundle->start_bundle && $date_to_comparable <= $bundle->end_bundle);
+            });
+
+            $current_bundle = reset($current_bundles);
+
+            if ($current_bundle) {
+                if ($nights < $current_bundle->min_nights) {
+                    $nights = $current_bundle->min_nights;
+                }
+            }
+            //END GET BUNDLES
+
             $currentPricePeriods = array_filter($pricePeriods, function ($period) use ($date_from_comparable, $date_to_comparable) {
                 return 
                     ($date_from_comparable >= $period['period_from'] && $date_from_comparable <= $period['period_to']) ||
