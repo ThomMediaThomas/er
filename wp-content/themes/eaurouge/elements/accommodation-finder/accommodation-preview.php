@@ -195,11 +195,11 @@
                     <span><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></span>
                 <?php } ?>
             </div>
-            <?php if ($isAvailable) { ?>
+            <?php if ($isAvailable) : ?>
                 <a class="button yellow small" href="<?php echo $url; ?>">
                     <?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i>
                 </a>
-            <?php } ?>
+            <?php endif; ?>
         </div>
         <?php if ($currentPricePeriod['notes_for_period']): ?>
             <div class="period-notes">

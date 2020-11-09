@@ -243,3 +243,6 @@ msgstr ""
 
 msgid "Waarborg"
 msgstr ""
+
+msgid "Deze accommodatie is helaas niet beschikbaar in de gekozen periode."
+msgstr ""
