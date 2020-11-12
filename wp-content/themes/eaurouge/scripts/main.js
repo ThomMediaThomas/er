@@ -134,24 +134,33 @@ function AccommodationBooker($element) {
     self.init = function () {
         self.bindEvents();
         self.setBookingDetails();
+        self.initFamilyMembers();
     };
 
     self.bindEvents = function () {
-        self.$detailsForm.find('input').on('change', debounce(self.calculatePrice, 500));
+        self.$detailsForm.find('input').on('change', debounce(self.setBookingDetails, 500));
+        //@TODO
+        // - de ingevulde waardes worden nog niet opgeslagen wanneer het veld nadien gerenderd wordt
+        //   (wellicht een aparte input.trigger-price-udpate logica bedenken)
     };
 
     self.validateBookingDetails = function () {
         return validateForm(self.$detailsForm);
     };
 
-    self.calculatePrice = function () {
+    self.reloadSmallParts = function () {
         self.$boxPriceDetail.addClass('loading');
         var serialized = self.$detailsForm.serialize();
         history.pushState(null, '', self.$detailsForm.attr('action') + '?' + serialized);
 
         $.get(self.$detailsForm.attr('action') + '?' + serialized, function (response) {
             self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
+
+            self.$detailsForm.find('#ask-for-family-members-box').html(($(response).find('#ask-for-family-members-box').html()));
+            self.initFamilyMembers();
+
             self.$boxPriceDetail.removeClass('loading');
+            
             self.setBookingDetails();
         });
     };
@@ -175,7 +184,73 @@ function AccommodationBooker($element) {
         });
 
         $('input[id*="field_extras"]').val(extrasValue.join(','));
-    }
+
+        //members
+        if(self.$familyHolder.length) {
+            var $familyMemberNames = $('input.family-member-name'),
+                familyMemberNamesValue = [];
+
+            $familyMemberNames.each(function() {
+                familyMemberNamesValue.push($(this).val() ? $(this).val() : ' / ');
+            });
+
+            $('input[id*="field_family_members"]').val(familyMemberNamesValue.join(','));
+        }
+    };
+
+    //family member form
+    self.familyCount = 1;
+    self.$familyHolder = self.$detailsForm.find("#family-holder");
+    self.familyMemberTemplate;
+    self.familyMembersHtml = [];
+
+    self.initFamilyMembers = function () {
+        self.familyCount = 1;
+        self.$familyHolder = self.$detailsForm.find("#family-holder");
+        self.familyMemberTemplate;
+        self.familyMembersHtml = [];
+
+        if(self.$familyHolder.length) {
+            self.setFamilyCount();
+            self.$detailsForm.find('input.change-family-members').on('change', debounce(self.updateFamilyMembers, 500));
+
+            self.familyMemberTemplate = self.$detailsForm.find('#family-member-template').html();
+            self.$detailsForm.find('#family-member-template').remove();
+
+            self.updateFamilyMembers();
+        }
+    };
+
+    self.updateFamilyMembers = function () {
+        self.setFamilyCount();
+        var currentRenderedMembers = self.$familyHolder.find('div.family-member').length;
+        var membersToAdd = self.familyCount;
+        // minus self
+        membersToAdd = membersToAdd -1;
+        // minus existing
+        membersToAdd = membersToAdd - currentRenderedMembers;
+
+        if (membersToAdd >= 0) {
+            for (var i = 0; i < membersToAdd; i++){
+                var htmlToAppend = self.familyMemberTemplate;
+                var memberCounter = currentRenderedMembers + i + 1;
+                htmlToAppend = htmlToAppend.replaceAll('MEMBER_COUNT', memberCounter);
+                self.$familyHolder.append(htmlToAppend);
+            }
+        }else{
+            var membersToRemove = Math.abs(membersToAdd);
+            for (var j = 0; j < membersToRemove; j++){
+                self.$familyHolder.find('div.family-member')[currentRenderedMembers - 1 - j].remove();
+            }                
+        }
+    };
+
+    self.setFamilyCount = function () {
+        var adults = $('#adults').val() ? parseInt($('#adults').val()) : 0;
+        var children = $('#children').val() ? parseInt($('#children').val()) : 0;
+        var babies = $('#babies').val() ? parseInt($('#babies').val()) : 0;
+        self.familyCount = adults + children + babies;
+    };
 }
 
 function NumberInput($element) {

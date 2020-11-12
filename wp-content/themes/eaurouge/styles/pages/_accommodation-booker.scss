@@ -143,3 +143,14 @@ ul.price-detail {
     @include transform(translateY(100px));
   }
 }
+
+.family-member {
+  margin-bottom: $baseMargin/2;
+  padding-bottom: $baseMargin/2;
+  border-bottom: 1px solid $turqoise;
+
+  &:last-child {
+    margin-bottom: 0px;
+    border-bottom: 0px;
+  }
+}

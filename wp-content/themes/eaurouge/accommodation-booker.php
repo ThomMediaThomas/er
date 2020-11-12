@@ -93,6 +93,8 @@
 
 
 	    $isAvailable = (isset($currentPricePeriod['available']) && $currentPricePeriod['available']) || !isset($currentPricePeriod['available']);
+
+	    $askForFamilyMembers = isset($currentPricePeriod["ask_for_family_members"]) ? $currentPricePeriod["ask_for_family_members"] : false;
 	}
 ?>
 <?php get_header(); ?>
@@ -111,6 +113,11 @@
 								<?php get_template_part('/elements/accommodation-booker/selected-period'); ?>
 								<hr />
 								<?php get_template_part('/elements/accommodation-booker/selected-family'); ?>
+								<div id="ask-for-family-members-box">
+									<?php if($askForFamilyMembers): ?>
+										<?php get_template_part('/elements/accommodation-booker/selected-family-members'); ?>
+									<?php endif; ?>
+								</div>
 								<hr />
 								<?php get_template_part('/elements/accommodation-booker/selected-extras'); ?>
 								<hr />

@@ -1182,6 +1182,8 @@ input::-webkit-calendar-picker-indicator {
       background-position: 0 -164px; }
     .input-with-icon i.pets {
       background-position: 0 -123px; }
+    .input-with-icon i.user {
+      background-position: 0 -205px; }
   .input-with-icon input {
     padding-left: 41px; }
 
@@ -1906,6 +1908,14 @@ ul.price-detail {
     -ms-transform: translateY(100px);
     -webkit-transform: translateY(100px);
     transform: translateY(100px); }
+
+.family-member {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #c8e3dc; }
+  .family-member:last-child {
+    margin-bottom: 0px;
+    border-bottom: 0px; }
 
 .kids-page .box {
   padding: 10px; }

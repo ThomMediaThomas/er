@@ -7,7 +7,7 @@
             <span class="number-input">
                 <span class="input-with-icon">
                     <i class="adults"></i>
-                    <input name="adults" id="adults" class="required" type="number" placeholder="0" value="<?php echo $adults; ?>">
+                    <input name="adults" id="adults" class="required change-family-members" type="number" placeholder="0" value="<?php echo $adults; ?>">
                 </span>
                 <i class="up">+</i>
                 <i class="down">-</i>
@@ -21,7 +21,7 @@
             <span class="number-input">
                 <span class="input-with-icon">
                     <i class="children"></i>
-                    <input name="children" id="children" type="number" placeholder="0" value="<?php echo $children; ?>">
+                    <input name="children" id="children" class="change-family-members" type="number" placeholder="0" value="<?php echo $children; ?>">
                 </span>
                 <i class="up">+</i>
                 <i class="down">-</i>
@@ -35,7 +35,7 @@
             <span class="number-input">
                 <span class="input-with-icon">
                     <i class="babies"></i>
-                    <input name="babies" id="babies" type="number" placeholder="0" value="<?php echo $babies; ?>">
+                    <input name="babies" id="babies" class="change-family-members" type="number" placeholder="0" value="<?php echo $babies; ?>">
                 </span>
                 <i class="up">+</i>
                 <i class="down">-</i>
