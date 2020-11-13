@@ -181,6 +181,7 @@ function AccommodationBooker($element) {
                 self.$boxPriceDetail.removeClass('loading');
                 
                 $('input[id*="field_calculated_price"]').val($('#total-price').text());
+                self.checkIfFormIsValid();
             });
         }
     };
