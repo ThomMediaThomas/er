@@ -138,31 +138,38 @@ function AccommodationBooker($element) {
     };
 
     self.bindEvents = function () {
+        self.$detailsForm.find('input').on('change', debounce(self.reloadSmallParts, 500));
         self.$detailsForm.find('input').on('change', debounce(self.setBookingDetails, 500));
-        //@TODO
-        // - de ingevulde waardes worden nog niet opgeslagen wanneer het veld nadien gerenderd wordt
-        //   (wellicht een aparte input.trigger-price-udpate logica bedenken)
     };
 
     self.validateBookingDetails = function () {
         return validateForm(self.$detailsForm);
     };
 
-    self.reloadSmallParts = function () {
-        self.$boxPriceDetail.addClass('loading');
-        var serialized = self.$detailsForm.serialize();
-        history.pushState(null, '', self.$detailsForm.attr('action') + '?' + serialized);
+    self.reloadSmallParts = function (event) {
+        if(!($(event.currentTarget).hasClass('prevent-reload-small-parts'))) {
+            self.$boxPriceDetail.addClass('loading');
+            var serialized = self.$detailsForm.serialize();
+            history.pushState(null, '', self.$detailsForm.attr('action') + '?' + serialized);
 
-        $.get(self.$detailsForm.attr('action') + '?' + serialized, function (response) {
-            self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
+            $.get(self.$detailsForm.attr('action') + '?' + serialized, function (response) {
+                self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
 
-            self.$detailsForm.find('#ask-for-family-members-box').html(($(response).find('#ask-for-family-members-box').html()));
-            self.initFamilyMembers();
+                var $currentAskForFamilyMembersBox = self.$detailsForm.find('#ask-for-family-members-box');
+                var $updatedAskForFamilyMembersBox = $(response).find('#ask-for-family-members-box');
+                if (
+                    (isEmpty($currentAskForFamilyMembersBox) && !isEmpty($updatedAskForFamilyMembersBox)) |
+                    (!isEmpty($currentAskForFamilyMembersBox) && isEmpty($updatedAskForFamilyMembersBox))
+                ) {
+                    $currentAskForFamilyMembersBox.html($updatedAskForFamilyMembersBox.html());
+                    self.initFamilyMembers();
+                }
 
-            self.$boxPriceDetail.removeClass('loading');
-            
-            self.setBookingDetails();
-        });
+                self.$boxPriceDetail.removeClass('loading');
+                
+                $('input[id*="field_calculated_price"]').val($('#total-price').text());
+            });
+        }
     };
 
     self.setBookingDetails = function () {
@@ -488,3 +495,5 @@ function StickyInParent($element) {
         });
     };
 }
+
+

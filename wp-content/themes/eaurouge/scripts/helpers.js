@@ -12,3 +12,7 @@ function debounce(func, wait, immediate) {
         if (callNow) func.apply(context, args);
     };
 };
+
+function isEmpty(el){
+  return !$.trim(el.html())
+}
