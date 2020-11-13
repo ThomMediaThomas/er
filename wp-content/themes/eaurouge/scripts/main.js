@@ -140,8 +140,19 @@ function AccommodationBooker($element) {
     };
 
     self.bindEvents = function () {
-        self.$detailsForm.find('input').on('change', debounce(self.reloadSmallParts, 500));
-        self.$detailsForm.find('input').on('change', debounce(self.setBookingDetails, 500));
+        self.$detailsForm.on('change', 'input', debounce(self.reloadSmallParts, 500));
+        self.$detailsForm.on('change', 'input', debounce(self.setBookingDetails, 500));
+        self.$detailsForm.on('change', 'input', debounce(self.checkIfFormIsValid, 500));
+    };
+
+    self.checkIfFormIsValid = function () {
+        var formIsValid = self.validateBookingDetails();
+
+        if(formIsValid) {
+            $("#form_booking_form").find('button[type="submit"]').removeAttr('disabled');
+        } else {
+            $("#form_booking_form").find('button[type="submit"]').attr('disabled', 'true');
+        }
     };
 
     self.validateBookingDetails = function () {

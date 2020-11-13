@@ -14,7 +14,9 @@ $darken: 10%;
   font-family: $fancyFont;
   border: 0px;
 
-  &.disabled {
+  &.disabled,
+  &:disabled
+  {
     cursor: default;
     opacity: 0.5;
   }
