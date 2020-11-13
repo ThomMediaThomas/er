@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Domaine de l'eau rouge\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 18:01+0000\n"
-"PO-Revision-Date: 2020-11-09 20:34+0100\n"
+"PO-Revision-Date: 2020-11-13 19:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -244,3 +244,9 @@ msgstr "Guarantee"
 
 msgid "Deze accommodatie is helaas niet beschikbaar in de gekozen periode."
 msgstr "Unfortunately, this accommodation is not available in the selected period."
+
+msgid "Naam en voornaam van hoofdboeker"
+msgstr "Name and first name of the main booker"
+
+msgid "Naam en voornaam van reisgenoot"
+msgstr "Name and first name of travel companion"

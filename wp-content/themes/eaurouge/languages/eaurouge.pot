@@ -246,3 +246,9 @@ msgstr ""
 
 msgid "Deze accommodatie is helaas niet beschikbaar in de gekozen periode."
 msgstr ""
+
+msgid "Naam en voornaam van hoofdboeker"
+msgstr ""
+
+msgid "Naam en voornaam van reisgenoot"
+msgstr ""
