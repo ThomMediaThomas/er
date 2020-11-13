@@ -66,7 +66,9 @@ $(document).ready(function () {
             }
 
 
-            $('.to-related-from').val(newTo.format('dd-mm-yyyy')).trigger('change').datepicker('update');
+            if(!isNaN(newTo.getTime())) {
+                $('.to-related-from').val(newTo.format('dd-mm-yyyy')).trigger('change').datepicker('update');
+            }
         });
     }
 });
