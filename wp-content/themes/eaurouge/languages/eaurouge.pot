@@ -252,3 +252,6 @@ msgstr ""
 
 msgid "Naam en voornaam van reisgenoot"
 msgstr ""
+
+msgid "Arrangement"
+msgstr ""

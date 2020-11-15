@@ -172,7 +172,11 @@
 							                    $price = $nights * $pets * floatval($currentPricePeriod['price_per_dog']);
 							                    $total += $price;
 							                    ?>
-							                    <span><?php echo $nights; ?> x <?php _e('nachten', 'eaurouge'); ?></span>
+							                    <?php if($current_bundle): ?>
+							                    	<span>1 x <?php _e('arrangement', 'eaurouge'); ?></span>
+						                    	<?php else: ?>
+								                    <span><?php echo $nights; ?> x <?php _e('nachten', 'eaurouge'); ?></span>
+								                <?php endif; ?>
 							                    <strong>€ <?php echo number_format($total, 2); ?></strong>
 							                    <?php if(!empty($_GET['adults']) || !empty($_GET['children']) || !empty($_GET['babies']) || !empty($_GET['pets'])): ?>
 							                        <ul>
