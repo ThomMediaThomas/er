@@ -93,8 +93,6 @@
 
 
 	    $isAvailable = (isset($currentPricePeriod['available']) && $currentPricePeriod['available']) || !isset($currentPricePeriod['available']);
-
-	    $askForFamilyMembers = isset($currentPricePeriod["ask_for_family_members"]) ? $currentPricePeriod["ask_for_family_members"] : false;
 	}
 ?>
 <?php get_header(); ?>
@@ -114,9 +112,7 @@
 								<hr />
 								<?php get_template_part('/elements/accommodation-booker/selected-family'); ?>
 								<div id="ask-for-family-members-box">
-									<?php if($askForFamilyMembers): ?>
-										<?php get_template_part('/elements/accommodation-booker/selected-family-members'); ?>
-									<?php endif; ?>
+									<?php get_template_part('/elements/accommodation-booker/selected-family-members'); ?>
 								</div>
 								<hr />
 								<?php get_template_part('/elements/accommodation-booker/selected-extras'); ?>
@@ -267,10 +263,10 @@
 							                        <strong id="total-price">€ <?php echo number_format($total, 2); ?><br /></strong>
 							                    </li>
 							                <?php endif; ?>
-							                <?php if(get_field('caution', $_GET['accommodation_id'])): ?>
+							                <?php if(get_field('collateral', $_GET['accommodation_id'])): ?>
 							                    <li class="caution">
 							                        <span><?php _e('Waarborg', 'eaurouge'); ?>:</span>
-							                        <strong>€ <?php echo number_format(get_field('caution', $_GET['accommodation_id']), 2); ?><br /></strong>
+							                        <strong>€ <?php echo number_format(get_field('collateral', $_GET['accommodation_id']), 2); ?><br /></strong>
 							                    </li>
 							                <?php endif; ?>
 							                <li class="info">

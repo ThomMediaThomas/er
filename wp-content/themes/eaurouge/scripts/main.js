@@ -167,17 +167,6 @@ function AccommodationBooker($element) {
 
             $.get(self.$detailsForm.attr('action') + '?' + serialized, function (response) {
                 self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
-
-                var $currentAskForFamilyMembersBox = self.$detailsForm.find('#ask-for-family-members-box');
-                var $updatedAskForFamilyMembersBox = $(response).find('#ask-for-family-members-box');
-                if (
-                    (isEmpty($currentAskForFamilyMembersBox) && !isEmpty($updatedAskForFamilyMembersBox)) |
-                    (!isEmpty($currentAskForFamilyMembersBox) && isEmpty($updatedAskForFamilyMembersBox))
-                ) {
-                    $currentAskForFamilyMembersBox.html($updatedAskForFamilyMembersBox.html());
-                    self.initFamilyMembers();
-                }
-
                 self.$boxPriceDetail.removeClass('loading');
                 
                 $('input[id*="field_calculated_price"]').val($('#total-price').text());
