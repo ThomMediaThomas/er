@@ -62,5 +62,5 @@
         <?php endif; ?>
     <?php endwhile; ?>
 <?php else: ?>
-    <p><strong><?php the_field('no_extras_for_accommodation'); ?></strong></p>
+    <p><strong><?php the_field('no_extras_for_accommodation', 'options'); ?></strong></p>
 <?php endif; ?>

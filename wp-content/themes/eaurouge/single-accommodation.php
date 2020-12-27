@@ -335,7 +335,7 @@
                                                 </li>
                                             <?php endif; ?>
                                             <li class="info">
-                                                <?php the_field('note_below_price'); ?>
+                                                <?php the_field('note_below_price', 'options'); ?>
                                             </li>
                                         </ul>
                                     <?php elseif(!$isAvailable): ?>
