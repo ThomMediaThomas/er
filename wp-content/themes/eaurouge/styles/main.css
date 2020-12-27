@@ -353,7 +353,7 @@ div.datepicker-dropdown {
       color: #426b6f; }
     div.datepicker-dropdown .datepicker-panel > ul > li.highlighted {
       background-color: #eec633; }
-    div.datepicker-dropdown .datepicker-panel > ul > li.muted {
+    div.datepicker-dropdown .datepicker-panel > ul > li.muted, div.datepicker-dropdown .datepicker-panel > ul > li.disabled, div.datepicker-dropdown .datepicker-panel > ul > li.muted:hover, div.datepicker-dropdown .datepicker-panel > ul > li.disabled:hover {
       color: #b8b8b8; }
   div.datepicker-dropdown .datepicker-panel > ul[data-view="week"] > li {
     font-family: "Dosis", sans-serif;

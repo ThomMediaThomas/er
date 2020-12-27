@@ -54,7 +54,8 @@ div.datepicker-dropdown {
           background-color: $yellow;
         }
 
-        &.muted {
+        &.muted, &.disabled,
+        &.muted:hover, &.disabled:hover {
           color: $lightGrey;
         }
       }

@@ -25,7 +25,8 @@ $(document).ready(function () {
     $('.datepicker').datepicker({
         format: 'dd-mm-yyyy',
         language: 'nl-NL',
-        autoHide: true
+        autoHide: true,
+        startDate: new Date()
     });
 
     if ($('.submit-parent-form').length > 0) {
