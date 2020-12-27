@@ -117,8 +117,8 @@
 
 .bundle, .period-notes {
   $titleheight: 30px;
-  background-color: $turqoise;
-  padding: 20px;
+  background-color: $yellow;
+  padding: $baseMargin/2;
   @include border-radius(10px);
 
   .bundle-header {
@@ -152,6 +152,6 @@
       font-family: $bodyFont;
       font-weight: normal;
       font-size: calculateRem(14px);
-      color: $blue;
+      color: White;
   }
 }

@@ -133,7 +133,7 @@ ul.price-detail {
   }
 }
 
-#box-price-detail {
+.can-reload {
   @include transition(all, .3s, ease-in-out);
   @include transform(translateY(0px));
   opacity: 1;

@@ -68,14 +68,16 @@
         //END GET BUNDLES
     }
 ?>
-<?php if ($current_bundle): ?>
-    <div class="bundle">
-        <div class="bundle-header">
-            <img src="<?php echo get_the_post_thumbnail_url($current_bundle->ID); ?>" tilte="<?php echo $current_bundle->post_title; ?>" alt="<?php echo $current_bundle->post_title; ?>" />
-            <span><?php echo $current_bundle->post_title; ?></span>
+<div id="period-info" class="can-reload">
+    <?php if ($current_bundle): ?>
+        <div class="bundle">
+            <div class="bundle-header">
+                <img src="<?php echo get_the_post_thumbnail_url($current_bundle->ID); ?>" tilte="<?php echo $current_bundle->post_title; ?>" alt="<?php echo $current_bundle->post_title; ?>" />
+                <span><?php echo $current_bundle->post_title; ?></span>
+            </div>
+            <div class="bundle-content">
+                <?php echo $current_bundle->post_content; ?>
+            </div>
         </div>
-        <div class="bundle-content">
-            <?php echo $current_bundle->post_content; ?>
-        </div>
-    </div>
-<?php endif; ?>
+    <?php endif; ?>
+</div>

@@ -133,6 +133,9 @@ function AccommodationBooker($element) {
     self.$element = $element;
     self.$detailsForm = $element.find('#booking-details-form');
     self.$boxPriceDetail = $element.find('#box-price-detail');
+    self.$periodInfo = $element.find("#period-info");
+    self.$selectedExtras = $element.find("#selected-extras");
+    self.$formidableForm = $element.find("#formidable-form");
 
     self.init = function () {
         self.bindEvents();
@@ -166,13 +169,21 @@ function AccommodationBooker($element) {
 
     self.reloadSmallParts = function (event) {
         if(!($(event.currentTarget).hasClass('prevent-reload-small-parts'))) {
-            self.$boxPriceDetail.addClass('loading');
+            //add loading states
+            self.$element.find('.can-reload').addClass('loading');
+
             var serialized = self.$detailsForm.serialize();
             history.pushState(null, '', self.$detailsForm.attr('action') + '?' + serialized);
 
             $.get(self.$detailsForm.attr('action') + '?' + serialized, function (response) {
+                //update HTML
                 self.$boxPriceDetail.html($(response).find('#box-price-detail').html());
-                self.$boxPriceDetail.removeClass('loading');
+                self.$periodInfo.html($(response).find('#period-info').html());
+                self.$selectedExtras.html($(response).find('#selected-extras').html());
+                self.$formidableForm.html($(response).find('#formidable-form').html());
+
+                //remove loading states
+                self.$element.find('.can-reload').removeClass('loading');
                 
                 $('input[id*="field_calculated_price"]').val($('#total-price').text());
                 self.checkIfFormIsValid();

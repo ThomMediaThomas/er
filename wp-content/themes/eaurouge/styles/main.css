@@ -1462,8 +1462,8 @@ input::-webkit-calendar-picker-indicator {
     -moz-border-radius: 5px; }
 
 .bundle, .period-notes {
-  background-color: #c8e3dc;
-  padding: 20px;
+  background-color: #eec633;
+  padding: 10px;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px; }
@@ -1492,7 +1492,7 @@ input::-webkit-calendar-picker-indicator {
     font-family: "Roboto", sans-serif;
     font-weight: normal;
     font-size: 0.77778rem;
-    color: #426b6f; }
+    color: White; }
 
 #follow {
   position: fixed;
@@ -1939,7 +1939,7 @@ ul.price-detail {
   float: left;
   padding-right: 20px; }
 
-#box-price-detail {
+.can-reload {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
@@ -1950,7 +1950,7 @@ ul.price-detail {
   -webkit-transform: translateY(0px);
   transform: translateY(0px);
   opacity: 1; }
-  #box-price-detail.loading {
+  .can-reload.loading {
     opacity: 0.1;
     -moz-transform: translateY(100px);
     -o-transform: translateY(100px);

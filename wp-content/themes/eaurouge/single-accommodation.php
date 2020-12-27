@@ -160,23 +160,27 @@
                                     <?php get_template_part('/elements/accommodation-booker/selected-family-members'); ?>
                                 </div>
                                 <hr class="blue" />
-                                <?php get_template_part('/elements/accommodation-booker/selected-extras'); ?>
+                                <div id="selected-extras" class="can-reload">
+                                    <?php get_template_part('/elements/accommodation-booker/selected-extras'); ?>
+                                </div>
                                 <hr class="blue" />
                             </form>
-                            <?php if($isAvailable): ?>
-                                <?php get_template_part('/elements/accommodation-booker/your-details'); ?>
-                            <?php else: ?>
-                                <div class="box red">
-                                    <div class="content-wrapper narrow">
-                                        <p class="white"><?php _e('Deze accommodatie is helaas niet beschikbaar in de gekozen periode.', 'eaurouge'); ?></p>
+                            <div id="formidable-form" class="can-reload">
+                                <?php if($isAvailable): ?>
+                                    <?php get_template_part('/elements/accommodation-booker/your-details'); ?>
+                                <?php else: ?>
+                                    <div class="box red">
+                                        <div class="content-wrapper narrow">
+                                            <p class="white"><?php _e('Deze accommodatie is helaas niet beschikbaar in de gekozen periode.', 'eaurouge'); ?></p>
+                                        </div>
                                     </div>
-                                </div>
-                            <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="column aside">
                         <div class="stick-in-parent">
-                            <div class="box green" id="box-price-detail">
+                            <div class="box green can-reload" id="box-price-detail">
                                 <div class="content-wrapper">
                                     <?php the_field('price_intro', 'options'); ?>
                                     <?php if($isAvailable && $pricePeriods && $currentPricePeriod ): ?>                
@@ -318,6 +322,8 @@
                                                 <?php the_field('note_below_price'); ?>
                                             </li>
                                         </ul>
+                                    <?php elseif(!$isAvailable): ?>
+                                        <p class="white"><?php _e('Deze accommodatie is helaas niet beschikbaar in de gekozen periode.', 'eaurouge'); ?></p>
                                     <?php else: ?>
                                         <p class="white"><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></p>
                                     <?php endif; ?>
