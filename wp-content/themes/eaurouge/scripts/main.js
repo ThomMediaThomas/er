@@ -184,6 +184,9 @@ function AccommodationBooker($element) {
 
                 //remove loading states
                 self.$element.find('.can-reload').removeClass('loading');
+
+                //reload hidden data
+                self.setBookingDetails();
                 
                 $('input[id*="field_calculated_price"]').val($('#total-price').text());
                 self.checkIfFormIsValid();
