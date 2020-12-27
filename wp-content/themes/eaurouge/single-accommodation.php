@@ -21,7 +21,6 @@
             </div>
         </div>
     </section>
-    <?php get_template_part('/elements/breadcrumbs'); ?>
     <section class="section">
         <div class="content-wrapper">
             <div class="column-holder">
