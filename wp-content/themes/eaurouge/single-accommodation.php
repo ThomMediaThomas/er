@@ -150,6 +150,7 @@
                         <div class="content-wrapper">
                             <h2 class="red"><?php the_field('book_title', 'options'); ?></h2>
                             <?php the_field('book_intro', 'options'); ?>
+                            <hr class="blue" />
                             <?php global $wp; ?>
                             <form id="booking-details-form" action="<?php echo home_url($wp->request); ?>" method="GET">
                                 <input type="hidden" id="accommodation_id" name="accommodation_id" value="<?php echo get_the_id(); ?>"/>
