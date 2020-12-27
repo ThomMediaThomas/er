@@ -1,7 +1,9 @@
 <div id="top-bar">
     <div class="content-wrapper">
         <div class="left">
-            <?php the_field('left', 'option'); ?>
+            <?php if(!is_singular('accommodation')) : ?>
+                <?php the_field('left', 'option'); ?>
+            <?php endif; ?>
         </div>
         <div class="right">
             <?php the_field('right', 'option'); ?>
