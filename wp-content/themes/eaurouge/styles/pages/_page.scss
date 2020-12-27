@@ -206,6 +206,16 @@ hr {
   background-color: $turqoise;
   display: block;
   margin: $baseMargin 0;
+
+  &.blue {
+    border-color: $blue;
+    background-color: $blue;
+  }
+
+  &.red {
+    border-color: $red;
+    background-color: $red;
+  }
 }
 
 .tag {

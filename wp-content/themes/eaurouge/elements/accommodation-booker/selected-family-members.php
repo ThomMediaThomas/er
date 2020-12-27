@@ -1,4 +1,4 @@
-<?php the_field('family_details_intro'); ?>
+<?php the_field('family_details_intro', 'options'); ?>
 <div class="family-members">
     <div class="family-member" id="family-member-you">
         <div class="input-field">

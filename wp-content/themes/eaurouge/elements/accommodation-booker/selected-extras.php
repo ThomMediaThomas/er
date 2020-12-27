@@ -1,4 +1,4 @@
-<?php the_field('extras_intro'); ?>
+<?php the_field('extras_intro', 'options'); ?>
 <?php 
     $selected_extras = $_GET['extras']; 
 
@@ -11,7 +11,7 @@
         $date_to_comparable = date_format($date_to,'Ymd');
     }
 
-    $pricePeriods = get_field('price_periods', $_GET['accommodation_id']);
+    $pricePeriods = get_field('price_periods', get_the_id());
 
     if ($pricePeriods) {
         $currentPricePeriods = array_filter($pricePeriods, function ($period) use ($date_from_comparable, $date_to_comparable) {
@@ -40,8 +40,8 @@
         $disabled_extras_for_period = $currentPricePeriod["disabled_extras_for_period"];
     }
 ?>
-<?php if(have_rows('extras', $_GET['accommodation_id'])): ?>
-    <?php while( have_rows('extras', $_GET['accommodation_id']) ): the_row(); ?>
+<?php if(have_rows('extras', get_the_id())): ?>
+    <?php while( have_rows('extras', get_the_id()) ): the_row(); ?>
         <?php
             $key = get_sub_field('key');
             $selected = $selected_extras ? in_array($key, $selected_extras) : false;

@@ -14,7 +14,7 @@
     $price = 0;
     $pricePeriods = get_field('price_periods');
 
-    $url = '/boeken/gegevens';
+    $url = get_permalink();
     $url .= '?accommodation_id=' . get_the_ID();
 
     if ($pricePeriods) {
@@ -160,8 +160,8 @@
     <div class="right">
         <h3 class="red no-margin"><?php the_title(); ?></h3>
         <h4 class=""><?php the_field('subtitle'); ?></h4>
-        <?php if (get_field('more_link')): ?>
-            <a class="button green tiny discover-accommodation" title="<?php the_field('more_text'); ?>" href="<?php the_field('more_link'); ?>" target="_blank">
+        <?php if (get_field('more_text')): ?>
+            <a class="button green tiny discover-accommodation" title="<?php the_field('more_text'); ?>" href="<?php echo get_permalink(); ?>" target="_blank">
                 <?php the_field('more_text'); ?> <i class="icon-chevron-right"></i>
             </a>
         <?php endif; ?> 
@@ -196,7 +196,7 @@
                 <?php } ?>
             </div>
             <?php if ($isAvailable) : ?>
-                <a class="button yellow small" href="<?php echo $url; ?>">
+                <a class="button yellow small" href="<?php echo $url; ?>#accommodation-booker">
                     <?php _e('Verblijf boeken', 'eaurouge'); ?><i class="icon-chevron-right"></i>
                 </a>
             <?php endif; ?>

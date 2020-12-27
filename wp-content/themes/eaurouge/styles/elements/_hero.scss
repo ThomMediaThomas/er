@@ -72,6 +72,26 @@
     font-weight: $fancyRegular;
     font-size: calculateRem(36px);    
   }
+
+  .usps {
+    color: White;
+    max-width: 900px;
+    margin: 0 auto;
+
+    font-family: $writtenFont;
+    font-size: calculateRem(24px);    
+
+    li {
+      display: inline-block;
+      margin-left: $baseMargin/2;
+      margin-right: $baseMargin/2;
+
+      i {
+        margin-right: $baseMargin/2;
+        color: $red;
+      }
+    }
+  }
 }
 
 

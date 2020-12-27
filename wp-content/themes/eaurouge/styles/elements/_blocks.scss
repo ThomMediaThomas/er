@@ -12,6 +12,35 @@
   display: table;
   width: 100%;
 
+  &.red{
+    background-color: $red;
+    color: White;
+  }
+
+  &.yellow {
+    background-color: $yellow;
+    color: White;
+  }
+
+  &.turqoise {
+    background-color: $turqoise;
+    color: $blue;
+  }
+
+  &.green{
+    background-color: $green;
+    color: White;
+  }
+
+  &.blue{
+    background-color: $blue;
+    color: White;
+  }
+
+  &.white{
+    background-color: white;
+  }
+
   .block {
     width: 50%;
     //float: left;

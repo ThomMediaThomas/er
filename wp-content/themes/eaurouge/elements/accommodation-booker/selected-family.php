@@ -1,4 +1,4 @@
-<?php the_field('family_intro'); ?>
+<?php the_field('family_intro', 'options'); ?>
 <div class="family">
     <div class="input-field">
         <?php $adults = isset($_GET['adults']) ? $_GET['adults'] : 1; ?>

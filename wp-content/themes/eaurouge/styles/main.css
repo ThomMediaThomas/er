@@ -729,6 +729,23 @@ body {
     content: "";
     display: table;
     clear: both; }
+  .section.red {
+    background-color: #ca303c;
+    color: White; }
+  .section.yellow {
+    background-color: #eec633;
+    color: White; }
+  .section.turqoise {
+    background-color: #c8e3dc;
+    color: #426b6f; }
+  .section.green {
+    background-color: #a0a433;
+    color: White; }
+  .section.blue {
+    background-color: #426b6f;
+    color: White; }
+  .section.white {
+    background-color: white; }
   .section .block {
     width: 50%;
     display: table-cell;
@@ -983,6 +1000,19 @@ ul.horizontal li, ol.horizontal li {
   .hero h2 {
     font-weight: 400;
     font-size: 2rem; }
+  .hero .usps {
+    color: White;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: "Caveat Brush", cursive;
+    font-size: 1.33333rem; }
+    .hero .usps li {
+      display: inline-block;
+      margin-left: 10px;
+      margin-right: 10px; }
+      .hero .usps li i {
+        margin-right: 10px;
+        color: #ca303c; }
 
 .rating-holder {
   width: 220px;
@@ -1536,6 +1566,19 @@ input::-webkit-calendar-picker-indicator {
   .breadcrumbs .breadcrumb_last {
     font-weight: bold; }
 
+.simple-gallery {
+  margin: 0px; }
+  .simple-gallery:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .simple-gallery li {
+    padding-right: 20px;
+    display: block;
+    float: left;
+    list-style: none;
+    width: 33.33%; }
+
 .reviews > .content-wrapper {
   padding-top: 60px;
   padding-bottom: 60px; }
@@ -1705,6 +1748,12 @@ hr {
   background-color: #c8e3dc;
   display: block;
   margin: 20px 0; }
+  hr.blue {
+    border-color: #426b6f;
+    background-color: #426b6f; }
+  hr.red {
+    border-color: #ca303c;
+    background-color: #ca303c; }
 
 .tag {
   display: inline-block;

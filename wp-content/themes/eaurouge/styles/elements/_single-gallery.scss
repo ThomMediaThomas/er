@@ -1,0 +1,12 @@
+.simple-gallery{
+	@include clearfix();
+	margin: 0px;	
+
+	li {
+		padding-right: $baseMargin;
+		display: block;
+		float: left;
+		list-style: none;
+		width: 33.33%;	
+	}
+}

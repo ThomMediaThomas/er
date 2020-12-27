@@ -1,4 +1,4 @@
-<?php the_field('period_intro'); ?>
+<?php the_field('period_intro', 'options'); ?>
 <div class="period">
     <div class="input-field">
         <?php $stayDateFrom = isset($_GET['date_from']) ? $_GET['date_from'] : null; ?>
@@ -33,7 +33,7 @@
         }
     }
 
-    $pricePeriods = get_field('price_periods', $_GET['accommodation_id']);
+    $pricePeriods = get_field('price_periods', get_the_id());
 
 
     if ($pricePeriods) {
@@ -42,7 +42,7 @@
 
         $meta_query = array(
             'key'       => 'for_accommodations',
-            'value'     => $_GET['accommodation_id'],
+            'value'     => get_the_id(),
             'compare'   => 'LIKE',
         );
 

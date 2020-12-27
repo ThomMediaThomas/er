@@ -151,8 +151,12 @@ function AccommodationBooker($element) {
         if(formIsValid) {
             $("#form_booking_form").find('button[type="submit"]').removeAttr('disabled');
         } else {
-            $("#form_booking_form").find('button[type="submit"]').attr('disabled', 'true');
+            self.disableSubmitButton();
         }
+    };
+
+    self.disableSubmitButton = function () {
+        $("#form_booking_form").find('button[type="submit"]').attr('disabled', 'true');
     };
 
     self.validateBookingDetails = function () {
@@ -229,6 +233,8 @@ function AccommodationBooker($element) {
 
             self.updateFamilyMembers();
         }
+        
+        self.disableSubmitButton();
     };
 
     self.updateFamilyMembers = function () {
@@ -452,6 +458,7 @@ function SameHeight($element) {
 function StickyInParent($element) {
     var self = this;
     self.$element = $element;
+    self.elementWidth = $element.width();
     self.$parent = self.$element.parents('.stick-in-parent-parent');
     self.parentPositionTop = self.$parent.offset().top;
     self.offset = 62;
@@ -471,20 +478,23 @@ function StickyInParent($element) {
                 var newPosition = currentScroll - self.parentPositionTop + self.offset;
 
                 self.$parent.css({
-                    'position': 'relative'
+                    'position': 'relative',
+                    'width': 'auto'
                 });
 
                 if (newPosition + self.$element.height() < self.$parent.height()) {
                     self.$element.css({
                         'position': 'absolute',
                         'top': newPosition,
-                        'bottom': 'initial'
+                        'bottom': 'initial',
+                        'width': self.elementWidth
                     });
                 } else {
                     self.$element.css({
                         'position': 'absolute',
                         'top': 'initial',
-                        'bottom': 0
+                        'bottom': 0,
+                        'width': self.elementWidth
                     });
 
                 }
