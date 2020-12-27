@@ -217,7 +217,7 @@
                                                 $price = $nights * $pets * floatval($currentPricePeriod['price_per_dog']);
                                                 $total += $price;
                                                 ?>
-                                                <?php if($current_bundle): ?>
+                                                <?php if($current_bundle && $current_bundle->min_nights > 1): ?>
                                                     <span>1 x <?php _e('arrangement', 'eaurouge'); ?></span>
                                                 <?php else: ?>
                                                     <span><?php echo $nights; ?> x <?php _e('nachten', 'eaurouge'); ?></span>
@@ -306,6 +306,21 @@
                                                     <span><?php _e('Korting', 'eaurouge'); ?>:</span>
                                                     <strong id="total-price">€ <?php echo number_format($discount, 2); ?><br /></strong>
                                                 </li>
+                                            <?php elseif($current_bundle->has_discount): ?>
+                                                <?php 
+                                                    $discount = $current_bundle->discount; 
+                                                ?>
+                                                <li class="total">
+                                                    <span><?php _e('Totaal', 'eaurouge'); ?>:</span>
+                                                    <strong>
+                                                        <span id="original-price">€ <?php echo number_format($total, 2); ?></span>
+                                                        <span id="total-price">€ <?php echo number_format($total - $discount, 2); ?></span>
+                                                    </strong>
+                                                </li>
+                                                <li class="discount">
+                                                    <span><?php _e('Korting', 'eaurouge'); ?>:</span>
+                                                    <strong id="total-price">€ <?php echo number_format($discount, 2); ?><br /></strong>
+                                                </li>                
                                             <?php else: ?>
                                                 <li class="total">
                                                     <span><?php _e('Totaal', 'eaurouge'); ?>:</span>

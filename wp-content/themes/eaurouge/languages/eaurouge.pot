@@ -255,3 +255,6 @@ msgstr ""
 
 msgid "Arrangement"
 msgstr ""
+
+msgid "Huisdieren niet toegestaan voor deze accommodatie!"
+msgstr ""

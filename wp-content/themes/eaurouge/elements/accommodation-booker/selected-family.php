@@ -48,20 +48,24 @@
         <div class="input-field">
             <?php $pets = isset($_GET['pets']) ? $_GET['pets'] : null; ?>
             <label for="pets"><?php _e('Huisdieren', 'eaurouge'); ?>:</label>
-            <div class="counter">
-                <span class="number-input">
-                    <span class="input-with-icon">
-                        <i class="pets"></i>
-                        <input name="pets" id="pets" type="number" placeholder="0" value="<?php echo $pets; ?>">
+            <?php if(!get_field('pets_prohibited')): ?>
+                <div class="counter">
+                    <span class="number-input">
+                        <span class="input-with-icon">
+                            <i class="pets"></i>
+                            <input name="pets" id="pets" type="number" placeholder="0" value="<?php echo $pets; ?>">
+                        </span>
+                        <i class="up">+</i>
+                        <i class="down">-</i>
                     </span>
-                    <i class="up">+</i>
-                    <i class="down">-</i>
+                </div>
+                <span class="smaller input-sub regular">
+                    <?php _e('Kamperen: maximaal 2', 'eaurouge'); ?><br />
+                    <?php _e('Chalet: maximaal 1', 'eaurouge'); ?>
                 </span>
-            </div>
-            <span class="smaller input-sub regular">
-                <?php _e('Kamperen: maximaal 2', 'eaurouge'); ?><br />
-                <?php _e('Chalet: maximaal 1', 'eaurouge'); ?>
-            </span>
+            <?php else: ?>
+                <strong class="red"><?php _e('Huisdieren niet toegestaan voor deze accommodatie!', 'eaurouge'); ?></strong>
+            <?php endif; ?>
         </div>
     </div>
 </div>

@@ -57,6 +57,15 @@
                                 );
                             }
 
+                            if (isset($_GET['pets']) && $_GET['pets'] > 0) {
+                                $meta_query[] = array(
+                                    'key'       => 'pets_prohibited',
+                                    'value'     => 0,
+                                    'compare'   => '=',
+                                    'type'      => 'BOOLEAN'
+                                );
+                            }
+
                             query_posts(array(
                                 'post_type' => array('accommodation'),
                                 'meta_query'	=> $meta_query

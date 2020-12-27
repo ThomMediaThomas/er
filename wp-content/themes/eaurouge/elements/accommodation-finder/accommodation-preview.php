@@ -186,6 +186,12 @@
                         ?>
                         <strong class="original-price">€ <?php echo number_format($price, 2); ?></strong>
                         <strong>€ <?php echo number_format($price - $discount, 2); ?></strong>
+                    <?php elseif($current_bundle->has_discount): ?>
+                        <?php 
+                            $discount = $current_bundle->discount; 
+                        ?>
+                        <strong class="original-price">€ <?php echo number_format($price, 2); ?></strong>
+                        <strong>€ <?php echo number_format($price - $discount, 2); ?></strong>                    
                     <?php else: ?>
                         <strong>€ <?php echo number_format($price, 2); ?></strong>
                     <?php endif; ?>
@@ -208,7 +214,7 @@
                 </div>
             </div>
         <?php endif; ?> 
-        <?php if ($current_bundle): ?>
+        <?php if ($current_bundle && $current_bundle->show_bundle_information): ?>
             <div class="bundle">
                 <div class="bundle-header">
                     <img src="<?php echo get_the_post_thumbnail_url($current_bundle->ID); ?>" tilte="<?php echo $current_bundle->post_title; ?>" alt="<?php echo $current_bundle->post_title; ?>" />

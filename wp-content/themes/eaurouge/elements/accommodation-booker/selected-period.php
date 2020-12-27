@@ -69,7 +69,7 @@
     }
 ?>
 <div id="period-info" class="can-reload">
-    <?php if ($current_bundle): ?>
+    <?php if ($current_bundle && $current_bundle->show_bundle_information): ?>
         <div class="bundle">
             <div class="bundle-header">
                 <img src="<?php echo get_the_post_thumbnail_url($current_bundle->ID); ?>" tilte="<?php echo $current_bundle->post_title; ?>" alt="<?php echo $current_bundle->post_title; ?>" />

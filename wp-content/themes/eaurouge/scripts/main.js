@@ -246,7 +246,7 @@ function AccommodationBooker($element) {
             self.updateFamilyMembers();
         }
         
-        self.disableSubmitButton();
+        self.checkIfFormIsValid();
     };
 
     self.updateFamilyMembers = function () {
