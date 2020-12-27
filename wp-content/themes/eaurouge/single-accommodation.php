@@ -178,7 +178,7 @@
                         <div class="stick-in-parent">
                             <div class="box green" id="box-price-detail">
                                 <div class="content-wrapper">
-                                    <?php the_field('price_intro'); ?>
+                                    <?php the_field('price_intro', 'options'); ?>
                                     <?php if($isAvailable && $pricePeriods && $currentPricePeriod ): ?>                
                                         <div class="box yellow booking-summary">
                                             <div class="content-wrapper narrow">
@@ -318,6 +318,8 @@
                                                 <?php the_field('note_below_price'); ?>
                                             </li>
                                         </ul>
+                                    <?php else: ?>
+                                        <p class="white"><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></p>
                                     <?php endif; ?>
                                 </div>
                             </div>
