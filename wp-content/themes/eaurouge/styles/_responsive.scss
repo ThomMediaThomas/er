@@ -562,6 +562,11 @@
     .input-field {
       width: 100%;
       float: none;
+      padding-right: 0px;
+
+      &:last-child{
+        margin-bottom: $baseMargin;
+      }
     }
   }
 

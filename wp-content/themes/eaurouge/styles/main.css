@@ -2385,7 +2385,10 @@ ul.price-detail {
   /*region FORMS*/
   .period .input-field, .family .input-field {
     width: 100%;
-    float: none; }
+    float: none;
+    padding-right: 0px; }
+    .period .input-field:last-child, .family .input-field:last-child {
+      margin-bottom: 20px; }
   .frm_submit {
     margin-bottom: 10px; }
   /*endregion FORMS*/
