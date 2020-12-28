@@ -10,6 +10,9 @@
             <a href="#" class="slide-nav next"><i class="icon-chevron-right"></i></a>
         </div>
         <div class="content-wrapper">
+            <a href="/" title="Camping de l'Eau Rouge" class="logo-holder">
+                <img class="logo tiny" src="<?php echo get_template_directory_uri(); ?>/img/logo.png" title="Domaine de l'Eau Rouge" alt="Domaine de l'Eau Rouge" />
+            </a>
             <h1 class=""><?php the_title(); ?></h1>
             <h2 class=""><?php the_field('subtitle'); ?></h2>
             <div class="usps">
