@@ -258,3 +258,6 @@ msgstr ""
 
 msgid "Huisdieren niet toegestaan voor deze accommodatie!"
 msgstr ""
+
+msgid "4-persoons chalet aan de bosrand"
+msgstr ""

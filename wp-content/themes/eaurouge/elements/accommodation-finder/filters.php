@@ -34,6 +34,7 @@
                 <select name="accommodation_type" id="accommodation_type">
                     <option value=""><?php _e('Maak een keuze', 'eaurouge'); ?></option>
                     <option value="chalet-4" <?php if($accommodation_type == 'chalet-4'): ?>selected="selected"<?php endif; ?>><?php _e('4-persoons chalet', 'eaurouge'); ?></option>
+                    <option value="chalet-4-br" <?php if($accommodation_type == 'chalet-4-br'): ?>selected="selected"<?php endif; ?>><?php _e('4-persoons chalet aan de bosrand', 'eaurouge'); ?></option>
                     <option value="chalet-6" <?php if($accommodation_type == 'chalet-6'): ?>selected="selected"<?php endif; ?>><?php _e('6-persoons chalet', 'eaurouge'); ?></option>
                 </select>
             </div>
