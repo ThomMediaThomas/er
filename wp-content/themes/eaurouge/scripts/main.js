@@ -265,7 +265,7 @@ function AccommodationBooker($element) {
             for (var i = 0; i < membersToAdd; i++){
                 var htmlToAppend = self.familyMemberTemplate;
                 var memberCounter = currentRenderedMembers + i + 1;
-                htmlToAppend = htmlToAppend.replaceAll('MEMBER_COUNT', memberCounter);
+                htmlToAppend = htmlToAppend.split('MEMBER_COUNT').join(memberCounter);
                 self.$familyHolder.append(htmlToAppend);
             }
         }else{
