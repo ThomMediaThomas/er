@@ -100,6 +100,14 @@
             }
 
             $price += $nights * floatval($pricePerNight);
+
+            if ($current_bundle) {
+                $total_guests = ($adults + $children + $babies);
+                if ($total_guests < $current_bundle->min_guests) {
+                    $adults += $current_bundle->min_guests - $total_guests;
+                }
+            }
+
             $price += $nights * $adults * floatval($currentPricePeriod['price_per_adult']);
             $price += $nights * $children * floatval($currentPricePeriod['price_per_child']);
             $price += $nights * $babies * floatval($currentPricePeriod['price_per_baby']);

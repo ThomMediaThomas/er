@@ -105,6 +105,13 @@
                         $nights = $current_bundle->min_nights;
                     }
                 }
+
+                if ($current_bundle) {
+                    $total_guests = ($adults + $children + $babies);
+                    if ($total_guests < $current_bundle->min_guests) {
+                        $adults += $current_bundle->min_guests - $total_guests;
+                    }
+                }
                 //END GET BUNDLES
 
                 $currentPricePeriods = array_filter($pricePeriods, function ($period) use ($date_from_comparable, $date_to_comparable) {
