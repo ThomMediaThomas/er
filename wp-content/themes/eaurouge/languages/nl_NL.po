@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Domaine de l'eau rouge\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 18:01+0000\n"
-"PO-Revision-Date: 2021-06-05 21:26+0100\n"
+"PO-Revision-Date: 2021-10-04 22:43+0100\n"
 "Last-Translator: thomas <bartels_thomas@hotmail.com>\n"
 "Language-Team: Nederlands\n"
 "Language: nl_NL\n"
@@ -259,3 +259,33 @@ msgstr "Huisdieren niet toegestaan voor deze accommodatie!"
 
 msgid "4-persoons chalet aan de bosrand"
 msgstr "4-persoons chalet aan de bosrand"
+
+msgid "Voor deze periode hanteren we vaste aankomst en/of vertrekdagen."
+msgstr "Voor deze periode hanteren we vaste aankomst en/of vertrekdagen."
+
+msgid "Aankomst op: "
+msgstr "Aankomst op: "
+
+msgid "Vertrek op: "
+msgstr "Vertrek op: "
+
+msgid "Mon"
+msgstr "maandag"
+
+msgid "Tue"
+msgstr "dinsdag"
+
+msgid "Wed"
+msgstr "woensdag"
+
+msgid "Thu"
+msgstr "donderdag"
+
+msgid "Fri"
+msgstr "vrijdag"
+
+msgid "Sat"
+msgstr "zaterdag"
+
+msgid "Sun"
+msgstr "zondag"

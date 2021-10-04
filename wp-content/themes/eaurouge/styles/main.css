@@ -1393,7 +1393,7 @@ input::-webkit-calendar-picker-indicator {
     margin-bottom: 0px;
     padding-bottom: 0px; }
   .accommodation-preview.disabled {
-    opacity: 0.4; }
+    opacity: 0.8; }
   .accommodation-preview:last-child {
     border-bottom: 0px;
     padding-bottom: 0px; }
@@ -1437,20 +1437,20 @@ input::-webkit-calendar-picker-indicator {
   .accommodation-preview .bottom .bottom-left {
     display: block;
     float: left;
-    width: 50%;
-    font-family: "Dosis", sans-serif;
-    font-weight: 800;
-    text-transform: uppercase;
-    line-height: 1;
-    font-size: 0.66667rem; }
-    .accommodation-preview .bottom .bottom-left strong, .accommodation-preview .bottom .bottom-left span {
+    width: 50%; }
+    .accommodation-preview .bottom .bottom-left .price, .accommodation-preview .bottom .bottom-left .price-label {
+      font-family: "Dosis", sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 1;
+      font-size: 0.66667rem;
       display: block; }
-    .accommodation-preview .bottom .bottom-left span {
+    .accommodation-preview .bottom .bottom-left .price-label {
       color: #b8b8b8; }
-    .accommodation-preview .bottom .bottom-left strong {
+    .accommodation-preview .bottom .bottom-left .price {
       font-size: 2rem;
       color: #426b6f; }
-      .accommodation-preview .bottom .bottom-left strong.original-price {
+      .accommodation-preview .bottom .bottom-left .price.original-price {
         font-size: 1.22222rem;
         text-decoration: line-through;
         color: #ca303c; }
@@ -1462,6 +1462,16 @@ input::-webkit-calendar-picker-indicator {
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px; }
+  .accommodation-preview .availability-info {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    color: #426b6f;
+    font-size: 0.77778rem; }
+    .accommodation-preview .availability-info .day-label {
+      text-decoration: underline; }
 
 .bundle, .period-notes {
   background-color: #eec633;

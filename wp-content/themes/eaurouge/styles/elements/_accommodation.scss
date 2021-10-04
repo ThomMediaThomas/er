@@ -12,7 +12,7 @@
   }
 
   &.disabled {
-    opacity: 0.4;
+    opacity: 0.8;
   }
 
   &:last-child {
@@ -77,21 +77,21 @@
       display: block;
       float: left;
       width: 50%;
-      font-family: $fancyFont;
-      font-weight: $fancyExtraBold;
-      text-transform: uppercase;
-      line-height: 1;
-      font-size: calculateRem(12px);
-
-      strong, span {
+      
+      .price, .price-label {
+        font-family: $fancyFont;
+        font-weight: $fancyExtraBold;
+        text-transform: uppercase;
+        line-height: 1;
+        font-size: calculateRem(12px);
         display: block;
       }
 
-      span {
+      .price-label {
         color: $lightGrey;
       }
 
-      strong {
+      .price {
         font-size: calculateRem(36px);
         color: $blue;
 
@@ -112,6 +112,18 @@
     margin-top: 10px;    
     padding: 10px;
     @include border-radius(5px);
+  }
+
+  .availability-info {
+    margin-top: 10px;    
+    padding: 10px;
+    @include border-radius(5px);    
+    color: $blue;
+    font-size: calculateRem(14px);
+
+    .day-label{
+      text-decoration: underline;
+    }
   }
 }
 

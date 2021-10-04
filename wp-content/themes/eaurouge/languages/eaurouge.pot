@@ -261,3 +261,33 @@ msgstr ""
 
 msgid "4-persoons chalet aan de bosrand"
 msgstr ""
+
+msgid "Voor deze periode hanteren we vaste aankomst en/of vertrekdagen."
+msgstr ""
+
+msgid "Aankomst op: "
+msgstr ""
+
+msgid "Vertrek op: "
+msgstr ""
+
+msgid "Mon"
+msgstr ""
+
+msgid "Tue"
+msgstr ""
+
+msgid "Wed"
+msgstr ""
+
+msgid "Thu"
+msgstr ""
+
+msgid "Fri"
+msgstr ""
+
+msgid "Sat"
+msgstr ""
+
+msgid "Sun"
+msgstr ""

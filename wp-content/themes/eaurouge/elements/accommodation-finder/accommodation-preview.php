@@ -49,6 +49,46 @@
             }
         }
         //END GET BUNDLES
+        
+        //GET PERIODS
+        $periods;
+
+        $meta_query = array(
+            'key'       => 'stay_type',
+            'value'     => get_field('type', $post->ID),
+            'compare'   => 'LIKE',
+        );
+
+        $periods = new WP_query(); 
+        $periods->query(array(
+            'post_type' => array('period'),
+            'meta_query' => array($meta_query)
+        )); 
+
+        $current_periods = array_filter($periods->posts, function ($period) use ($date_from_comparable, $date_to_comparable) {
+            return 
+                ($date_from_comparable >= $period->date_from && $date_from_comparable <= $period->date_to) ||
+                ($date_to_comparable >= $period->date_from && $date_to_comparable <= $period->date_to);
+        });
+
+        $current_period = reset($current_periods);
+
+        $arrival_date_available = true;
+        $departure_date_available = true;
+
+        if ($current_period) {
+            $arrival_date_available = false;
+            $departure_date_available = false;
+
+            $current_period_arrival_days = $current_period->available_days_arrival;
+            $requested_arrival_day = $date_from->format('D');
+            $arrival_date_available = in_array($requested_arrival_day, $current_period_arrival_days);
+
+            $current_period_departure_days = $current_period->available_days_departure;
+            $requested_departure_day = $date_to->format('D');
+            $departure_date_available = in_array($requested_departure_day, $current_period_departure_days);
+        }
+        //END GET PERIODS
 
         $currentPricePeriods = array_filter($pricePeriods, function ($period) use ($date_from_comparable, $date_to_comparable) {
             return 
@@ -143,7 +183,10 @@
             }
         }
 
-        $isAvailable = (isset($currentPricePeriod['available']) && $currentPricePeriod['available']) || !isset($currentPricePeriod['available']);
+        $isAvailable = 
+            ((isset($currentPricePeriod['available']) && $currentPricePeriod['available']) || !isset($currentPricePeriod['available'])) && 
+            $arrival_date_available && 
+            $departure_date_available;
     }
 ?>
 <div class="accommodation-preview <?php if (!$isAvailable): ?>disabled<?php endif; ?>">
@@ -181,7 +224,7 @@
         <div class="bottom">
             <div class="bottom-left">
                 <?php if ($isAvailable && $hasPrice) { ?>
-                    <span><?php _e('Prijs voor het verblijf', 'eaurouge'); ?> </span>
+                    <span class="price-label"><?php _e('Prijs voor het verblijf', 'eaurouge'); ?> </span>
                     <?php if ($currentPricePeriod['has_discount']): ?>
                         <?php 
                             $discount = 0; 
@@ -192,19 +235,43 @@
                                 $discount = $currentPricePeriod['discount'];
                             }
                         ?>
-                        <strong class="original-price">€ <?php echo number_format($price, 2); ?></strong>
-                        <strong>€ <?php echo number_format($price - $discount, 2); ?></strong>
+                        <strong class="price original-price">€ <?php echo number_format($price, 2); ?></strong>
+                        <strong class="price">€ <?php echo number_format($price - $discount, 2); ?></strong>
                     <?php elseif($current_bundle->has_discount): ?>
                         <?php 
                             $discount = $current_bundle->discount; 
                         ?>
-                        <strong class="original-price">€ <?php echo number_format($price, 2); ?></strong>
-                        <strong>€ <?php echo number_format($price - $discount, 2); ?></strong>                    
+                        <strong class="price original-price">€ <?php echo number_format($price, 2); ?></strong>
+                        <strong class="price">€ <?php echo number_format($price - $discount, 2); ?></strong>                    
                     <?php else: ?>
-                        <strong>€ <?php echo number_format($price, 2); ?></strong>
+                        <strong class="price">€ <?php echo number_format($price, 2); ?></strong>
                     <?php endif; ?>
                 <?php } elseif (!$isAvailable) { ?>
-                    <span><?php _e('Niet beschikbaar <br />voor de door jullie <br />gekozen periode.', 'eaurouge'); ?></span>
+                    <?php if($arrival_date_available && $departure_date_available) : ?>
+                        <div class="availability-info box turqoise">
+                            <span><?php _e('Niet beschikbaar <br />voor de door jullie <br />gekozen periode.', 'eaurouge'); ?></span>
+                        </div>
+                    <?php else: ?>
+                        <div class="availability-info box turqoise">
+                            <span><?php _e('Voor deze periode hanteren we vaste aankomst en/of vertrekdagen.', 'eaurouge'); ?></span><br />
+                            <span>
+                                <span class="day-label"><?php _e('Aankomst op: ', 'eaurouge'); ?></span>
+                                <?php foreach( $current_period->available_days_arrival as $key => $day ) { 
+                                    _e($day, 'eaurouge');
+                                    if ($key < count($current_period->available_days_arrival) - 1) {
+                                        echo ', '; 
+                                    }
+                                }?> <br />
+                                <span class="day-label"><?php _e('Vertrek op: ', 'eaurouge'); ?></span>
+                                <?php foreach( $current_period->available_days_departure as $key => $day ) { 
+                                    _e($day, 'eaurouge');
+                                    if ($key < count($current_period->available_days_departure) - 1) {
+                                        echo ', '; 
+                                    }
+                                }?> <br />
+                            </span>
+                        </div>
+                    <?php endif; ?>
                 <?php } else { ?>
                     <span><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></span>
                 <?php } ?>

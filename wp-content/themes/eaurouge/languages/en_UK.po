@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Domaine de l'eau rouge\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 18:01+0000\n"
-"PO-Revision-Date: 2021-06-05 21:28+0100\n"
+"PO-Revision-Date: 2021-10-04 22:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -259,3 +259,33 @@ msgstr "Pets not allowed for this accommodation!"
 
 msgid "4-persoons chalet aan de bosrand"
 msgstr "4-person chalet with forest-view"
+
+msgid "Voor deze periode hanteren we vaste aankomst en/of vertrekdagen."
+msgstr "For this period we use fixed arrival and/or departure days."
+
+msgid "Aankomst op: "
+msgstr "Arrivals: "
+
+msgid "Vertrek op: "
+msgstr "Departures: For this period we use fixed arrival and/or departure days."
+
+msgid "Mon"
+msgstr "monday"
+
+msgid "Tue"
+msgstr "tuesday"
+
+msgid "Wed"
+msgstr "wednesday"
+
+msgid "Thu"
+msgstr "thursday"
+
+msgid "Fri"
+msgstr "friday"
+
+msgid "Sat"
+msgstr "saturday"
+
+msgid "Sun"
+msgstr "sunday"
