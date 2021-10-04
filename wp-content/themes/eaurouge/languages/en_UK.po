@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Domaine de l'eau rouge\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 18:01+0000\n"
-"PO-Revision-Date: 2021-10-04 22:48+0100\n"
+"PO-Revision-Date: 2021-10-04 23:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -220,7 +220,7 @@ msgstr "Folding car"
 
 #: elements/accommodation-finder/accommodation-preview.php:135
 msgid "We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen."
-msgstr "We need more details<br />to calculate an <br />accurate price."
+msgstr "We need more details to calculate an accurate price."
 
 #: elements/quick-booking.php:60 elements/quick-booking.php:90
 #: elements/accommodation-finder/filters.php:117
@@ -289,3 +289,8 @@ msgstr "saturday"
 
 msgid "Sun"
 msgstr "sunday"
+
+#, fuzzy
+#| msgid "We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen."
+msgid "We hebben nog niet alle gegevens om een goede prijs te kunnen berekenen."
+msgstr "We need more details to calculate an accurate price."

@@ -273,7 +273,9 @@
                         </div>
                     <?php endif; ?>
                 <?php } else { ?>
-                    <span><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></span>
+                    <div class="availability-info box turqoise">
+                        <span><?php _e('We hebben nog niet alle gegevens om een goede prijs te kunnen berekenen.', 'eaurouge'); ?></span>
+                    </div>
                 <?php } ?>
             </div>
             <?php if ($isAvailable) : ?>

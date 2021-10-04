@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Domaine de l'eau rouge\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 18:01+0000\n"
-"PO-Revision-Date: 2021-10-04 22:47+0100\n"
+"PO-Revision-Date: 2021-10-04 23:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -221,9 +221,7 @@ msgstr "Remorque pliante"
 #: elements/accommodation-finder/accommodation-preview.php:135
 msgid ""
 "We hebben meer gegevens<br /> nodig om de actuele prijs <br />te berekenen."
-msgstr ""
-"Nous avons besoin de plus de données <br /> pour calculer le prix actuel "
-"<br />."
+msgstr "Nous avons besoin de plus de données pour calculer le prix actuel."
 
 #: elements/quick-booking.php:60 elements/quick-booking.php:90
 #: elements/accommodation-finder/filters.php:117
@@ -267,8 +265,7 @@ msgstr "Chalet 4 personnes en lisière de forêt"
 
 msgid "Voor deze periode hanteren we vaste aankomst en/of vertrekdagen."
 msgstr ""
-"Pour cette période, nous utilisons des jours d'arrivée et/ou de départ "
-"fixes."
+"Pour cette période, nous utilisons des jours d'arrivée et/ou de départ fixes."
 
 msgid "Aankomst op: "
 msgstr "Arrivées: "
@@ -296,3 +293,7 @@ msgstr "samedi"
 
 msgid "Sun"
 msgstr "zondag"
+
+msgid ""
+"We hebben nog niet alle gegevens om een goede prijs te kunnen berekenen."
+msgstr "Nous n'avons pas encore toutes les données pour calculer un bon prix."

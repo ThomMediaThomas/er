@@ -291,3 +291,6 @@ msgstr ""
 
 msgid "Sun"
 msgstr ""
+
+msgid "We hebben nog niet alle gegevens om een goede prijs te kunnen berekenen."
+msgstr ""
