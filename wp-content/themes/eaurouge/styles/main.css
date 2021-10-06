@@ -1470,8 +1470,6 @@ input::-webkit-calendar-picker-indicator {
     -moz-border-radius: 5px;
     color: #426b6f;
     font-size: 0.77778rem; }
-    .accommodation-preview .availability-info .day-label {
-      text-decoration: underline; }
 
 .bundle, .period-notes {
   background-color: #eec633;
@@ -1505,6 +1503,9 @@ input::-webkit-calendar-picker-indicator {
     font-weight: normal;
     font-size: 0.77778rem;
     color: White; }
+
+.day-label {
+  text-decoration: underline; }
 
 #follow {
   position: fixed;

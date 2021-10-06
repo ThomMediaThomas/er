@@ -113,6 +113,46 @@
                     }
                 }
                 //END GET BUNDLES
+        
+                //GET PERIODS
+                $periods;
+
+                $meta_query = array(
+                    'key'       => 'stay_type',
+                    'value'     => get_field('type', get_the_id()),
+                    'compare'   => 'LIKE',
+                );
+
+                $periods = new WP_query(); 
+                $periods->query(array(
+                    'post_type' => array('period'),
+                    'meta_query' => array($meta_query)
+                )); 
+
+                $current_periods = array_filter($periods->posts, function ($period) use ($date_from_comparable, $date_to_comparable) {
+                    return 
+                        ($date_from_comparable >= $period->date_from && $date_from_comparable <= $period->date_to) ||
+                        ($date_to_comparable >= $period->date_from && $date_to_comparable <= $period->date_to);
+                });
+
+                $current_period = reset($current_periods);
+
+                $arrival_date_available = true;
+                $departure_date_available = true;
+
+                if ($current_period) {
+                    $arrival_date_available = false;
+                    $departure_date_available = false;
+
+                    $current_period_arrival_days = $current_period->available_days_arrival;
+                    $requested_arrival_day = $date_from->format('D');
+                    $arrival_date_available = in_array($requested_arrival_day, $current_period_arrival_days);
+
+                    $current_period_departure_days = $current_period->available_days_departure;
+                    $requested_departure_day = $date_to->format('D');
+                    $departure_date_available = in_array($requested_departure_day, $current_period_departure_days);
+                }
+                //END GET PERIODS
 
                 $currentPricePeriods = array_filter($pricePeriods, function ($period) use ($date_from_comparable, $date_to_comparable) {
                     return 
@@ -150,7 +190,9 @@
                 }
 
 
-                $isAvailable = (isset($currentPricePeriod['available']) && $currentPricePeriod['available']) || !isset($currentPricePeriod['available']);
+                $isAvailable = ((isset($currentPricePeriod['available']) && $currentPricePeriod['available']) || !isset($currentPricePeriod['available'])) && 
+                    $arrival_date_available && 
+                    $departure_date_available;
             }
         ?>
             <div class="content-wrapper">
@@ -349,8 +391,28 @@
                                         </ul>
                                     <?php elseif(!$isAvailable): ?>
                                         <p class="white"><?php _e('Deze accommodatie is helaas niet beschikbaar in de gekozen periode.', 'eaurouge'); ?></p>
+                                        <?php if(!$arrival_date_available || !$departure_date_available): ?>
+                                            <hr />
+                                            <p class="white no-margin"><?php _e('Voor deze periode hanteren we vaste aankomst en/of vertrekdagen.', 'eaurouge'); ?></p>
+                                            <p class="white smaller regular">
+                                                <span class="day-label"><?php _e('Aankomst op: ', 'eaurouge'); ?></span>
+                                                <?php foreach( $current_period->available_days_arrival as $key => $day ) { 
+                                                    _e($day, 'eaurouge');
+                                                    if ($key < count($current_period->available_days_arrival) - 1) {
+                                                        echo ', '; 
+                                                    }
+                                                }?> <br />
+                                                <span class="day-label"><?php _e('Vertrek op: ', 'eaurouge'); ?></span>
+                                                <?php foreach( $current_period->available_days_departure as $key => $day ) { 
+                                                    _e($day, 'eaurouge');
+                                                    if ($key < count($current_period->available_days_departure) - 1) {
+                                                        echo ', '; 
+                                                    }
+                                                }?>
+                                            </p>
+                                        <?php endif; ?>
                                     <?php else: ?>
-                                        <p class="white"><?php _e('We hebben meer gegevens <br />nodig om de actuele prijs <br />te berekenen.', 'eaurouge'); ?></p>
+                                        <p class="white"><?php _e('We hebben meer gegevens nodig om de actuele prijs te berekenen.', 'eaurouge'); ?></p>
                                     <?php endif; ?>
                                 </div>
                             </div>

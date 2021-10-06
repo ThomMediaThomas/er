@@ -120,10 +120,6 @@
     @include border-radius(5px);    
     color: $blue;
     font-size: calculateRem(14px);
-
-    .day-label{
-      text-decoration: underline;
-    }
   }
 }
 
@@ -166,4 +162,8 @@
       font-size: calculateRem(14px);
       color: White;
   }
+}
+
+.day-label{
+  text-decoration: underline;
 }
