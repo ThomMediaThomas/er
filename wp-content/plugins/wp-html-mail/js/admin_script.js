@@ -71,7 +71,7 @@ haet_mail.switch_edit_mode = function () {
 			.slideUp(400);
 	} else {
 		$(".haet-mail-woocommerce-global-template").slideDown(400);
-		$(".haet-mail-woocommerce-mailbuilder").slideUp(400);
+		$(".haet-mail-woocommerce-mailbuilder, .addon-emails").slideUp(400);
 	}
 };
 
@@ -82,7 +82,7 @@ haet_mail.maybe_hide_headerimage_fields = function () {
 	);
 };
 
-jQuery(document).ready(function ($) {
+jQuery(function ($) {
 	$("input,textarea,select").change(function () {
 		haet_mail.ajaxSave();
 	});
@@ -110,7 +110,7 @@ jQuery(document).ready(function ($) {
 
 	// Uploading files
 	var file_frame;
-	$(".upload_image_button").live("click", function (event) {
+	$(".upload_image_button").on("click", function (event) {
 		event.preventDefault();
 		// If the media frame already exists, reopen it.
 		if (file_frame) {
@@ -139,7 +139,7 @@ jQuery(document).ready(function ($) {
 		file_frame.open();
 	});
 
-	$("#haet_mail_test_submit").click(function () {
+	$("#haet_mail_test_submit").on('click', function () {
 		var email = $("#haet_mail_test_address").val();
 		$.post(
 			ajaxurl,
@@ -161,7 +161,7 @@ jQuery(document).ready(function ($) {
 		);
 	});
 
-	$("#haet_mail_create_template_button").click(function () {
+	$("#haet_mail_create_template_button").on('click',function () {
 		if (
 			!$(this).hasClass("button-disabled") &&
 			confirm($(this).data("haet-confirm"))
@@ -171,7 +171,7 @@ jQuery(document).ready(function ($) {
 	});
 	haet_mail.previewMail($("#haet_mailtemplate").val());
 
-	$("a[data-haet-confirm]").click(function (e) {
+	$("a[data-haet-confirm]").on('click',function (e) {
 		return confirm($(this).data("haet-confirm"));
 	});
 
@@ -193,7 +193,7 @@ jQuery(document).ready(function ($) {
 	/*************************************
 	 * MOBILE PREVIEW
 	 * ***********************************/
-	$(".haet-mail-preview-size-button").click(function () {
+	$(".haet-mail-preview-size-button").on('click',function () {
 		var $button = $(this);
 		$button
 			.addClass("nav-tab-active")

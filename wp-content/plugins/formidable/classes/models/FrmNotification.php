@@ -1,12 +1,10 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
-// TODO: change class name to FrmEmailController by 08/2017 or later
 class FrmNotification {
 	public function __construct() {
-		if ( ! defined( 'ABSPATH' ) ) {
-			die( 'You are not allowed to call this page directly.' );
-		}
-
 		self::hook_emails_to_action();
 	}
 
@@ -73,6 +71,7 @@ class FrmNotification {
 	 */
 	public static function remove_mandrill_br() {
 		_deprecated_function( __FUNCTION__, '2.03.04', 'FrmEmailHelper::remove_mandrill_br' );
+
 		return FrmEmailHelper::remove_mandrill_br();
 	}
 

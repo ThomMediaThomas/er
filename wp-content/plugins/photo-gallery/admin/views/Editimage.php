@@ -6,15 +6,15 @@ class EditimageView_bwg {
 
   public function display() {
 	wp_print_scripts('jquery');
-    $popup_width = (int) WDWLibrary::get('width', 650);
+    $popup_width = WDWLibrary::get('width', 650, 'intval');
     $image_width = $popup_width - 40;
-    $popup_height = (int) WDWLibrary::get('height', 500);
+    $popup_height = WDWLibrary::get('height', 500, 'intval');
     $image_height = $popup_height - 40;
 
-    $instagram_post_width  = (int) WDWLibrary::get('instagram_post_width', $image_width);
-    $instagram_post_height = (int) WDWLibrary::get('instagram_post_height', $image_height);
+    $instagram_post_width  = WDWLibrary::get('instagram_post_width', $image_width, 'intval');
+    $instagram_post_height = WDWLibrary::get('instagram_post_height', $image_height, 'intval');
     $modified_date = WDWLibrary::get('modified_date', '');
-    $FeedbackSocialProofHeight = 132;
+    $FeedbackSocialProofHeight = 176;
     if ( $instagram_post_width ) {
       if ( $image_height / ($instagram_post_height + $FeedbackSocialProofHeight) < $image_width / $instagram_post_width ) {
         $instagram_post_width = ($image_height - $FeedbackSocialProofHeight) * $instagram_post_width / $instagram_post_height + 16;
@@ -58,10 +58,10 @@ class EditimageView_bwg {
     <script language="javascript" type="text/javascript" src="<?php echo BWG()->plugin_url . '/js/bwg_embed.js?ver=' . BWG()->plugin_version; ?>"></script>
     <script>
       var file_type = window.parent.document.getElementById("input_filetype_<?php echo $image_id; ?>").value;
+      var file_url = window.parent.document.getElementById("image_url_<?php echo $image_id; ?>").value;
       var is_embed = file_type.indexOf("EMBED_") > -1 ? true : false;
       //for facebook
       var is_facebook_post = file_type.indexOf("_FACEBOOK_POST") > -1 ? true : false;
-      var file_url = window.parent.document.getElementById("image_url_<?php echo $image_id; ?>").value;
       var is_instagram_post = file_type.indexOf("INSTAGRAM_POST") > -1 ? true : false;
       if (is_embed) {
         var embed_id = window.parent.document.getElementById("input_filename_<?php echo $image_id; ?>").value;
@@ -87,7 +87,7 @@ class EditimageView_bwg {
           }
         }
       }
-      jQuery(window).load(function() {
+      jQuery(window).on('load',function(){
       jQuery('#loading_div', window.parent.document).hide();
 	  });
     </script>
@@ -96,11 +96,11 @@ class EditimageView_bwg {
   }
 
   public function thumb_display() {
-    $popup_width = ((int) (isset($_GET['width']) ? esc_html($_GET['width']) : '1000')) - 30;
+    $popup_width = WDWLibrary::get('width', 1000, 'intval') - 30;
     $image_width = $popup_width - 40;
-    $popup_height = ((int) (isset($_GET['height']) ? esc_html($_GET['height']) : '600')) - 50;
+    $popup_height = WDWLibrary::get('width', 600, 'intval') - 50;
     $image_height = $popup_height - 40;
-    $image_id = (isset($_GET['image_id']) ? esc_html($_GET['image_id']) : '0');
+    $image_id = WDWLibrary::get('image_id', 0, 'intval');
     $modified_date = WDWLibrary::get('modified_date', '');
     ?>
     <div style="display:table; width:100%; height:<?php echo $popup_height; ?>px;">
@@ -216,6 +216,8 @@ class EditimageView_bwg {
         <?php
       }
       $where = ' `id` = ' . $image_id;
+      $resolution_thumb = intval($thumb_width)."x".intval($thumb_height);
+      WDWLibrary::update_thumb_dimansions($resolution_thumb, $where);
       $updated_image = WDWLibrary::update_image_modified_date( $where );
       $image_data->image_url = WDWLibrary::image_url_version($image_data->image_url, $updated_image['modified_date']);
     }
@@ -313,9 +315,10 @@ class EditimageView_bwg {
 		  <input id="y" type="hidden" name="y" value="" />
 		  <input id="w" type="hidden" name="w" value="" />
 		  <input id="h" type="hidden" name="h" value="" />
+      <input id="res_thumb_crop" type="hidden" name="res_thumb_crop" value="" />
 		</form>
 
-    <div id="croped_preview"  class="hidden wp-core-ui">
+    <div id="croped_preview"  class="bwg-hidden wp-core-ui">
       <span id="success_msg" class="notice notice-success"><p><?php _e('The thumbnail was successfully cropped.', BWG()->prefix); ?></p></span>
       <div id="croped_image_cont" style="height: 445px; display: grid;">
         <img id='croped_image_thumb'>
@@ -324,7 +327,7 @@ class EditimageView_bwg {
     </div>
 	</div>
 	<script language="javascript">
-	  jQuery(window).load(function () {
+	  jQuery(window).on('load',function(){
         spider_crop_fix("<?php echo $thumb_width * 300 / $thumb_height; ?>", "<?php echo 300; ?>");
       });
       function spider_crop_ratio() {
@@ -388,6 +391,9 @@ class EditimageView_bwg {
             'margin': 'auto',
             'display': 'block',
           });
+          //this will save thumbnail cropped size
+          var res = jQuery("#res_thumb_crop").val();
+          window.parent.jQuery("#input_resolution_thumb_<?php echo $image_id; ?>").val(res);
 
           jQuery('.message').hide();
         });
@@ -420,6 +426,7 @@ class EditimageView_bwg {
         jQuery('#y').val(c.y * ratio);
         jQuery('#w').val(c.w * ratio);
         jQuery('#h').val(c.h * ratio);
+        jQuery('#res_thumb_crop').val(c.w+'x'+c.h);
         jQuery('.message').css('visibility', 'hidden');
         if ( jQuery('.message').hasClass('croped') ) {
           /* TODO. remove TB_window block.
@@ -437,8 +444,8 @@ class EditimageView_bwg {
     $image_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . $wpdb->prefix . 'bwg_image WHERE id="%d"', $id));
     if ( !$image_data ) {
       $image_data = new stdClass();
-      $image_data->image_url = (isset($_GET['image_url']) ? esc_html(stripcslashes($_GET['image_url'])) : '');
-      $image_data->thumb_url = (isset($_GET['thumb_url']) ? esc_html(stripcslashes($_GET['thumb_url'])) : '');
+      $image_data->image_url = WDWLibrary::get('image_url', '', 'esc_url_raw');
+      $image_data->thumb_url = WDWLibrary::get('thumb_url', '', 'esc_url_raw');
     }
     $filename = htmlspecialchars_decode(BWG()->upload_dir . $image_data->image_url, ENT_COMPAT | ENT_QUOTES);
     $thumb_filename = htmlspecialchars_decode(BWG()->upload_dir . $image_data->thumb_url, ENT_COMPAT | ENT_QUOTES);
@@ -450,19 +457,19 @@ class EditimageView_bwg {
   }
 
   public function rotate($image_data = array()) {
-    $popup_width = ((int) (isset($_GET['width']) ? esc_html($_GET['width']) : '650')) - 30;
+    $popup_width = WDWLibrary::get('width', 650, 'intval') - 30;
     $image_width = $popup_width - 40;
-    $popup_height = ((int) (isset($_GET['height']) ? esc_html($_GET['height']) : '500')) - 55;
+    $popup_height = WDWLibrary::get('height', 500, 'intval') - 55;
     $image_height = $popup_height - 70;
-    $image_id = (isset($_GET['image_id']) ? esc_html($_GET['image_id']) : '0');
-    $edit_type = (isset($_POST['edit_type']) ? esc_html($_POST['edit_type']) : '');
-    $brightness_val = (isset($_POST['brightness_val']) ? esc_html($_POST['brightness_val']) : 0);
-    $contrast_val = (isset($_POST['contrast_val']) ? esc_html($_POST['contrast_val']) : 0);
+    $image_id = WDWLibrary::get('image_id', 0, 'intval');
+    $edit_type = WDWLibrary::get('edit_type');
+    $brightness_val = WDWLibrary::get('brightness_val', 0, 'intval');
+    $contrast_val = WDWLibrary::get('contrast_val', 0, 'intval');
     $image_data = new stdClass();
     $modified_date = time();
-    if ( isset($_GET['image_url']) ) {
-      $image_data->image_url = (isset($_GET['image_url']) ? esc_html(stripcslashes($_GET['image_url'])) : '');
-      $image_data->thumb_url = (isset($_GET['thumb_url']) ? esc_html(stripcslashes($_GET['thumb_url'])) : '');
+    if ( WDWLibrary::get('image_url') ) {
+      $image_data->image_url = WDWLibrary::get('image_url', '', 'esc_url_raw');
+      $image_data->thumb_url = WDWLibrary::get('thumb_url', '', 'esc_url_raw');
       $filename = htmlspecialchars_decode(BWG()->upload_dir . $image_data->image_url, ENT_COMPAT | ENT_QUOTES);
       $thumb_filename = htmlspecialchars_decode(BWG()->upload_dir . $image_data->thumb_url, ENT_COMPAT | ENT_QUOTES);
       $form_action = add_query_arg(array(
@@ -772,13 +779,18 @@ class EditimageView_bwg {
     }
     elseif ( $edit_type == 'recover' ) {
       global $wpdb;
-      $id = ((isset($_POST['image_id'])) ? (int) esc_html(stripslashes($_POST['image_id'])) : 0);
+      $id = WDWLibrary::get('image_id', 0, 'intval');
       $thumb_width = BWG()->options->thumb_width;
       $thumb_height = BWG()->options->thumb_height;
       $this->recover_image($id, $thumb_width, $thumb_height);
     }
     @ini_restore('memory_limit');
     if ( !empty($edit_type) ) {
+      $resolution_thumb = WDWLibrary::get_thumb_size( $image_data->thumb_url );
+      if ( $resolution_thumb != '' ) {
+        WDWLibrary::update_thumb_dimansions($resolution_thumb, "id = $image_id");
+      }
+
       $where = ' `id` = ' . $image_id;
       $updated_image = WDWLibrary::update_image_modified_date( $where );
       $image_data->image_url = WDWLibrary::image_url_version($image_data->image_url, $updated_image['modified_date']);
@@ -789,7 +801,6 @@ class EditimageView_bwg {
     wp_print_scripts('jquery-ui-slider');
     ?>
     <link type="text/css" rel="stylesheet" id="bwg_tables-css" href="<?php echo BWG()->front_url . '/css/bwg_edit_image.css'; ?>" media="all">
-    <link type="text/css" rel="stylesheet" href="<?php echo BWG()->front_url . '/css/font-awesome/font-awesome.min.css?ver=4.6.3'; ?>">
     <form method="post" id="bwg_rotate_image" action="<?php echo $form_action; ?>">
       <?php wp_nonce_field('editimage_' . BWG()->prefix, 'bwg_nonce'); ?>
       <div class="main_cont" style="height: <?php echo $popup_height; ?>px;">
@@ -942,7 +953,7 @@ class EditimageView_bwg {
         window.parent.document.getElementById("image_thumb_<?php echo $image_id; ?>").src = image_src + "<?php echo isset($updated_image['modified_date']) && $updated_image['modified_date'] ? '?bwg=' . $updated_image['modified_date'] : ''; ?>";
       }
 
-      jQuery(document).ready(function () {
+      jQuery(function() {
         jQuery(".bwg_opt_cont").click(function () {
           if (jQuery('#brightness_contrast').height() == 0) {
             jQuery('#brightness_contrast').animate({

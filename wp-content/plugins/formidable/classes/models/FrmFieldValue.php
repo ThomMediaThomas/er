@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.04
@@ -11,6 +14,13 @@ class FrmFieldValue {
 	 * @var stdClass
 	 */
 	protected $field = null;
+
+	/**
+	 * @since 4.03
+	 *
+	 * @var object
+	 */
+	protected $entry;
 
 	/**
 	 * @since 2.04
@@ -44,8 +54,10 @@ class FrmFieldValue {
 			return;
 		}
 
+		$this->entry    = $entry;
 		$this->entry_id = $entry->id;
-		$this->field = $field;
+		$field = apply_filters( 'frm_field_value_object', $field );
+		$this->field    = $field;
 		$this->init_saved_value( $entry );
 	}
 
@@ -59,7 +71,7 @@ class FrmFieldValue {
 	protected function init_saved_value( $entry ) {
 		if ( $this->field->type === 'html' ) {
 			$this->saved_value = $this->field->description;
-		} else if ( isset( $entry->metas[ $this->field->id ] ) ) {
+		} elseif ( isset( $entry->metas[ $this->field->id ] ) ) {
 			$this->saved_value = $entry->metas[ $this->field->id ];
 		} else {
 			$this->saved_value = '';
@@ -77,16 +89,32 @@ class FrmFieldValue {
 	 */
 	public function prepare_displayed_value( $atts = array() ) {
 		$this->displayed_value = $this->saved_value;
+		unset( $atts['class'] ); // This class shouldn't affect values.
 		$this->generate_displayed_value_for_field_type( $atts );
 		$this->filter_displayed_value( $atts );
 	}
 
 	/**
 	 * Get a value from the field settings
+	 *
 	 * @since 2.05.06
 	 */
 	public function get_field_option( $value ) {
 		return FrmField::get_option( $this->field, $value );
+	}
+
+	/**
+	 * @since 4.03
+	 */
+	public function get_field_attr( $option ) {
+		return is_object( $this->field ) ? $this->field->{$option} : '';
+	}
+
+	/**
+	 * @since 4.03
+	 */
+	public function get_field() {
+		return $this->field;
 	}
 
 	/**
@@ -95,7 +123,7 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_field_label() {
-		return $this->field->name;
+		return $this->get_field_attr( 'name' );
 	}
 
 	/**
@@ -104,7 +132,7 @@ class FrmFieldValue {
 	 * @since 2.05
 	 */
 	public function get_field_id() {
-		return $this->field->id;
+		return $this->get_field_attr( 'id' );
 	}
 
 	/**
@@ -113,7 +141,7 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_field_key() {
-		return $this->field->field_key;
+		return $this->get_field_attr( 'field_key' );
 	}
 
 	/**
@@ -122,7 +150,7 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_field_type() {
-		return $this->field->type;
+		return $this->get_field_attr( 'type' );
 	}
 
 	/**
@@ -159,6 +187,7 @@ class FrmFieldValue {
 	protected function generate_displayed_value_for_field_type( $atts ) {
 		if ( ! FrmAppHelper::is_empty_value( $this->displayed_value, '' ) ) {
 			$field_obj = FrmFieldFactory::get_field_object( $this->field );
+
 			$this->displayed_value = $field_obj->get_display_value( $this->displayed_value, $atts );
 		}
 	}
@@ -171,13 +200,18 @@ class FrmFieldValue {
 	 * @param array $atts
 	 */
 	protected function filter_displayed_value( $atts ) {
-		$entry = FrmEntry::getOne( $this->entry_id, true );
+		if ( ! is_object( $this->entry ) || empty( $this->entry->metas ) ) {
+			$this->entry = FrmEntry::getOne( $this->entry_id, true );
+			if ( ! is_object( $this->entry ) ) {
+				return;
+			}
+		}
 
 		// TODO: maybe change from 'source' to 'run_filters' = 'email'
 		if ( isset( $atts['source'] ) && $atts['source'] === 'entry_formatter' ) {
 			// Deprecated frm_email_value hook
-			$meta                  = array(
-				'item_id'    => $entry->id,
+			$meta = array(
+				'item_id'    => $this->entry->id,
 				'field_id'   => $this->field->id,
 				'meta_value' => $this->saved_value,
 				'field_type' => $this->field->type,
@@ -189,7 +223,7 @@ class FrmFieldValue {
 					'frm_email_value',
 					$this->displayed_value,
 					(object) $meta,
-					$entry,
+					$this->entry,
 					array(
 						'field' => $this->field,
 					)
@@ -203,9 +237,11 @@ class FrmFieldValue {
 			$this->displayed_value,
 			array(
 				'field' => $this->field,
-				'entry' => $entry,
+				'entry' => $this->entry,
 			)
 		);
+
+		$this->displayed_value = apply_filters( 'frm_display_value', $this->displayed_value, $this->field, $atts );
 	}
 
 	/**
@@ -215,8 +251,9 @@ class FrmFieldValue {
 	 */
 	protected function clean_saved_value() {
 		if ( $this->saved_value !== '' ) {
-
-			$this->saved_value = maybe_unserialize( $this->saved_value );
+			if ( ! is_array( $this->saved_value ) && ! is_object( $this->saved_value ) ) {
+				FrmAppHelper::unserialize_or_decode( $this->saved_value );
+			}
 
 			if ( is_array( $this->saved_value ) && empty( $this->saved_value ) ) {
 				$this->saved_value = '';

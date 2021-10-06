@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Photo Gallery
- * Plugin URI: https://10web.io/plugins/wordpress-photo-gallery/
+ * Plugin URI: https://10web.io/plugins/wordpress-photo-gallery/?utm_source=photo_gallery&utm_medium=free_plugin
  * Description: This plugin is a fully responsive gallery plugin with advanced functionality.  It allows having different image galleries for your posts and pages. You can create unlimited number of galleries, combine them into albums, and provide descriptions and tags.
- * Version: 1.5.14
+ * Version: 1.5.75
  * Author: Photo Gallery Team
- * Author URI: https://10web.io/pricing/
+ * Author URI: https://10web.io/plugins/?utm_source=photo_gallery&utm_medium=free_plugin
  * License: GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
@@ -17,6 +17,9 @@ final class BWG {
    * The single instance of the class.
    */
   protected static $_instance = null;
+
+  public $plugin_link = 'https://10web.io/plugins/wordpress-photo-gallery/';
+  public $utm_source = '?utm_source=photo_gallery&utm_medium=free_plugin';
   /**
    * Plugin directory path.
    */
@@ -37,6 +40,7 @@ final class BWG {
    * Plugin database version.
    */
   public $db_version = '';
+
   /**
    * Plugin prefix.
    */
@@ -49,6 +53,9 @@ final class BWG {
   public $upload_dir = '';
   public $upload_url = '';
   public $free_msg = '';
+  public $front_url = '';
+  /* $abspath variable is using as defined APSPATH doesn't work in wordpress.com */
+  public $abspath = '';
 
   /**
    * Main BWG Instance.
@@ -70,32 +77,54 @@ final class BWG {
    */
   public function __construct() {
     $this->define_constants();
-    require_once($this->plugin_dir . '/framework/WDWLibrary.php');
     $this->add_actions();
+  }
+
+  /**
+   * get ABSPATH from WP_CONTENT_DIR.
+   *
+   * @param string $dirpath
+   *
+   * @return string
+   */
+  public static function get_abspath() {
+    $dirpath = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : ABSPATH;
+    $array = explode( "wp-content", $dirpath );
+    if( isset( $array[0] ) && $array[0] != "" ) {
+      return $array[0];
+    }
+    return ABSPATH;
   }
 
   /**
    * Define Constants.
    */
   private function define_constants() {
+    $this->abspath = self::get_abspath();
     $this->plugin_dir = WP_PLUGIN_DIR . "/" . plugin_basename(dirname(__FILE__));
     $this->plugin_url = plugins_url(plugin_basename(dirname(__FILE__)));
+    $this->front_url = $this->plugin_url;
     $this->main_file = plugin_basename(__FILE__);
-    $this->plugin_version = '1.5.14';
-    $this->db_version = '1.5.14';
+    $this->plugin_version = '1.5.75';
+    $this->db_version = '1.5.75';
     $this->prefix = 'bwg';
     $this->nicename = __('Photo Gallery', $this->prefix);
-
-    $this->use_home_url();
-
+    require_once($this->plugin_dir . '/framework/WDWLibrary.php');
     require_once($this->plugin_dir . '/framework/BWGOptions.php');
     $this->options = new WD_BWG_Options();
+    require_once($this->plugin_dir . '/framework/WD_BWG_Theme.php');
+
+    $this->is_demo = get_site_option('tenweb_admin_demo');
 
     $this->upload_dir = $this->options->upload_dir;
     $this->upload_url = $this->options->upload_url;
 
-    $this->free_msg = __('This option is disabled in free version.', $this->prefix);
-    $this->is_demo = get_site_option('tenweb_admin_demo');
+    if ( $this->is_demo ) {
+      $this->upload_dir = preg_replace('/uploads(.+)photo-gallery/', 'uploads/photo-gallery', $this->upload_dir);
+      $this->upload_url = preg_replace('/uploads(.+)photo-gallery/', 'uploads/photo-gallery', $this->upload_url);
+    }
+
+    $this->free_msg = __('This option is available in Premium version', $this->prefix);
   }
 
   /**
@@ -146,7 +175,7 @@ final class BWG {
 
     // Add media button to WP editor.
     add_action('wp_ajax_shortcode_' . $this->prefix, array($this, 'admin_ajax'));
-    add_filter('media_buttons_context', array($this, 'media_button'));
+    add_action('media_buttons', array($this, 'media_button'));
     add_filter('mce_external_plugins', array($this, 'bwg_register'));
     add_filter('mce_buttons', array($this, 'media_internal_button'), 0);
 
@@ -204,6 +233,7 @@ final class BWG {
 
     // Enqueue block editor assets for Gutenberg.
     add_filter('tw_get_block_editor_assets', array($this, 'register_block_editor_assets'));
+    add_filter('tw_get_plugin_blocks', array($this, 'register_plugin_block'));
     add_action('enqueue_block_editor_assets', array($this, 'enqueue_block_editor_assets'));
 
     add_action('admin_notices', array($this, 'admin_notices'));
@@ -212,16 +242,79 @@ final class BWG {
     add_action( 'admin_init', array($this, 'add_privacy_policy_content') );
     // Prevent adding shortcode conflict with some builders.
 
-	  $this->before_shortcode_add_builder_editor();
+    $this->before_shortcode_add_builder_editor();
 
-	  // Register widget for Elementor builder.
+    // Register widget for Elementor builder.
     add_action('elementor/widgets/widgets_registered', array($this, 'register_elementor_widgets'));
 
     //fires after elementor editor styles and scripts are enqueued.
     add_action('elementor/editor/after_enqueue_styles', array($this, 'enqueue_editor_styles'), 11);
 
+    add_action('elementor/editor/after_enqueue_scripts', array($this, 'enqueue_elementor_widget_scripts'));
+
+
     // Register 10Web category for Elementor widget if 10Web builder isn't installed.
     add_action('elementor/elements/categories_registered', array($this, 'register_widget_category'), 1, 1);
+
+    // Add noindex/nofollow to custom posts to not allow search engines to index custom posts.
+    add_action('wp_head', array($this, 'robots'), 9, 1);
+
+    // Divi frontend builder assets.
+    add_action('et_fb_enqueue_assets', array($this, 'enqueue_divi_bulder_assets'));
+  	add_action('et_fb_enqueue_assets', array($this, 'global_script'));
+
+    // Add Photo Gallery images to sitemap xml.
+    require_once ($this->plugin_dir . '/framework/WDWSitemap.php');
+    add_filter('wd_seo_sitemap_images', array( WDWSitemap::instance(), 'add_wpseo_xml_sitemap_images'), 10, 2);
+    add_filter('wpseo_sitemap_urlimages', array( WDWSitemap::instance(), 'add_wpseo_xml_sitemap_images'), 10, 2);
+
+    if ( !$this->is_pro ) {
+      /* Add wordpress.org support custom link in plugin page */
+      add_filter('plugin_action_links_' . plugin_basename(__FILE__), array( $this, 'add_ask_question_links' ));
+    }
+
+    /* Free Trial Banner for 2 weeks */
+    add_action('wp_ajax_bwg_free_trial_banner', array($this, 'free_trial_banner_update_status'));
+    add_action('wp_ajax_nopriv_bwg_free_trial_banner', array($this, 'free_trial_banner_update_status'));
+  }
+
+  /**
+   * Add plugin action links.
+   *
+   * Add a link to the settings page on the plugins.php page.
+   *
+   * @since 1.0.0
+   *
+   * @param  array  $links List of existing plugin action links.
+   * @return array         List of modified plugin action links.
+   */
+  function add_ask_question_links ( $links ) {
+    $slug = 'photo-gallery';
+    $fm_ask_question_link = array('<a href="https://wordpress.org/support/plugin/' . $slug . '/#new-post" target="_blank">' . __('Help', $this->prefix) . '</a>');
+    return array_merge( $links, $fm_ask_question_link );
+  }
+
+  public function enqueue_divi_bulder_assets() {
+    wp_enqueue_style('thickbox');
+  	wp_enqueue_script('thickbox');
+  }
+
+  /**
+   * Add noindex/nofollow to custom posts to not allow search engines to index custom posts.
+   */
+  public function robots() {
+    if ( isset($this->options->noindex_custom_post) && $this->options->noindex_custom_post ) {
+      global $wp;
+      $current_relative_url = trailingslashit($wp->request);
+      if ( isset($_SERVER['QUERY_STRING']) ) {
+        $current_relative_url = trailingslashit(add_query_arg($_SERVER['QUERY_STRING'], '', $current_relative_url));
+      }
+      if ( strpos($current_relative_url, 'bwg_gallery') !== FALSE
+      || strpos($current_relative_url, 'bwg_album') !== FALSE
+      || strpos($current_relative_url, 'bwg_tag') !== FALSE ) {
+        echo '<meta name="robots" content="noindex,nofollow" />' . "\n";
+      }
+    }
   }
 
   public function enqueue_editor_styles() {
@@ -243,14 +336,14 @@ final class BWG {
    * @param $elements_manager
    */
   public function register_widget_category( $elements_manager ) {
-    $elements_manager->add_category('tenweb-widgets', array(
-      'title' => __('10WEB', 'tenweb-builder'),
+    $elements_manager->add_category('tenweb-plugins-widgets', array(
+      'title' => __('10WEB Plugins', 'tenweb-plugins-widgets'),
       'icon' => 'fa fa-plug',
     ));
   }
 
   public function register_block_editor_assets($assets) {
-    $version = '2.0.2';
+    $version = '2.0.6';
     $js_path = $this->plugin_url . '/js/tw-gb/block.js';
     $css_path = $this->plugin_url . '/css/tw-gb/block.css';
     if (!isset($assets['version']) || version_compare($assets['version'], $version) === -1) {
@@ -271,6 +364,18 @@ final class BWG {
     wp_add_privacy_policy_content(BWG()->nicename, wp_kses_post(wpautop($content, FALSE)));
   }
 
+  public function register_plugin_block($blocks) {
+    $blocks['tw/' . $this->prefix] = array(
+      'title' => $this->nicename,
+      'titleSelect' => sprintf(__('Select %s', $this->prefix), $this->nicename),
+      'iconUrl' => $this->plugin_url . '/images/tw-gb/shortcode_new.jpg',
+      'iconSvg' => array('width' => 20, 'height' => 20, 'src' => $this->plugin_url . '/images/tw-gb/icon.svg'),
+      'isPopup' => true,
+      'data' => array('shortcodeUrl' => add_query_arg(array('action' => 'shortcode_bwg'), admin_url('admin-ajax.php'))),
+    );
+    return $blocks;
+  }
+
   public function enqueue_block_editor_assets() {
     // Remove previously registered or enqueued versions
     $wp_scripts = wp_scripts();
@@ -281,6 +386,8 @@ final class BWG {
         wp_deregister_style( $key );
       }
     }
+    // Get plugin blocks from all 10Web plugins.
+    $blocks = apply_filters('tw_get_plugin_blocks', array());
     // Get the last version from all 10Web plugins.
     $assets = apply_filters('tw_get_block_editor_assets', array());
     // Not performing unregister or unenqueue as in old versions all are with prefixes.
@@ -288,12 +395,7 @@ final class BWG {
     wp_localize_script('tw-gb-block', 'tw_obj_translate', array(
       'nothing_selected' => __('Nothing selected.', $this->prefix),
       'empty_item' => __('- Select -', $this->prefix),
-      'key' => 'tw/' . $this->prefix,
-      'plugin_name' => $this->nicename,
-      'select' => sprintf(__('Select %s', $this->prefix), $this->nicename),
-      'icon_url' => $this->plugin_url . '/images/tw-gb/photo-gallery.svg',
-      'icon_svg' => $this->plugin_url . '/images/tw-gb/icon.svg',
-       'url' => add_query_arg(array('action' => 'shortcode_bwg'), admin_url('admin-ajax.php')),
+      'blocks' => json_encode($blocks)
     ));
     wp_enqueue_style('tw-gb-block', $assets['css_path'], array( 'wp-edit-blocks' ), $assets['version']);
   }
@@ -304,7 +406,7 @@ final class BWG {
   public function init() {
     ob_start();
     $this->overview();
-	  add_action('init', array($this, 'language_load'));
+	add_action('init', array($this, 'language_load'));
     add_action('init', array($this, 'create_post_types'));
   }
 
@@ -313,7 +415,7 @@ final class BWG {
    */
   public function admin_notices() {
     // Show this notice only on Photo Gallery pages.
-    if ( isset( $_GET[ 'page' ] ) && strpos( esc_html( $_GET[ 'page' ] ), '_bwg' ) !== FALSE ) {
+    if ( isset( $_GET['page'] ) && strpos( esc_html( $_GET['page'] ), '_bwg' ) !== FALSE ) {
       /**
        * possible values are 'editor_missing', 'editor_missing_dismissed', 'recreate_dismissed', false
        */
@@ -345,7 +447,7 @@ final class BWG {
       }
       if ( $wp_editor_message ) {
         ?>
-        <div id="bwg_image_editor_notice" class="notice notice-warning is-dismissible" data-action="<?php echo $wp_editor_message_action; ?>">
+        <div id="bwg_image_editor_notice" class="wd-notice bwg-notice notice notice-warning is-dismissible" data-action="<?php echo $wp_editor_message_action; ?>">
           <?php echo $wp_editor_message; ?>
         </div>
         <?php
@@ -369,38 +471,16 @@ final class BWG {
     die();
   }
 
-  private function use_home_url() {
-    $home_url = str_replace(array("http://", "https://"), "", home_url());
-    $pos = strpos($home_url, "/");
-    if ( $pos ) {
-      $home_url = substr($home_url, 0, $pos);
-    }
-
-    $site_url = str_replace("http://", "", $this->plugin_url);
-    $site_url = str_replace("https://", "", $site_url);
-    $pos = strpos($site_url, "/");
-    if ( $pos ) {
-      $site_url = substr($site_url, 0, $pos);
-    }
-
-    if ( $site_url != $home_url ) {
-      $this->front_url = home_url("wp-content/plugins/" . plugin_basename(dirname(__FILE__)));
-    }
-    else {
-      $this->front_url = $this->plugin_url;
-    }
-  }
-
   /**
    * Plugin menu.
    */
   public function admin_menu() {
     $permissions = $this->is_pro ? $this->options->permissions : 'manage_options';
-    $parent_slug = $this->is_pro ? 'galleries_' . $this->prefix : null;
-    if( $this->is_pro || get_option( "bwg_subscribe_done" ) == 1 ) {
-      add_menu_page($this->nicename, $this->nicename, $permissions, 'galleries_' . $this->prefix, array($this , 'admin_pages'), $this->plugin_url . '/images/icons/icon.png');
-      $parent_slug = 'galleries_' . $this->prefix;
-    }
+    $tags_permission = $this->is_pro && $this->options->tag_role ? $this->options->permissions : 'manage_options';
+    $themes_permission = $this->is_pro && $this->options->theme_role ? $this->options->permissions : 'manage_options';
+    $settings_permission = $this->is_pro && $this->options->settings_role ? $this->options->permissions : 'manage_options';
+    $parent_slug = 'galleries_' . $this->prefix;
+    add_menu_page($this->nicename, $this->nicename, $permissions, 'galleries_' . $this->prefix, array($this , 'admin_pages'), $this->plugin_url . '/images/icons/icon.png');
 
     $galleries_page = add_submenu_page($parent_slug, __('Add Galleries/Images', $this->prefix), __('Add Galleries/Images', $this->prefix), $permissions, 'galleries_' . $this->prefix, array($this , 'admin_pages'));
     add_action('load-' . $galleries_page, array($this, 'galleries_per_page_option'));
@@ -408,11 +488,11 @@ final class BWG {
     $albums_page = add_submenu_page($parent_slug, __('Gallery Groups', $this->prefix), __('Gallery Groups', $this->prefix), $permissions, 'albums_' . $this->prefix, array($this , 'admin_pages'));
     add_action('load-' . $albums_page, array($this, 'albums_per_page_option'));
 
-    add_submenu_page($parent_slug, __('Tags', $this->prefix), __('Tags', $this->prefix), $permissions, 'edit-tags.php?taxonomy=bwg_tag');
+    add_submenu_page($parent_slug, __('Tags', $this->prefix), __('Tags', $this->prefix), $tags_permission, 'edit-tags.php?taxonomy=bwg_tag');
 
-    add_submenu_page($parent_slug, __('Options', $this->prefix), __('Options', $this->prefix), 'manage_options', 'options_' . $this->prefix, array($this , 'admin_pages'));
+    add_submenu_page($parent_slug, __('Global Settings', $this->prefix), __('Global Settings', $this->prefix), $settings_permission, 'options_' . $this->prefix, array($this , 'admin_pages'));
 
-    $themes_page = add_submenu_page($parent_slug, __('Themes', $this->prefix), __('Themes', $this->prefix), 'manage_options', 'themes_' . $this->prefix, array($this , 'admin_pages'));
+    $themes_page = add_submenu_page($parent_slug, __('Themes', $this->prefix), __('Themes', $this->prefix), $themes_permission, 'themes_' . $this->prefix, array($this , 'admin_pages'));
     add_action('load-' . $themes_page, array($this, 'themes_per_page_option'));
 
     if( $this->is_pro ) {
@@ -433,6 +513,17 @@ final class BWG {
 
     add_submenu_page(NULL, __('Uninstall', $this->prefix), __('Uninstall', $this->prefix), 'manage_options', 'uninstall_' . $this->prefix, array($this , 'admin_pages'));
     add_submenu_page(NULL, __('Generate Shortcode', $this->prefix), __('Generate Shortcode', $this->prefix), $permissions, 'shortcode_' . $this->prefix, array($this , 'admin_pages'));
+
+    if ( !$this->is_pro && current_user_can( $permissions ) ) {
+      /* Custom link to wordpress.org*/
+      global $submenu;
+      $slug = 'photo-gallery';
+      $submenu[$parent_slug][] = array(
+        '<div id="bwg_ask_question">' . __('Ask a question', $this->prefix) . '</div>',
+        'manage_options',
+        'https://wordpress.org/support/plugin/' . $slug . '/#new-post',
+      );
+    }
   }
 
   /**
@@ -521,8 +612,13 @@ final class BWG {
       'media-views', // media uploader styles
       'wp-auth-check', // check all
     );
-
+    if ( $this->is_pro ) {
+      wp_register_style($this->prefix . '_fontselect', $this->plugin_url . '/js/fontselect/styles/fontselect-default.css', $required_styles, $this->plugin_version);
+      array_push($required_styles, $this->prefix . '_fontselect');
+      wp_register_script($this->prefix . '_fontselect', $this->plugin_url . '/js/fontselect/jquery.fontselect.js', $required_scripts, $this->plugin_version);
+    }
     wp_register_style($this->prefix . '_tables', $this->plugin_url . '/css/bwg_tables.css', $required_styles, $this->plugin_version);
+    wp_register_style($this->prefix . '_gallery-upgrade', $this->plugin_url . '/css/gallery-upgrade.css', $required_styles, $this->plugin_version);
 
     wp_register_script($this->prefix . '_admin', $this->plugin_url . '/js/bwg.js', $required_scripts, $this->plugin_version);
     wp_localize_script($this->prefix . '_admin', 'bwg', array(
@@ -530,6 +626,7 @@ final class BWG {
       'select_at_least_one_item' => __('You must select at least one item.', $this->prefix),
       'remove_pricelist_confirmation' => __('Do you want to remove pricelist from selected items?', $this->prefix),
       'google_fonts' => WDWLibrary::get_google_fonts(),
+      'bwg_premium_text' => __(' view is<br>available in Premium Version', $this->prefix),
     ));
 
     wp_register_script($this->prefix . '_embed', $this->plugin_url . '/js/bwg_embed.js', array('jquery'), $this->plugin_version);
@@ -540,8 +637,8 @@ final class BWG {
       'bwg_select_audio'  => __('You must select an audio file.', $this->prefix),
       'bwg_access_token'  => __('You do not have Instagram access token. Sign in with Instagram in Options -> Advanced tab -> Social. ', $this->prefix),
       'bwg_client_id' => __('You do not have Instagram CLIENT_ID. Input its value in Options->Embed options.', $this->prefix),
-      'bwg_post_number'  => __('Instagram recent post number must be between 1 and 33.', $this->prefix),
-      'bwg_not_empty'  => __('Gallery type cannot be changed, since it is not empty. In case you would like to have Instagram or Facebook gallery, please create a new one.', $this->prefix),
+      'bwg_post_number'  => __('Instagram recent post number must be between 1 and 25.', $this->prefix),
+      'bwg_not_empty'  => __('Gallery type cannot be changed, since it is not empty. In case you would like to have Instagram gallery, please create a new one.', $this->prefix),
       'bwg_enter_url'  => __('Please enter url to embed.', $this->prefix),
       'bwg_cannot_response'  => __('Error: cannot get response from the server.', $this->prefix),
       'bwg_something_wrong'  => __('Error: something wrong happened at the server.', $this->prefix),
@@ -550,15 +647,15 @@ final class BWG {
       'bwg_hide_order'  => __('Hide order column', $this->prefix),
       'selected_item'  =>  __('Selected %d item.', $this->prefix),
       'selected_items'  =>  __('Selected %d items.', $this->prefix),
-      'saved'  => __('Items Succesfully Saved.', $this->prefix),
-      'recovered'  => __('Item Succesfully Recovered.', $this->prefix),
-      'published'  => __('Item Succesfully Published.', $this->prefix),
-      'unpublished'  => __('Item Succesfully Unpublished.', $this->prefix),
-      'deleted'  => __('Item Succesfully Deleted.', $this->prefix),
+      'saved'  => __('Items Successfully Saved.', $this->prefix),
+      'recovered'  => __('Item Successfully Recovered.', $this->prefix),
+      'published'  => __('Item Successfully Published.', $this->prefix),
+      'unpublished'  => __('Item Successfully Unpublished.', $this->prefix),
+      'deleted'  => __('Item Successfully Deleted.', $this->prefix),
       'one_item'  => __('You must select at least one item.', $this->prefix),
-      'resized'  => __('Items Succesfully resized.', $this->prefix),
-      'watermark_set'  => __('Watermarks Succesfully Set.', $this->prefix),
-      'reset'  => __('Items Succesfully Reset.', $this->prefix),
+      'resized'  => __('Items Successfully resized.', $this->prefix),
+      'watermark_set'  => __('Watermarks Successfully Set.', $this->prefix),
+      'reset'  => __('Items Successfully Reset.', $this->prefix),
       'save_tag' => __('Save Tag', $this->prefix),
       'delete_alert' => __('Do you want to delete selected items?', $this->prefix),
       'default_warning' => __('This action will reset gallery type to mixed and will save that choice. You cannot undo it.', $this->prefix),
@@ -579,35 +676,64 @@ final class BWG {
 
     wp_register_style($this->prefix . '_addons', $this->plugin_url . '/addons/style.css');
 
+    // Open Sans
+    wp_register_style($this->prefix . '-opensans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800&display=swap');
+    wp_enqueue_style($this->prefix . '-opensans');
+
     wp_register_style($this->prefix . '_shortcode', $this->plugin_url . '/css/bwg_shortcode.css', $required_styles, $this->plugin_version);
     wp_register_script($this->prefix . '_shortcode', $this->plugin_url . '/js/bwg_shortcode.js', $required_scripts, $this->plugin_version);
     wp_localize_script($this->prefix . '_shortcode', 'bwg_objectGGF', WDWLibrary::get_google_fonts());
+    wp_localize_script($this->prefix . '_shortcode', 'bwg_shortcode_premium_text', array('bwg_premium_text' => __(' view is<br>available in Premium Version', $this->prefix)));
 
     if ( !$this->is_pro ) {
       wp_register_style($this->prefix . '_licensing', $this->plugin_url . '/css/bwg_licensing.css', $required_styles, $this->plugin_version);
     }
 
     // Roboto font for top bar.
-    wp_register_style($this->prefix . '-roboto', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
     wp_register_style($this->prefix . '-pricing', $this->plugin_url . '/css/pricing.css', array(), $this->plugin_version);
+    wp_register_style($this->prefix . '-roboto', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+
+    /* Free Trial Banner - for 2 weeks */
+    wp_register_style($this->prefix . '-free_trial_banner_css', $this->plugin_url . '/css/free_trial_banner.css', array(), $this->plugin_version);
+    wp_register_script($this->prefix . '-free_trial_banner_js', $this->plugin_url . '/js/free_trial_banner.js', array(), $this->plugin_version);
 
     // For drag and drop on mobiles.
     wp_register_script($this->prefix . '_jquery.ui.touch-punch.min', $this->plugin_url . '/js/jquery.ui.touch-punch.min.js', array(), '0.2.3');
+
+    $current_screen = get_current_screen();
+    if ( !$this->is_pro && !empty($current_screen->id) && $current_screen->id == "toplevel_page_bwg_subscribe" ) {
+      wp_enqueue_style($this->prefix . '_subscribe', $this->plugin_url . '/css/bwg_subscribe.css', array(), $this->plugin_version);
+    }
   }
+
+  /**
+   * Free Trial Banner for 2 weeks
+	 *
+	*/
+  public function free_trial_banner_update_status() {
+    $free_trial_banner_status = add_option('wd_bwg_free_trial_banner', '1', '', 'no');
+    if ( $free_trial_banner_status ) {
+    	echo "True";
+    } else {
+    	echo "False";
+    }
+    die();
+	}
 
   /**
    * Frontend AJAX actions.
    */
   public function frontend_data() {
     $params = array();
-    $params['id'] = WDWLibrary::get('shortcode_id', 0);
+    $params['id'] = WDWLibrary::get('shortcode_id', 0, 'intval');
 
     // Get values for elementor widget.
     $params['gallery_type'] = WDWLibrary::get('gallery_type', 'thumbnails');
-    $params['gallery_id'] = WDWLibrary::get('gallery_id', 0);
-    $params['tag'] = WDWLibrary::get('tag', 0);
-    $params['album_id'] = WDWLibrary::get('album_id', 0);
-    $params['theme_id'] = WDWLibrary::get('theme_id', 0);
+    $params['gallery_id'] = WDWLibrary::get('gallery_id', 0, 'intval');
+    $params['tag'] = WDWLibrary::get('tag', 0, 'intval');
+    $params['album_id'] = WDWLibrary::get('album_id', 0, 'intval');
+    $params['theme_id'] = WDWLibrary::get('theme_id', 0, 'intval');
+    $params['current_url'] = WDWLibrary::get('current_url', NULL);
     $params['ajax'] = TRUE;
 
     echo $this->shortcode($params);
@@ -659,7 +785,8 @@ final class BWG {
 
     // 'gallery_type' is the only parameter not being checked.
     // Checking for incomplete shortcodes.
-    if ( isset($params['gallery_type']) ) {
+    $gallery_allowed_types = WDWLibrary::get_gallery_allowed_types();
+    if ( isset($params['gallery_type']) && in_array($params['gallery_type'], $gallery_allowed_types) ) {
       $pairs = WDWLibrary::get_shortcode_option_params( $params );
       if ( isset($params['ajax']) ) {
         $pairs['ajax'] = $params['ajax'];
@@ -667,7 +794,6 @@ final class BWG {
       ob_start();
       $this->front_end( $pairs );
       return str_replace( array( "\r\n", "\n", "\r" ), '', ob_get_clean() );
-//      return ob_get_clean();
     }
   }
 
@@ -681,7 +807,7 @@ final class BWG {
     require_once(BWG()->plugin_dir . '/frontend/controllers/controller.php');
     $controller = new BWGControllerSite( ucfirst( $params[ 'gallery_type' ] ) );
     if ( WDWLibrary::get('shortcode_id', 0) || isset($params['ajax']) ) {
-      $controller->execute($params, 1, WDWLibrary::get('bwg', 0));
+      $controller->execute($params, 1, WDWLibrary::get('bwg', 0, 'intval'));
     }
     else {
       $bwg = WDWLibrary::unique_number();
@@ -693,12 +819,12 @@ final class BWG {
 
   // TODO: move
   public function bwg_captcha() {
-    if (isset($_GET['action']) && esc_html($_GET['action']) == 'bwg_captcha') {
-      $i = (isset($_GET["i"]) ? esc_html($_GET["i"]) : '');
-      $r2 = (isset($_GET["r2"]) ? (int) $_GET["r2"] : 0);
-      $rrr = (isset($_GET["rrr"]) ? (int) $_GET["rrr"] : 0);
+    if ( WDWLibrary::get('action') == 'bwg_captcha') {
+      $i = WDWLibrary::get('i');
+      $r2 = WDWLibrary::get('r2', 0, 'intval');
+      $rrr = WDWLibrary::get('rrr', 0, 'intval');
       $randNum = 0 + $r2 + $rrr;
-      $digit = (isset($_GET["digit"]) ? (int) $_GET["digit"] : 0);
+      $digit = WDWLibrary::get('digit', 0, 'intval');
       $cap_width = $digit * 10 + 15;
       $cap_height = 26;
       $cap_length_min = $digit;
@@ -816,6 +942,20 @@ final class BWG {
 
   public function admin_ajax() {
     $page = WDWLibrary::get('action');
+    if ( $page == 'shortcode_' . $this->prefix ) {
+      $permissions = 'edit_posts';
+    }
+    else {
+      $permissions = $this->is_pro ? BWG()->options->permissions : 'manage_options';
+    }
+    if ( function_exists('current_user_can') ) {
+      if ( !current_user_can($permissions) ) {
+        die('Access Denied');
+      }
+    }
+    else {
+      die('Access Denied');
+    }
     $allowed_pages = array(
       'galleries_' . $this->prefix,
       'albumsgalleries_' . $this->prefix,
@@ -889,15 +1029,13 @@ final class BWG {
   /**
    * Add media button to Wp editor.
    *
-   * @param $context
-   *
    * @return string
    */
-  function media_button($context) {
+  function media_button() {
     ob_start();
     $url = add_query_arg(array('action' => 'shortcode_bwg', 'TB_iframe' => '1'), admin_url('admin-ajax.php'));
 	  ?>
-    <a onclick="if ( typeof tb_click == 'function' && (jQuery(this).parent().attr('id').indexOf('elementor') !== -1 || typeof bwg_check_ready == 'function') ) {
+    <a onclick="if ( typeof tb_click == 'function' && ( jQuery(this).parent().attr('id') && jQuery(this).parent().attr('id').indexOf('elementor') !== -1 || typeof bwg_check_ready == 'function') ) {
             tb_click.call(this);
             bwg_create_loading_block();
             bwg_set_shortcode_popup_dimensions(); } return false;" href="<?php echo $url; ?>" class="bwg-shortcode-btn button" title="<?php _e('Insert Photo Gallery', $this->prefix); ?>">
@@ -905,9 +1043,7 @@ final class BWG {
       <?php _e('Add Photo Gallery', $this->prefix); ?>
     </a>
     <?php
-    $context .= ob_get_clean();
-
-    return $context;
+    echo ob_get_clean();
   }
 
   /**
@@ -932,14 +1068,15 @@ final class BWG {
       var bwg_admin_ajax = '<?php echo add_query_arg(array('action' => 'shortcode_' . $this->prefix), admin_url('admin-ajax.php')); ?>';
       var bwg_ajax_url = '<?php echo add_query_arg(array('action' => ''), admin_url('admin-ajax.php')); ?>';
       var bwg_plugin_url = '<?php echo BWG()->plugin_url; ?>';
-      jQuery(document).ready(function () {
+      document.addEventListener('DOMContentLoaded', function(){ // Analog of $(document).ready(function(){
         bwg_check_ready = function () {}
-        jQuery(document).keyup(function(e) {
-          if ( e.keyCode == 27 ) {
+        document.onkeyup = function(e){
+          if ( e.key == 'Escape' ) {
             bwg_remove_loading_block();
           }
-        });
+        };
       });
+
       // Set shortcode popup dimensions.
       function bwg_set_shortcode_popup_dimensions() {
         var H = jQuery(window).height(), W = jQuery(window).width();
@@ -1050,6 +1187,7 @@ final class BWG {
       BWGInsert::tables();
       update_user_meta(get_current_user_id(),'bwg_photo_gallery', '1');
       add_option("wd_bwg_version", $new_version, '', 'no');
+      add_option("wd_bwg_initial_version", $new_version, '', 'no');
       if ( !$this->is_pro ) {
         add_option("wd_bwg_theme_version", '1.0.0', '', 'no');
       }
@@ -1062,8 +1200,12 @@ final class BWG {
         add_option("wd_bwg_theme_version", '1.0.0', '', 'no');
       }
     }
+
     $this->create_post_types();
-    flush_rewrite_rules();
+    // Using this insted of flush_rewrite_rule() for better performance with multisite.
+    global $wp_rewrite;
+    $wp_rewrite->init();
+    $wp_rewrite->flush_rules();
   }
 
   /**
@@ -1095,7 +1237,10 @@ final class BWG {
    */
   public function deactivate() {
     wp_clear_scheduled_hook( 'bwg_schedule_event_hook' );
-    flush_rewrite_rules();
+    // Using this insted of flush_rewrite_rule() for better performance with multisite.
+    global $wp_rewrite;
+    $wp_rewrite->init();
+    $wp_rewrite->flush_rules();
   }
 
   public function new_blog_added( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
@@ -1222,14 +1367,12 @@ final class BWG {
   public function register_frontend_scripts() {
     $version = BWG()->plugin_version;
     $required_styles = array(
-      $this->prefix . '_sumoselect',
-      $this->prefix . '_font-awesome',
-      $this->prefix . '_mCustomScrollbar',
-      'dashicons'
+	  $this->prefix . '_fonts',
+      'sumoselect',
+      'mCustomScrollbar'
     );
-	  $required_scripts = array(
-      'jquery',
-    );
+  	$required_scripts = array('jquery');
+  	$in_footer = BWG()->options->use_inline_stiles_and_scripts || WDWLibrary::elementor_is_active() ? true : false;
 	  // Google fonts.
     if (BWG()->options->enable_google_fonts) {
       require_once(BWG()->plugin_dir . '/framework/WDWLibrary.php');
@@ -1239,56 +1382,71 @@ final class BWG {
         array_push($required_styles, $this->prefix . '_googlefonts');
       }
     }
-
-    wp_register_script($this->prefix . '_sumoselect', BWG()->front_url . '/js/jquery.sumoselect.min.js', $required_scripts, '3.0.3', true);
-    wp_register_style($this->prefix . '_sumoselect', BWG()->front_url . '/css/sumoselect.min.css', array(), '3.0.3');
+    wp_register_script('instagram-embed', 'https://www.instagram.com/embed.js', $required_scripts, '', $in_footer);
+    wp_register_script('sumoselect', BWG()->front_url . '/js/jquery.sumoselect.min.js', $required_scripts, '3.0.3', $in_footer);
+    wp_register_style('sumoselect', BWG()->front_url . '/css/sumoselect.min.css', array(), '3.0.3');
 
     // Styles/Scripts for popup.
-    wp_register_style($this->prefix . '_font-awesome', BWG()->front_url . '/css/font-awesome/font-awesome.min.css', array(), '4.6.3');
-    wp_register_script($this->prefix . '_jquery_mobile', BWG()->front_url . '/js/jquery.mobile.min.js', $required_scripts, $version, true);
-    wp_register_script($this->prefix . '_mCustomScrollbar', BWG()->front_url . '/js/jquery.mCustomScrollbar.concat.min.js', $required_scripts, $version, true);
-    wp_register_style($this->prefix . '_mCustomScrollbar', BWG()->front_url . '/css/jquery.mCustomScrollbar.min.css', array(), $version);
+    wp_register_style($this->prefix . '_fonts', BWG()->front_url . '/css/bwg-fonts/fonts.css', array(), '0.0.1');
+    // jquery.mobile js file contain "Defaults, Namespace, Events All" selected from  https://jquerymobile.com/download-builder/
+    wp_register_script('jquery-mobile', BWG()->front_url . '/js/jquery.mobile.min.js', $required_scripts, '1.4.5', $in_footer);
+    wp_register_script('mCustomScrollbar', BWG()->front_url . '/js/jquery.mCustomScrollbar.concat.min.js', $required_scripts, $version, $in_footer);
+    wp_register_style('mCustomScrollbar', BWG()->front_url . '/css/jquery.mCustomScrollbar.min.css', array(), $version);
 
-    wp_register_script($this->prefix . '_jquery-fullscreen', BWG()->front_url . '/js/jquery.fullscreen-0.4.1.min.js', $required_scripts, '0.4.1', true);
-    wp_register_script($this->prefix . '_gallery_box', BWG()->front_url . '/js/bwg_gallery_box.js', $required_scripts, $version, true);
-    wp_register_script($this->prefix . '_embed', BWG()->front_url . '/js/bwg_embed.js', $required_scripts, $version, true);
+    wp_register_script('jquery-fullscreen', BWG()->front_url . '/js/jquery.fullscreen-0.4.1.min.js', $required_scripts, '0.4.1', $in_footer);
+    wp_register_script($this->prefix . '_lazyload', BWG()->front_url . '/js/jquery.lazy.min.js', $required_scripts, $version, $in_footer);
+
     array_push($required_scripts,
-        $this->prefix . '_sumoselect',
-        $this->prefix . '_jquery_mobile',
-        $this->prefix . '_mCustomScrollbar',
-        $this->prefix . '_jquery-fullscreen',
-        $this->prefix . '_gallery_box',
-        $this->prefix . '_embed'
-		);
+               'sumoselect',
+               'jquery-mobile',
+               'mCustomScrollbar',
+               'jquery-fullscreen'
+    );
 
-	  if ( $this->is_pro ) {
-      wp_register_script($this->prefix . '_raty', BWG()->front_url . '/js/jquery.raty.min.js', $required_scripts, '2.5.2', true);
-      wp_register_script($this->prefix . '_featureCarousel', BWG()->plugin_url . '/js/jquery.featureCarousel.min.js', $required_scripts, $version, true);
-      // 3D Tag Cloud.
-      wp_register_script($this->prefix . '_3DEngine', BWG()->front_url . '/js/3DEngine/3DEngine.min.js', $required_scripts, '1.0.0', true);
-	  
-	    array_push($required_scripts,
-        $this->prefix . '_raty',
-        $this->prefix . '_featureCarousel',
-        $this->prefix . '_3DEngine');
+    if ( BWG()->options->developer_mode ) {
+      // These scripts are minified in none developer mode so there is no need to register scripts and set as required.
+      wp_register_script($this->prefix . '_gallery_box', BWG()->front_url . '/js/bwg_gallery_box.js', $required_scripts, $version, $in_footer);
+      wp_register_script($this->prefix . '_embed', BWG()->front_url . '/js/bwg_embed.js', $required_scripts, $version, $in_footer);
+      array_push($required_scripts,
+                 $this->prefix . '_gallery_box',
+                 $this->prefix . '_embed'
+      );
+      if ( $this->is_pro ) {
+        wp_register_script($this->prefix . '_raty', BWG()->front_url . '/js/jquery.raty.min.js', $required_scripts, '2.5.2', $in_footer);
+        wp_register_script($this->prefix . '_featureCarousel', BWG()->plugin_url . '/js/jquery.featureCarousel.js', $required_scripts, $version, $in_footer);
+        // 3D Tag Cloud.
+        wp_register_script($this->prefix . '_3DEngine', BWG()->front_url . '/js/3DEngine/3DEngine.min.js', $required_scripts, '1.0.0', $in_footer);
+
+        array_push($required_scripts,
+                   $this->prefix . '_raty',
+                   $this->prefix . '_featureCarousel',
+                   $this->prefix . '_3DEngine'
+        );
+      }
+      $style_file  = BWG()->front_url . '/css/bwg_frontend.css';
+      $script_file = BWG()->front_url . '/js/bwg_frontend.js';
+    }
+    else {
+      $style_file  = BWG()->front_url . '/css/styles.min.css';
+      $script_file = BWG()->front_url . '/js/scripts.min.js';
     }
 
-    wp_register_style($this->prefix . '_frontend', BWG()->front_url . '/css/bwg_frontend.css', $required_styles, $version);
-    wp_register_script($this->prefix . '_frontend', BWG()->front_url . '/js/bwg_frontend.js', $required_scripts, $version, true);
-	
+    wp_register_style($this->prefix . '_frontend', $style_file, $required_styles, $version);
+    wp_register_script($this->prefix . '_frontend', $script_file, $required_scripts, $version, $in_footer);
+
+    if( BWG()->options->lazyload_images ) {
+      wp_enqueue_script($this->prefix . '_lazyload');
+    }
+
     if ( !BWG()->options->use_inline_stiles_and_scripts || WDWLibrary::elementor_is_active() ) {
       wp_enqueue_style($this->prefix . '_frontend');
       wp_enqueue_script($this->prefix . '_frontend');
     }
 
-    wp_localize_script($this->prefix . '_gallery_box', 'bwg_objectL10n', array(
-      'bwg_field_required'  => __('field is required.', $this->prefix),
+    wp_localize_script($this->prefix . '_frontend', 'bwg_objectsL10n', array(
+	    'bwg_field_required'  => __('field is required.', $this->prefix),
       'bwg_mail_validation' => __('This is not a valid email address.', $this->prefix),
       'bwg_search_result' => __('There are no images matching your search.', $this->prefix),
-      'is_pro' => $this->is_pro,
-    ));
-
-    wp_localize_script($this->prefix . '_frontend', 'bwg_objectsL10n', array(
       'bwg_select_tag'  => __('Select Tag', $this->prefix),
       'bwg_order_by'  => __('Order By', $this->prefix),
       'bwg_search' => __('Search', $this->prefix),
@@ -1299,6 +1457,7 @@ final class BWG {
       'bwg_restore' =>  __('Restore', $this->prefix),
       'bwg_maximize' =>  __('Maximize', $this->prefix),
       'bwg_fullscreen' =>  __('Fullscreen', $this->prefix),
+      'bwg_exit_fullscreen' =>  __('Exit Fullscreen', $this->prefix),
       'bwg_search_tag' =>  __('SEARCH...', $this->prefix),
       'bwg_tag_no_match' => __('No tags found', $this->prefix),
       'bwg_all_tags_selected' => __('All tags selected', $this->prefix),
@@ -1306,6 +1465,20 @@ final class BWG {
       'play' => __('Play', $this->prefix),
       'pause' => __('Pause', $this->prefix),
       'is_pro' => $this->is_pro,
+      'bwg_play' => __('Play', $this->prefix),
+      'bwg_pause' => __('Pause', $this->prefix),
+      'bwg_hide_info' => __('Hide info', $this->prefix),
+      'bwg_show_info' => __('Show info', $this->prefix),
+      'bwg_hide_rating' => __('Hide rating', $this->prefix),
+      'bwg_show_rating' => __('Show rating', $this->prefix),
+      'ok' => __('Ok', $this->prefix),
+      'cancel' => __('Cancel', $this->prefix),
+      'select_all' => __('Select all', $this->prefix),
+      'lazy_load'=> BWG()->options->lazyload_images,
+      'lazy_loader'=> BWG()->plugin_url."/images/ajax_loader.png",
+      'front_ajax' => BWG()->options->front_ajax,
+      'bwg_tag_see_all' => __('see all tags', $this->prefix),
+      'bwg_tag_see_less' => __('see less tags', $this->prefix),
     ));
   }
 
@@ -1317,12 +1490,12 @@ final class BWG {
   }
 
   public function init_free_users_lib() {
-    add_filter('tenweb_free_users_lib_path', array($this, 'tenweb_lib_path'));
+    add_filter('tenweb_new_free_users_lib_path', array($this, 'tenweb_lib_path'));
   }
 
   public function tenweb_lib_path($path) {
     // The version of WD Lib
-    $version = '1.1.1';
+    $version = '1.1.3';
     if (!isset($path['version']) || version_compare($path['version'], $version) === -1) {
       $path['version'] = $version;
       $path['path'] = $this->plugin_dir;
@@ -1334,11 +1507,12 @@ final class BWG {
    * Overview.
    */
   public function overview() {
-    if (is_admin() && !isset($_REQUEST['ajax'])) {
-      if (!class_exists("TenWebLib")) {
-        $plugin_dir = apply_filters('tenweb_free_users_lib_path', array('version' => '1.1.1', 'path' => $this->plugin_dir));
+    if ( is_admin() && !isset($_REQUEST['ajax']) ) {
+      if ( !class_exists("TenWebLibNew") ) {
+        $plugin_dir = apply_filters('tenweb_new_free_users_lib_path', array('version' => '1.1.3', 'path' => $this->plugin_dir));
         require_once($plugin_dir['path'] . '/wd/start.php');
       }
+
       global $bwg_options;
       $bwg_options = array(
         "prefix" => "bwg",
@@ -1556,22 +1730,22 @@ final class BWG {
           ),
         ),
         "video_youtube_id" => "4Mxg0FsFZZE",  // e.g. https://www.youtube.com/watch?v=acaexefeP7o youtube id is the acaexefeP7o
-        "plugin_wd_url" => "https://10web.io/plugins/wordpress-photo-gallery/",
-        "plugin_wd_demo_link" => "https://demo.10web.io/photo-gallery/",
-        "plugin_wd_addons_link" => "https://10web.io/plugins/wordpress-photo-gallery/",
-        "plugin_wd_docs_link" => "https://help.10web.io/hc/en-us/sections/360002159111-Photo-Gallery/",
-        "after_subscribe" => admin_url('admin.php?page=galleries_bwg'), // this can be plagin overview page or set up page
+        "plugin_wd_url" => BWG()->plugin_link . BWG()->utm_source,
+        "plugin_wd_demo_link" => "https://demo.10web.io/photo-gallery/" . BWG()->utm_source,
+        "plugin_wd_addons_link" => BWG()->plugin_link . BWG()->utm_source,
+        "plugin_wd_docs_link" => "https://help.10web.io/hc/en-us/sections/360002159111-Photo-Gallery/" . BWG()->utm_source,
+        "after_subscribe" => admin_url('admin.php?page=galleries_bwg'), // this can be plugin overview page or set up page
         "plugin_wizard_link" => '',
         "plugin_menu_title" => $this->nicename,
         "plugin_menu_icon" => BWG()->plugin_url . '/images/icons/icon.png',
         "deactivate" => !$this->is_pro,
-        "subscribe" => !$this->is_pro,
+        "subscribe" => false,
         "custom_post" => '',
         "menu_position" => null,
         "display_overview" => false,
       );
 
-      ten_web_lib_init($bwg_options);
+      ten_web_new_lib_init($bwg_options);
     }
   }
 
@@ -1596,12 +1770,13 @@ final class BWG {
       $show_hide_custom_post = true;
     }
     $args = array(
+      'label' => 'Gallery',
       'public' => TRUE,
       'exclude_from_search' => TRUE,
       'publicly_queryable' => TRUE,
       'show_ui' => $show_hide_custom_post,
       'show_in_menu' => TRUE,
-      'show_in_nav_menus' => FALSE,
+      'show_in_nav_menus' => TRUE,
       'permalink_epmask' => TRUE,
       'rewrite' => TRUE,
       'label'  => __('Galleries', $this->prefix),
@@ -1610,12 +1785,13 @@ final class BWG {
     register_post_type( 'bwg_gallery', $args );
 
     $args = array(
+      'label'=> 'Gallery group',
       'public' => TRUE,
       'exclude_from_search' => TRUE,
       'publicly_queryable' => TRUE,
       'show_ui' => $show_hide_custom_post,
       'show_in_menu' => TRUE,
-      'show_in_nav_menus' => FALSE,
+      'show_in_nav_menus' => TRUE,
       'permalink_epmask' => TRUE,
       'rewrite' => TRUE,
       'label'  => __('Albums', $this->prefix),
@@ -1624,12 +1800,13 @@ final class BWG {
     register_post_type( 'bwg_album', $args );
 
     $args = array(
+      'label' => 'Gallery Tags',
       'public' => TRUE,
       'exclude_from_search' => TRUE,
       'publicly_queryable' => TRUE,
       'show_ui' => $show_hide_custom_post,
       'show_in_menu' => TRUE,
-      'show_in_nav_menus' => FALSE,
+      'show_in_nav_menus' => TRUE,
       'permalink_epmask' => TRUE,
       'rewrite' => TRUE,
       'label'  => __('Gallery tags', $this->prefix),
@@ -1639,6 +1816,7 @@ final class BWG {
 
     if ( $this->is_pro ) {
       $args = array(
+        'label' => 'Gallery Share',
         'public' => FALSE,
         'publicly_queryable' => TRUE,
         'exclude_from_search' => TRUE,
@@ -1721,7 +1899,7 @@ final class BWG {
 	* @param $add_ons_notice
 	*/
 	function addons_compatibility_notice($add_ons_notice) {
-		$addon_names = implode($add_ons_notice, ', ');
+		$addon_names = implode(', ', $add_ons_notice);
 		$count = count($add_ons_notice);
 		$single = __('Please update the %s add-on to start using.', $this->prefix);
 		$plural = __('Please update the %s add-ons to start using.', $this->prefix);
@@ -1738,7 +1916,7 @@ final class BWG {
 		  'photo-gallery-ecommerce' => array( 'version' => '1.0.17', 'file' => 'photo-gallery-ecommerce.php' ),
 		);
 		$add_ons_notice = array();
-		include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+		include_once(BWG()->abspath . 'wp-admin/includes/plugin.php');
 		foreach ( $add_ons as $add_on_key => $add_on_value ) {
 		  $addon_path = plugin_dir_path(dirname(__FILE__)) . $add_on_key . '/' . $add_on_value['file'];
 		  if ( is_plugin_active($add_on_key . '/' . $add_on_value['file']) ) {
@@ -1766,7 +1944,7 @@ final class BWG {
     if ( plugin_basename(__FILE__) == $file ) {
       $plugin_url = "https://wordpress.org/support/plugin/photo-gallery";
       $prefix = $this->prefix;
-      $meta_fields[] = "<a href='" . $plugin_url . "' target='_blank'>" . __('Support Forum', $prefix) . "</a>";
+      $meta_fields[] = "<a href='" . $plugin_url . "/#new-post' target='_blank'>" . __('Ask a question', $prefix) . "</a>";
       $meta_fields[] = "<a href='" . $plugin_url . "/reviews#new-post' target='_blank' title='" . __('Rate', $prefix) . "'>
             <i class='wdi-rate-stars'>"
         . "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
@@ -1798,7 +1976,7 @@ final class BWG {
    */
   function allowed_upload_mime_types( $mimes ) {
     // Optional. allowed a mime type.
-    $allowed = array( 'jpg|jpeg|jpe', 'gif', 'png' );
+    $allowed = array( 'jpg|jpeg|jpe', 'gif', 'png', 'svg' );
     foreach ( $mimes as $key => $val ) {
       if ( !in_array( $key, $allowed ) ) {
         unset( $mimes[ $key ] );
@@ -1811,12 +1989,32 @@ final class BWG {
    * Prevent adding shortcode conflict with some builders.
    */
   private function before_shortcode_add_builder_editor() {
-    if ( defined('ELEMENTOR_VERSION') ) {
+    if ( defined('ELEMENTOR_VERSION') && did_action( 'elementor/loaded' ) ) {
       add_action('elementor/editor/footer', array( $this, 'global_script' ));
     }
     if ( class_exists('FLBuilder') ) {
       add_action('wp_enqueue_scripts', array( $this, 'global_script' ));
     }
+  }
+
+  public function enqueue_elementor_widget_scripts() {
+    wp_enqueue_script(BWG()->prefix . 'elementor_widget_js', plugins_url('js/bwg_elementor_widget.js', __FILE__), array( 'jquery' ));
+  }
+
+  public function webinar_banner() {
+    // Webinar banner
+    if ( !class_exists( 'TWPGWebinar' ) ) {
+      require_once( $this->plugin_dir . '/framework/TWWebinar.php' );
+    }
+    new TWPGWebinar(array(
+      'menu_postfix' => '_' . $this->prefix,
+      'title' => 'Join the Webinar',
+      'description' => 'How to Create a Fully Functional WP Website with Beautiful Photo Gallery in Just an Hour + SPECIAL GIFT FOR WEBINAR ATTENDEES',
+      'preview_type' => 'youtube',
+      'preview_url' => 'A111ykjWdW8',
+      'button_text' => 'SIGN UP',
+      'button_link' => 'https://my.demio.com/ref/ydTJSUzyVqOgcUOV',
+    ));
   }
 }
 
@@ -1837,641 +2035,5 @@ BWG();
  * @param $id Shortcode id.
  */
 function photo_gallery( $id ) {
-  echo BWG()->shortcode(array('id' => $id));
-}
-
-/**
- * Show notice to install 10web manager plugin
- */
-function wdpg_tenweb_install_notice() {
-  // Show notice only on plugin pages.
-  if ( ( !isset($_GET['page']) || strpos(esc_html($_GET['page']), '_bwg') === FALSE ) || ( isset($_GET['task']) && !strpos(esc_html($_GET['task']), 'edit') === TRUE ) ) {
-    return '';
-  }
-  wp_enqueue_script('thickbox');
-  wp_enqueue_script('bwg_admin', BWG()->plugin_url . '/js/bwg.js', array(), BWG()->plugin_version);
-
-  // Remove old notice.
-  if ( get_option('tenweb_notice_status') !== FALSE ) {
-    update_option('tenweb_notice_status', '1', 'no');
-  }
-
-  $meta_value = get_option('tenweb_notice_status');
-  if ( $meta_value === '' || $meta_value === FALSE ) {
-    ob_start();
-    $prefix = BWG()->prefix;
-    $nicename = BWG()->nicename;
-    $url = BWG()->plugin_url;
-    $dismiss_url = add_query_arg(array( 'action' => 'wd_tenweb_dismiss' ), admin_url('admin-ajax.php'));
-
-    $slug = '10web-manager';
-    $install_url = esc_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=' . $slug), 'install-plugin_' . $slug));
-    $activation_url = na_action_link($slug.'/10web-manager.php', 'activate');
-    $tenweb_url = admin_url( 'admin.php?page=tenweb_menu' );
-    $verify_url = add_query_arg( array ('action' => 'tenweb_status'), admin_url('admin-ajax.php'));
-    ?>
-    <div class="notice" id="wd_tenweb_notice_cont">
-		<div class="notice_col tenweb_logo">
-			<img id="wd_tenweb_logo_notice" src="<?php echo $url . '/images/tenweb/10web-logo.svg'; ?>" />
-		</div>
-		<div class="notice_col backup-wrap"> 
-			<span class="sub-title"><?php _e("Time For", $prefix); ?></span>
-			<h2>
-				<span class="full-border">
-					<span class="hide"><?php _e("Time For", $prefix); ?></span> 
-					Image <span class="border">Optimization <span class="line"></span></span> & <span class="border">Backup<span class="line"></span></span>
-					<span class="clear"></span>
-					<span class="line hide"></span>
-				</span>
-			</h2>
-		</div>
-		<div class="notice_col optimization-wrap">
-			<span class="sub-title"><?php _e("Up to", $prefix); ?></span>
-			<div>
-				<h2><?php _e("90%", $prefix); ?></h2>
-				<div class="sub-text">
-					<h3><span class="hide"><?php _e("90%", $prefix); ?></span> <?php _e("Image", $prefix); ?></h3>
-					<h3><?php _e("Optimization", $prefix); ?></h3>
-				</div>		
-			</div>		
-		</div>		
-		<div class="notice_col website-wrap">
-			<span  class="sub-title"><?php _e("Up to", $prefix); ?></span>
-			<div>
-				<h2><?php _e("3x", $prefix); ?></h2>
-				<div class="sub-text">
-					<h3><span class="hide">3x</span> <?php _e("Faster", $prefix); ?></h3>
-					<h3><?php _e("Website", $prefix); ?></h3>
-				</div>
-			</div>
-		</div>
-		<div class="notice_col time-wrap">
-			<span class="sub-title"><span class="hide">100%</span> <?php _e("Secure Real Time", $prefix); ?></span>
-			<div>
-				<h2><?php _e("100%", $prefix); ?></h2>
-				<div class="sub-text">
-					<h3><?php _e("Cloud Backup", $prefix); ?></h3>
-					<h3><?php _e("For Your Images & Websites", $prefix); ?></h3>
-				</div>
-			</div>
-		</div>
-	  <div class="notice_col tenweb_action">
-        <div>
-          <?php
-          $plugin_dir = ABSPATH . 'wp-content/plugins/10web-manager/';
-          if ( is_dir($plugin_dir) && !is_plugin_active( '10web-manager/manager.php' ) ) {
-            ?>
-            <a class="button tenweb_activaion" id="activate_now" data-tenweb-url="<?php echo $tenweb_url; ?>" data-install-url="<?php echo $install_url; ?>" data-activate-url="<?php echo $activation_url; ?>"><?php _e("Activation", $prefix); ?>
-				<span class="spinner"></span>
-			</a>
-            <span class="error_activate hide"><?php _e("Activation failed, please try again.", $prefix); ?></span>
-            <?php
-          } else if( ! is_dir($plugin_dir) ) {
-            ?>
-            <a class="button tenweb_activaion" id="install_now" data-install-url="<?php echo $install_url; ?>" data-activate-url="<?php echo $activation_url; ?>"><?php _e("Install now for free", $prefix); ?>
-				<span class="spinner"></span>
-			</a>
-            <a class="button tenweb_activaion hide" id="activate_now" data-tenweb-url="<?php echo $tenweb_url; ?>" data-install-url="<?php echo $install_url; ?>" data-activate-url="<?php echo $activation_url; ?>"><?php _e("Activation", $prefix); ?>
-				<span class="spinner"></span>
-			</a>
-            <span class="error_install hide tenweb_active"><?php _e("Installation failed, please try again.", $prefix); ?></span>
-            <?php
-          }
-          ?>
-		  <a class="wd_tenweb_notice_dissmiss" onclick="jQuery('#wd_tenweb_notice_cont').attr('style', 'display: none !important;'); jQuery.post('<?php echo $dismiss_url; ?>');"><img src="<?php echo $url?>/images/tenweb/close.svg"></a>
-		  <div id="verifyUrl" data-url="<?php echo $verify_url ?>"></div>
-        </div>
-      </div>
-    </div>
-    <script>
-      var url = jQuery(".tenweb_activaion").attr("data-install-url");
-      var activate_url = jQuery(".tenweb_activaion").attr("data-activate-url");
-
-      function install_tenweb_plugin() {
-        jQuery(".spinner").addClass('is-active');
-        jQuery(this).prop('disable',true);
-        var io_plugin_url = '<?php echo plugins_url('10web-manager/10web-manager.php');?>'; // Getting 10web manager plugin url
-
-        jQuery.ajax({
-          method: "POST",
-          url: url,
-        }).done(function() {
-		  // Check if plugin installed
-          jQuery.ajax({
-            type: 'POST',
-			dataType: 'json',
-            url: jQuery("#verifyUrl").attr('data-url'),
-            error: function()
-            {
-              jQuery(".spinner").removeClass('is-active');
-              jQuery(".error_install").show();
-            },
-            success: function(response)
-            {
-              if ( response.status_install == 1 ) {
-                jQuery('#install_now').addClass('hide');
-                jQuery('#activate_now').removeClass('hide');
-
-				activate_tenweb_plugin();
-              }
-              else {
-                jQuery(".spinner").removeClass('is-active');
-                jQuery(".error_install").removeClass('hide');
-              }
-            }
-          });
-        })
-		.fail(function() {
-			jQuery(".spinner").removeClass('is-active');
-			jQuery(".error_install").removeClass('hide');
-		});
-      }
-
-      function activate_tenweb_plugin() {
-        jQuery(".spinner").addClass('is-active');
-        jQuery.ajax({
-          method: "POST",
-          url: activate_url,
-        }).done(function() {
-          jQuery(".spinner").removeClass('is-active');
-          var data_tenweb_url = '';
-		  // Check if plugin installed
-          jQuery.ajax({
-            type: 'POST',
-			dataType: 'json',
-            url: jQuery("#verifyUrl").attr('data-url'),
-            error: function()
-            {
-              jQuery(".spinner").removeClass('is-active');
-              jQuery(".error_activate").removeClass('hide');
-            },
-            success: function(response)
-            {
-              if ( response.status_active == 0 ) {
-                jQuery('#install_now').addClass('hide');
-                data_tenweb_url = jQuery('#activate_now').attr('data-tenweb-url');
-                jQuery.post('<?php echo $dismiss_url; ?>');
-              }
-              else {
-                jQuery(".spinner").removeClass('is-active');
-                jQuery(".error_activate").removeClass('hide');
-              }
-            },
-            complete : function() {
-              if ( data_tenweb_url != '' ) {
-               window.location.href = data_tenweb_url;
-              }
-            }
-          });
-        })
-		.fail(function() {
-			jQuery(".spinner").removeClass('is-active');
-		});
-      }
-
-      jQuery("#install_now").on("click",function(){
-        install_tenweb_plugin();
-      });
-      jQuery("#activate_now").on("click",function(){
-        activate_tenweb_plugin();
-	  });
-    </script>
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800" rel="stylesheet">
-    <style>
-		.hide {
-			display: none !important;
-		}
-		#verifyUrl {
-			display: none
-		}
-		.error_install, .error_activate {
-			color:red;
-			font-size: 11px;
-		}
-		#wd_tenweb_notice_cont {
-			width: 98%;
-			min-height: 80px;
-			height: 100%;
-			display: flex;
-			flex-wrap:wrap;
-			position: relative;
-			justify-content: center;
-			border-radius: 15px;
-			background-color: rgb(100, 84, 240);
-			font-family: Open Sans, ExtraBold;
-			color: #fff;
-			border: unset;
-			box-shadow: unset;
-		}
-		#wd_tenweb_notice_cont .notice_col {
-			display: flex;
-			float: left;
-			flex-direction: column;
-			justify-content: center;
-		}
-		#wd_tenweb_notice_cont .notice_col.tenweb_logo {
-			margin-left: 0px;
-		}
-		#wd_tenweb_notice_cont .notice_col.tenweb_action {
-			margin-right:0px;
-		}
-		#wd_tenweb_notice_cont span.sub-title {
-			display: block;
-			font-size: 12px;
-			opacity: 0.7;
-		}
-		#wd_tenweb_notice_cont .notice_col h2 {
-			float:left;
-			margin: 0;
-			padding: 0;
-			line-height: 32px;
-			font-family: Open sans;
-			font-weight: bold;
-			font-size: 32px;
-			color: #fff;
-		}	
-		#wd_tenweb_notice_cont .notice_col h3 { 
-			margin: 0;
-			padding: 0;
-			line-height: 15px;
-			font-size:14px;
-			color: #fff;
-		}
-		#wd_tenweb_notice_cont .backup-wrap h2 { 
-			line-height: 22px;
-			font-size: 22px;
-		}
-		#wd_tenweb_notice_cont .border {
-			display: inline-block;
-		}
-		#wd_tenweb_notice_cont .border .line,
-		#wd_tenweb_notice_cont .full-border .line {
-			display: block;
-			margin-top: 7px;
-			background: #f8c332;
-			border: 1px solid #f8c332;
-			border-radius: 3px;
-			height: 1.5px;
-		}
-		#wd_tenweb_notice_cont .notice_col .sub-text {
-			float:left;
-			margin-left: 5px;
-		}
-		#wd_tenweb_notice_cont .wd_tenweb_notice_dissmiss {
-			position: absolute;
-			top: 8px;
-			right: 12px;
-			cursor: pointer;
-			margin: 0;
-			width: 10px;
-			height: 10px;
-		}
-		.tenweb_action .tenweb_activaion {
-			display: block;
-			position: relative;
-			width: 220px;
-			height: 40px;
-			padding: 0 30px;
-			background: #F8C332;
-			text-transform: uppercase;
-			box-shadow:unset;
-			border-radius: 20px;
-			border: transparent;
-			vertical-align: middle;
-			text-align: center;
-			font-weight: 600;
-			line-height: 40px;
-			font-size: 14px;
-			color: #fff;
-			transition: all .2s linear;
-		}
-		.tenweb_action .tenweb_activaion:hover {
-			background: #F9BB11 !important;
-			color: #fff;
-		}
-		#wd_tenweb_notice_cont .spinner {
-			position:absolute;
-			background: url("<?php echo $url?>/images/spinner.gif") no-repeat;
-			background-size: 15px 15px;
-			margin: 0px;
-			width: 15px;
-			height: 15px;
-			right: -16px;
-			top: 6px;
-		}
-
-		@media only screen and (min-width: 1920px) {
-			#wd_tenweb_notice_cont .notice_col.tenweb_logo {
-				margin-right: 50px;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap {
-				margin-right: 101px;
-			}
-			#wd_tenweb_notice_cont .notice_col.optimization-wrap {
-				margin-right:51px;
-			}
-			#wd_tenweb_notice_cont .notice_col.website-wrap {
-				margin-right:70px;
-			}
-			#wd_tenweb_notice_cont .notice_col.time-wrap {
-				margin-right:80px;
-			}
-			#wd_tenweb_notice_cont #wd_tenweb_logo_notice {
-				height: 32px;
-			}
-		}
-
-		@media only screen and (min-width: 1440px) and (max-width: 1919px) {
-			#wd_tenweb_notice_cont .notice_col.tenweb_logo {
-				margin-right: 30.5px;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap {
-				margin-right: 50px;
-			}
-			#wd_tenweb_notice_cont .notice_col.optimization-wrap {
-				margin-right:36px;
-			}
-			#wd_tenweb_notice_cont .notice_col.website-wrap {
-				margin-right:36px;
-			}
-			#wd_tenweb_notice_cont .notice_col.time-wrap {
-				margin-right:46px;
-			}
-			#wd_tenweb_notice_cont #wd_tenweb_logo_notice {
-				height: 22px;
-			}
-			#wd_tenweb_notice_cont span.sub-title {
-				font-size: 12px;
-			}
-			#wd_tenweb_notice_cont .notice_col h2 {
-				line-height: 28px;
-				font-size:28px;
-			}
-			#wd_tenweb_notice_cont .backup-wrap h2 {
-				line-height: 15px;
-				font-size: 15px;
-			}
-			#wd_tenweb_notice_cont .notice_col h3 {
-				line-height: 14px;
-				font-size: 12px;
-			}
-			.tenweb_action .tenweb_activaion {
-				width: 165px;
-				height: 30px;
-				padding:0 13px;
-				line-height: 30px;
-				font-size: 12px;
-			}
-		}
-		
-		@media only screen and (min-width: 1366px) and (max-width: 1439px) {
-			#wd_tenweb_notice_cont .notice_col.tenweb_logo {
-				margin-right: 22.5px;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap {
-				margin-right: 45px;
-			}
-			#wd_tenweb_notice_cont .notice_col.optimization-wrap {
-				margin-right:26px;
-			}
-			#wd_tenweb_notice_cont .notice_col.website-wrap {
-				margin-right:26px;
-			}
-			#wd_tenweb_notice_cont .notice_col.time-wrap {
-				margin-right:26px;
-			}
-			#wd_tenweb_notice_cont #wd_tenweb_logo_notice {
-				height: 22px;
-			}
-			#wd_tenweb_notice_cont .notice_col h2 {
-				line-height: 28px;
-				font-size: 28px;
-			}
-			#wd_tenweb_notice_cont .backup-wrap h2 {
-				line-height: 15px;
-				font-size: 15px;
-			}
-			#wd_tenweb_notice_cont .notice_col h3 {
-				line-height: 14px;
-				font-size: 12px;
-			}
-			.tenweb_action .tenweb_activaion {
-				width: 165px;
-				height: 30px;
-				padding: 0 13px;
-				line-height: 30px;
-				font-size: 12px;
-			}
-		}
-
-		@media only screen and (min-width: 768px) and (max-width: 1365px) {
-			#wd_tenweb_notice_cont .notice_col {
-				height: auto;
-				margin-bottom:18px;
-			}
-			#wd_tenweb_notice_cont .notice_col.tenweb_logo,
-			#wd_tenweb_notice_cont .notice_col.backup-wrap {
-				width:100%;
-				height: auto;
-				margin: auto;
-				padding: 0px;
-				text-align: center;
-			}
-			#wd_tenweb_notice_cont .notice_col.tenweb_logo {
-				margin-top: 10px;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap {
-				margin-top: 8px;
-				margin-bottom: 14px;
-			}
-			#wd_tenweb_notice_cont .notice_col.tenweb_action {
-				width: 100%;
-				height: auto;
-				margin-left: 0;
-			}
-			#wd_tenweb_notice_cont .notice_col.optimization-wrap {
-				margin-right: 60px;
-			}
-			#wd_tenweb_notice_cont .notice_col.website-wrap {
-				margin-right: 60px;
-			}
-			#wd_tenweb_notice_cont .notice_col.tenweb_logo #wd_tenweb_logo_notice {
-				height: 24px;
-			}		
-			#wd_tenweb_notice_cont .notice_col.backup-wrap .sub-title {
-				display: none;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap h2 .hide {
-			    display: inline-block !important;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap h2 .border .line,
-			#wd_tenweb_notice_cont .notice_col.backup-wrap h2 .line.hide {
-				display: none !important;
-			}
-			#wd_tenweb_notice_cont .notice_col h2 {
-				line-height: 28px;
-				font-size: 28px;
-			}
-			#wd_tenweb_notice_cont .notice_col h3 {
-				line-height: 14px;
-				font-size: 13px;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap h2 {
-				font-size: 19px;
-			}
-			#wd_tenweb_notice_cont .tenweb_action .tenweb_activaion {
-				margin: 0 auto;
-				width: 165px;
-				height: 28px;
-				padding: 0 13px;
-				line-height: 28px;
-				font-size: 12px;
-			}
-		}
-
-		@media only screen and (min-width: 320px) and (max-width: 767px) {
-			#wd_tenweb_notice_cont .notice_col {
-				width:100%;
-				min-height: auto;
-				height: auto;
-				margin: 0px 0 8px 0;
-				padding: 0px;
-				text-align: center;
-			}
-			#wd_tenweb_notice_cont .notice_col.tenweb_logo {
-				margin-top: 10px;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap {
-				margin-top: 7px;
-			}
-			#wd_tenweb_notice_cont .notice_col.optimization-wrap {
-				margin-top: 16px;
-			}
-			#wd_tenweb_notice_cont .notice_col.time-wrap {
-				margin-bottom: 0px;
-			}
-			#wd_tenweb_notice_cont .notice_col.tenweb_action {
-				margin-top: 20px;
-				margin-bottom: 20px;
-			}
-			#wd_tenweb_notice_cont #wd_tenweb_logo_notice {
-				height: 20px;
-			}
-			#wd_tenweb_notice_cont .notice_col h2,
-			#wd_tenweb_notice_cont .notice_col .sub-text {
-				width:100%;
-				float: none;
-				margin: 0px;
-				line-height: 13px;
-				font-size: 13px;
-			}
-			#wd_tenweb_notice_cont .notice_col h3 {
-				display: inline-block;
-				font-size: 13px;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap .sub-title {
-				display:none;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap h2 .full-border {
-				padding-bottom: 3px;
-				border-bottom: 2px solid #f8c332;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap h2 .border .line {
-				display:none;
-			}
-			#wd_tenweb_notice_cont .notice_col.time-wrap .sub-title {
-				opacity:1;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap h2 .hide,
-			#wd_tenweb_notice_cont .notice_col.optimization-wrap .sub-text .hide,
-			#wd_tenweb_notice_cont .notice_col.website-wrap .sub-text .hide,
-			#wd_tenweb_notice_cont .notice_col.time-wrap .sub-title .hide {
-				display: inline-block !important;
-			}
-			#wd_tenweb_notice_cont .notice_col.backup-wrap h2 .full-border .line.hide {
-				display:none !important;
-			}
-			#wd_tenweb_notice_cont .notice_col.optimization-wrap h2,
-			#wd_tenweb_notice_cont .notice_col.website-wrap h2,
-			#wd_tenweb_notice_cont .notice_col.time-wrap h2 {
-				display:none;
-			}
-			#wd_tenweb_notice_cont span.sub-title {
-				font-size:13px;
-			}
-			#wd_tenweb_notice_cont  .tenweb_action .tenweb_activaion {
-				margin: 0 auto;
-				width: 165px;
-				height: 28px;
-				padding: 0 13px;
-				line-height: 28px;
-				font-size:12px;
-			}
-		}
-    </style>
-    <?php
-    echo ob_get_clean();
-  }
-}
-
-if( !function_exists('is_plugin_active') ) {
-  include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-}
-
-if( !is_plugin_active( '10web-manager/10web-manager.php' ) ) {
-  add_action('admin_notices', 'wdpg_tenweb_install_notice');
-}
-
-if ( !function_exists('wd_tenwebps_install_notice_status') ) {
-  // Add usermeta to db.
-  function wd_tenwebps_install_notice_status() {
-    update_option('tenweb_notice_status', '1', 'no');
-  }
-  add_action('wp_ajax_wd_tenweb_dismiss', 'wd_tenwebps_install_notice_status');
-}
-
-// Check status 10web manager install
-function check_tenweb_status() {
-  $status_install = 0;
-  $status_active = 0;
-  $plugin_dir = ABSPATH . 'wp-content/plugins/10web-manager/';
-  if ( is_dir($plugin_dir) ) {
-    $status_install = 1;
-  } else if ( is_plugin_active( '10web-manager/10web-manager.php' ) ) {
-    $status_active = 1;
-  }
-
-  if ( is_dir($plugin_dir) ) {
-	$old_opt_array = array();
-	$new_opt_array = array('photo-gallery' => 101); // core_id
-	$key = 'tenweb_manager_installed';
-	$option = get_option($key);
-	if ( !empty($option) ) {
-		$old_opt_array = (array) json_decode($option);
-	}
-	$array_installed = array_merge( $new_opt_array, $old_opt_array );
-	update_option( $key, json_encode($array_installed) );
-  }
-
-  $jsondata = array('status_install' => $status_install, 'status_active' => $status_active);
-  echo json_encode($jsondata); exit;
-}
-add_action('wp_ajax_tenweb_status', 'check_tenweb_status');
-
-/**
- * Get activation or deactivation link of a plugin
- *
- * @author Nazmul Ahsan <mail@nazmulahsan.me>
- * @param string $plugin plugin file name
- * @param string $action action to perform. activate or deactivate
- * @return string $url action url
- */
-function na_action_link( $plugin, $action = 'activate' ) {
-  if ( strpos( $plugin, '/' ) ) {
-    $plugin = str_replace( '\/', '%2F', $plugin );
-  }
-  $url = sprintf( admin_url( 'plugins.php?action=' . $action . '&plugin=%s&plugin_status=all&paged=1&s' ), $plugin );
-  $_REQUEST['plugin'] = $plugin;
-  $url = wp_nonce_url( $url, $action . '-plugin_' . $plugin );
-  return $url;
+  echo BWG()->shortcode(array( 'id' => $id ));
 }

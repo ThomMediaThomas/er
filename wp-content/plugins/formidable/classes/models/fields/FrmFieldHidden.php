@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -30,8 +33,10 @@ class FrmFieldHidden extends FrmFieldType {
 	protected $holds_email_values = true;
 
 	protected function field_settings_for_type() {
-		$settings = parent::field_settings_for_type();
+		$settings        = parent::field_settings_for_type();
 		$settings['css'] = false;
+		$settings['default'] = true;
+
 		return $settings;
 	}
 

@@ -1,5 +1,4 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -15,6 +14,7 @@ class FrmAddon {
 	public $version;
 	public $author = 'Strategy11';
 	public $is_parent_licence = false;
+	public $needs_license = true;
 	private $is_expired_addon = false;
 	public $license;
 	protected $get_beta = false;
@@ -29,7 +29,7 @@ class FrmAddon {
 		}
 
 		$this->plugin_folder = plugin_basename( $this->plugin_file );
-		$this->license = $this->get_license();
+		$this->license       = $this->get_license();
 
 		add_filter( 'frm_installed_addons', array( &$this, 'insert_installed_addon' ) );
 		$this->edd_plugin_updater();
@@ -42,15 +42,17 @@ class FrmAddon {
 
 	public function insert_installed_addon( $plugins ) {
 		$plugins[ $this->plugin_slug ] = $this;
+
 		return $plugins;
 	}
 
 	public static function get_addon( $plugin_slug ) {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
-		$plugin = false;
+		$plugin  = false;
 		if ( isset( $plugins[ $plugin_slug ] ) ) {
 			$plugin = $plugins[ $plugin_slug ];
 		}
+
 		return $plugin;
 	}
 
@@ -76,9 +78,10 @@ class FrmAddon {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param mixed   $_data
-	 * @param string  $_action
-	 * @param object  $_args
+	 * @param mixed $_data
+	 * @param string $_action
+	 * @param object $_args
+	 *
 	 * @return object $_data
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
@@ -98,14 +101,15 @@ class FrmAddon {
 				'name'      => $this->plugin_name,
 				'excerpt'   => '',
 				'changelog' => 'See the full changelog at <a href="' . esc_url( $this->store_url . '/changelog/' ) . '"></a>',
-	 			'banners' => array(
-	 				'high' => '',
-	 				'low'  => 'https://ps.w.org/formidable/assets/banner-1544x500.png',
-	 			),
+				'banners'   => array(
+					'high' => '',
+					'low'  => 'https://ps.w.org/formidable/assets/banner-1544x500.png',
+				),
 			);
 		} else {
-			$plugins = FrmAddonsController::get_addon_info( $this->license );
-			$_data = $plugins[ $item_id ];
+			$api     = new FrmFormApi( $this->license );
+			$plugins = $api->get_api_info();
+			$_data   = $plugins[ $item_id ];
 		}
 
 		$_data['sections'] = array(
@@ -143,8 +147,9 @@ class FrmAddon {
 			return false;
 		}
 
-		$frmpro_updater = FrmAddonsController::get_pro_updater();
-		$license = $frmpro_updater->license;
+		$api = new FrmFormApi();
+		$api->get_pro_updater();
+		$license = $api->get_license();
 		if ( empty( $license ) ) {
 			return false;
 		}
@@ -159,6 +164,7 @@ class FrmAddon {
 
 	/**
 	 * Activate the license in wp-config.php
+	 *
 	 * @since 2.04
 	 */
 	public function activate_defined_license() {
@@ -170,15 +176,18 @@ class FrmAddon {
 				$license = '';
 			}
 		}
+
 		return $license;
 	}
 
 	/**
 	 * Check the wp-config.php for the license key
+	 *
 	 * @since 2.04
 	 */
 	public function get_defined_license() {
 		$consant_name = 'FRM_' . strtoupper( $this->plugin_slug ) . '_LICENSE';
+
 		return defined( $consant_name ) ? constant( $consant_name ) : false;
 	}
 
@@ -189,10 +198,12 @@ class FrmAddon {
 	/**
 	 * If the license is in the config, limit the frequency of checks.
 	 * The license may be entered incorrectly, so we don't want to check on every page load.
+	 *
 	 * @since 2.04
 	 */
 	private function is_time_to_auto_activate() {
 		$last_try = get_option( $this->option_name . 'last_activate' );
+
 		return ( ! $last_try || $last_try < strtotime( '-1 day' ) );
 	}
 
@@ -206,6 +217,7 @@ class FrmAddon {
 
 	/**
 	 * @since 3.04.03
+	 *
 	 * @param array error
 	 */
 	public function maybe_clear_license( $error ) {
@@ -233,7 +245,12 @@ class FrmAddon {
 	 */
 	protected function delete_cache() {
 		delete_transient( 'frm_api_licence' );
-		delete_option( FrmAddonsController::get_cache_key( $this->license ) );
+
+		$api = new FrmFormApi( $this->license );
+		$api->reset_cached();
+
+		$api = new FrmFormTemplateApi( $this->license );
+		$api->reset_cached();
 	}
 
 	/**
@@ -255,9 +272,10 @@ class FrmAddon {
 		$message = '';
 		if ( empty( $this->license ) ) {
 			/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
-			$message = sprintf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=licenses_settings' ) ) . '">', '</a>' );
+			$message = sprintf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">', '</a>' );
 		} else {
-			$errors = FrmAddonsController::error_for_license( $this->license );
+			$api    = new FrmFormApi( $this->license );
+			$errors = $api->error_for_license();
 			if ( ! empty( $errors ) ) {
 				$message = reset( $errors );
 			}
@@ -268,7 +286,8 @@ class FrmAddon {
 		}
 
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-		$id = sanitize_title( $plugin['Name'] ) . '-next';
+		$id            = sanitize_title( $plugin['Name'] ) . '-next';
+
 		echo '<tr class="plugin-update-tr active" id="' . esc_attr( $id ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice error inline notice-error notice-alt"><p>';
 		echo FrmAppHelper::kses( $message, 'a' ); // WPCS: XSS ok.
 		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '").previousSibling;if ( d !== null ){ d.className = d.className + " update"; }</script>';
@@ -305,6 +324,7 @@ class FrmAddon {
 	 * Check if the plugin information is correct to allow an update
 	 *
 	 * @since 3.04.03
+	 *
 	 * @param object $transient - the current plugin info saved for update
 	 */
 	private function prepare_update_details( &$transient ) {
@@ -320,7 +340,6 @@ class FrmAddon {
 				$transient = false;
 			} else {
 				$this->maybe_use_beta_url( $version_info );
-				$version_info->new_version = trim( $version_info->new_version, 'p' );
 
 				if ( version_compare( $version_info->new_version, $this->version, '>' ) ) {
 					$transient = $version_info;
@@ -335,8 +354,8 @@ class FrmAddon {
 	 * @since 3.04.03
 	 */
 	protected function get_api_info( $license ) {
-		$addons = FrmAddonsController::get_addon_info( $license );
-		$addon  = FrmAddonsController::get_addon_for_license( $addons, $this );
+		$api   = new FrmFormApi( $license );
+		$addon = $api->get_addon_for_license( $this );
 
 		// if there is no download url, this license does not apply to the addon
 		if ( isset( $addon['package'] ) ) {
@@ -351,7 +370,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * make sure transients don't stick around on sites that
+	 * Make sure transients don't stick around on sites that
 	 * don't save the transient expiration
 	 *
 	 * @since 2.05.05
@@ -360,7 +379,8 @@ class FrmAddon {
 		$timeout = ( isset( $version_info->timeout ) && ! empty( $version_info->timeout ) ) ? $version_info->timeout : 0;
 		if ( ! empty( $timeout ) && time() > $timeout ) {
 			$version_info = false; // Cache is expired
-			FrmAddonsController::reset_cached_addons( $this->license );
+			$api          = new FrmFormApi( $this->license );
+			$api->reset_cached();
 		}
 	}
 
@@ -375,7 +395,7 @@ class FrmAddon {
 			$version_info->new_version = $version_info->beta['version'];
 			$version_info->package     = $version_info->beta['package'];
 			if ( isset( $version_info->plugin ) && ! empty( $version_info->plugin ) ) {
-				$version_info->plugin  = $version_info->beta['plugin'];
+				$version_info->plugin = $version_info->beta['plugin'];
 			}
 		}
 	}
@@ -395,11 +415,12 @@ class FrmAddon {
 
 	private function has_been_cleared() {
 		$last_cleared = get_option( 'frm_last_cleared' );
-		return ( $last_cleared && $last_cleared > date( 'Y-m-d H:i:s', strtotime( '-5 minutes' ) ) );
+
+		return ( $last_cleared && $last_cleared > gmdate( 'Y-m-d H:i:s', strtotime( '-5 minutes' ) ) );
 	}
 
 	private function cleared_plugins() {
-		update_option( 'frm_last_cleared', date( 'Y-m-d H:i:s' ) );
+		update_option( 'frm_last_cleared', gmdate( 'Y-m-d H:i:s' ) );
 	}
 
 	private function is_license_revoked() {
@@ -413,14 +434,14 @@ class FrmAddon {
 			$last_checked = get_option( $this->transient_key() );
 		}
 
-		$seven_days_ago = date( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
+		$seven_days_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
 
 		if ( ! $last_checked || $last_checked < $seven_days_ago ) {
 			// check weekly
 			if ( is_multisite() ) {
-				update_site_option( $this->transient_key(), date( 'Y-m-d H:i:s' ) );
+				update_site_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
 			} else {
-				update_option( $this->transient_key(), date( 'Y-m-d H:i:s' ) );
+				update_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
 			}
 
 			$response = $this->get_license_status();
@@ -430,6 +451,9 @@ class FrmAddon {
 		}
 	}
 
+	/**
+	 * Use a new cache after the license is changed, or Formidable is updated.
+	 */
 	private function transient_key() {
 		return 'frm_' . md5( sanitize_key( $this->license . '_' . $this->plugin_slug ) );
 	}
@@ -438,7 +462,8 @@ class FrmAddon {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		if ( ! isset( $_POST['license'] ) || empty( $_POST['license'] ) ) {
+		$license = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) );
+		if ( empty( $license ) ) {
 			wp_die(
 				json_encode(
 					array(
@@ -449,20 +474,26 @@ class FrmAddon {
 			);
 		}
 
-		$license = stripslashes( sanitize_text_field( $_POST['license'] ) );
-		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
-		$this_plugin = self::get_addon( $plugin_slug );
-		$response = $this_plugin->activate_license( $license );
+		$plugin_slug = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
+		$response    = self::activate_license_for_plugin( $license, $plugin_slug );
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	public static function activate_license_for_plugin( $license, $plugin_slug ) {
+		$this_plugin = self::get_addon( $plugin_slug );
+		return $this_plugin->activate_license( $license );
 	}
 
 	private function activate_license( $license ) {
 		$this->set_license( $license );
 		$this->license = $license;
 
-		$response = $this->get_license_status();
+		$response            = $this->get_license_status();
 		$response['message'] = '';
 		$response['success'] = false;
 
@@ -478,7 +509,7 @@ class FrmAddon {
 
 			$is_valid = false;
 			if ( 'valid' === $response['status'] ) {
-				$is_valid = 'valid';
+				$is_valid            = 'valid';
 				$response['success'] = true;
 			}
 			$this->set_active( $is_valid );
@@ -494,12 +525,13 @@ class FrmAddon {
 		);
 		if ( empty( $this->license ) ) {
 			$response['error'] = false;
+
 			return $response;
 		}
 
 		try {
 			$response['error'] = false;
-			$license_data = $this->send_mothership_request( 'activate_license' );
+			$license_data      = $this->send_mothership_request( 'activate_license' );
 
 			// $license_data->license will be either "valid" or "invalid"
 			if ( is_array( $license_data ) ) {
@@ -518,24 +550,40 @@ class FrmAddon {
 
 	private function get_messages() {
 		return array(
-			'valid'   => __( 'Your license has been activated. Enjoy!', 'formidable' ),
-			'invalid' => __( 'That license key is invalid', 'formidable' ),
-			'expired' => __( 'That license is expired', 'formidable' ),
-			'revoked' => __( 'That license has been refunded', 'formidable' ),
+			'valid'               => __( 'Your license has been activated. Enjoy!', 'formidable' ),
+			'invalid'             => __( 'That license key is invalid', 'formidable' ),
+			'expired'             => __( 'That license is expired', 'formidable' ),
+			'revoked'             => __( 'That license has been refunded', 'formidable' ),
 			'no_activations_left' => __( 'That license has been used on too many sites', 'formidable' ),
-			'invalid_item_id' => __( 'Oops! That is the wrong license key for this plugin.', 'formidable' ),
-			'missing' => __( 'That license key is invalid', 'formidable' ),
+			'invalid_item_id'     => __( 'Oops! That is the wrong license key for this plugin.', 'formidable' ),
+			'missing'             => __( 'That license key is invalid', 'formidable' ),
 		);
+	}
+
+	/**
+	 * @since 4.03
+	 */
+	public static function reset_cache() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$this_plugin = self::set_license_from_post();
+		$this_plugin->delete_cache();
+
+		$response = array(
+			'success' => true,
+			'message' => __( 'Cache cleared', 'formidable' ),
+		);
+
+		echo json_encode( $response );
+		wp_die();
 	}
 
 	public static function deactivate() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$plugin_slug = sanitize_text_field( $_POST['plugin'] );
-		$this_plugin = self::get_addon( $plugin_slug );
-		$license = $this_plugin->get_license();
-		$this_plugin->license = $license;
+		$this_plugin = self::set_license_from_post();
 
 		$response = array(
 			'success' => false,
@@ -560,6 +608,17 @@ class FrmAddon {
 		wp_die();
 	}
 
+	/**
+	 * @since 4.03
+	 */
+	private static function set_license_from_post() {
+		$plugin_slug          = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
+		$this_plugin          = self::get_addon( $plugin_slug );
+		$license              = $this_plugin->get_license();
+		$this_plugin->license = $license;
+		return $this_plugin;
+	}
+
 	public function send_mothership_request( $action ) {
 		$api_params = array(
 			'edd_action' => $action,
@@ -573,8 +632,8 @@ class FrmAddon {
 		}
 
 		$arg_array = array(
-			'body'      => $api_params,
-			'timeout'   => 25,
+			'body'       => $api_params,
+			'timeout'    => 25,
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
 

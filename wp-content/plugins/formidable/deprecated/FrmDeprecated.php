@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * Class FrmDeprecated
@@ -13,6 +16,64 @@ class FrmDeprecated {
 	 */
 	public static function deprecated( $function, $version ) {
 		_deprecated_function( $function, $version );
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function new_form( $values = array() ) {
+		_deprecated_function( __FUNCTION__, '4.0', 'FrmFormsController::edit' );
+
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+
+		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+		$action = empty( $values ) ? FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' ) : $values[ $action ];
+
+		if ( $action === 'create' ) {
+			FrmFormsController::update( $values );
+			return;
+		}
+
+		$values = FrmFormsHelper::setup_new_vars( $values );
+		$id   = FrmForm::create( $values );
+		$values['id'] = $id;
+
+		FrmFormsController::edit( $values );
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function update_order() {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$fields = FrmAppHelper::get_post_param( 'frm_field_id' );
+		foreach ( (array) $fields as $position => $item ) {
+			FrmField::update( absint( $item ), array( 'field_order' => absint( $position ) ) );
+		}
+		wp_die();
+	}
+
+	/**
+	 * @deprecated 4.0
+	 * @param array $values - The form array
+	 */
+	public static function builder_submit_button( $values ) {
+		_deprecated_function( __FUNCTION__, '4.0' );
+		$page_action = FrmAppHelper::get_param( 'frm_action' );
+		$label = ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
+
+		?>
+		<div class="postbox">
+			<p class="inside">
+				<button class="frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
+					<?php echo esc_html( $label ); ?>
+				</button>
+			</p>
+		</div>
+		<?php
 	}
 
 	/**
@@ -92,6 +153,73 @@ class FrmDeprecated {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @codeCoverageIgnore
+	 */
+	public static function get_pro_updater() {
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_pro_updater' );
+		$api = new FrmFormApi();
+		return $api->get_pro_updater();
+	}
+
+	/**
+	 * @since 4.06.02
+	 * @deprecated 4.09.01
+	 * @codeCoverageIgnore
+	 */
+	public static function ajax_multiple_addons() {
+		_deprecated_function( __FUNCTION__, '4.09.01', 'FrmProAddonsController::' . __METHOD__ );
+		echo json_encode( __( 'Your plugin has been not been installed. Please update Formidable Pro to get downloads.', 'formidable' ) );
+		wp_die();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @codeCoverageIgnore
+	 * @return array
+	 */
+	public static function error_for_license( $license ) {
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::error_for_license' );
+		$api = new FrmFormApi( $license );
+		return $api->error_for_license();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 */
+	public static function reset_cached_addons( $license = '' ) {
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::reset_cached' );
+		$api = new FrmFormApi( $license );
+		$api->reset_cached();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @return string
+	 */
+	public static function get_cache_key( $license ) {
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_cache_key' );
+		$api = new FrmFormApi( $license );
+		return $api->get_cache_key();
+	}
+
+	/**
+	 * @since 3.04.03
+	 * @deprecated 3.06
+	 * @codeCoverageIgnore
+	 * @return array
+	 */
+	public static function get_addon_info( $license = '' ) {
+		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_api_info' );
+		$api = new FrmFormApi( $license );
+		return $api->get_api_info();
 	}
 
 	/**
@@ -358,9 +486,6 @@ class FrmDeprecated {
 			$values['form_key'] = $filename;
 			$values['is_template'] = $template;
 			$values['status'] = 'published';
-			if ( $default ) {
-				$values['default_template'] = 1;
-			}
 
 			include( $templates[ $i ] );
 

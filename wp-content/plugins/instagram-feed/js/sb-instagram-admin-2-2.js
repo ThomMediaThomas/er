@@ -1,7 +1,14 @@
 jQuery(document).ready(function($) {
 
+    //Close the modal if clicking anywhere outside it
+    jQuery('body').on('click', '.sb_cross_install_modal', function(e){
+        if (e.target !== this) return;
+        jQuery('.sb_cross_install_modal').remove();
+    });
+
+    jQuery('#sbi_no_js_warning').remove();
     /* NEW API CODE */
-    $('.sbi_admin_btn, .sbi_reconnect').click(function(event) {
+    $('.sbi_admin_btn, .sbi_reconnect').on('click',function(event) {
         event.preventDefault();
 
         var today = new Date(),
@@ -36,10 +43,14 @@ jQuery(document).ready(function($) {
             '</div>');
 
         $('.sbi_modal_close').on('click', function(){
-            $('#sbi_config_info').remove();
+            if (jQuery('.sbi-need-to-connect').length) {
+                $('#sbi_config_info').hide();
+            } else {
+                $('#sbi_config_info').remove();
+            }
         });
 
-        $('input[name=sbi_login_type]').change(function() {
+        $('input[name=sbi_login_type]').on('change',function() {
             if ($('input[name=sbi_login_type]:checked').val() === 'business') {
                 $('a.sbi_admin_btn').attr('href',newApiURL);
             } else {
@@ -52,68 +63,70 @@ jQuery(document).ready(function($) {
         $('#sbi_config').append($('#sbi_config_info'));
     }
 
-    $('#sbi-select-all').change(function() {
+    $('#sbi-select-all').on('change',function() {
         var status = $(this).is(':checked');
         $('.sbi-add-checkbox input').each(function() {
-            $(this).attr('checked',status);
+            $(this).prop('checked',status);
         });
         if($('.sbi-add-checkbox input:checked').length) {
-            $('#sbi-connect-business-accounts').removeAttr('disabled');
+            $('#sbi-connect-business-accounts').prop('disabled',false);
         } else {
-            $('#sbi-connect-business-accounts').attr('disabled',true);
+            $('#sbi-connect-business-accounts').prop('disabled',true);
         }
     });
 
-    $('.sbi-add-checkbox input').change(function() {
+    $('.sbi-add-checkbox input').on('change',function() {
         if($('.sbi-add-checkbox input:checked').length) {
-            $('#sbi-connect-business-accounts').removeAttr('disabled');
+            $('#sbi-connect-business-accounts').prop('disabled',false);
         } else {
-            $('#sbi-connect-business-accounts').attr('disabled',true);
+            $('#sbi-connect-business-accounts').prop('disabled',true);
         }
     });
 
-    $('#sbi-connect-business-accounts').click(function(event) {
-        if(typeof $(this).attr('disabled') === 'undefined') {
-            event.preventDefault();
-            var accounts = {};
-            $('.sbi-add-checkbox input').each(function(index) {
-                if ($(this).is(':checked')) {
-                    var jsonSubmit = JSON.parse($(this).val());
-                    jsonSubmit.access_token = $(this).closest('.sbi-managed-page').attr('data-token');
-                    jsonSubmit.page_access_token = $(this).closest('.sbi-managed-page').attr('data-page-token');
-                    accounts[index] = jsonSubmit;
+    $('#sbi-connect-business-accounts').on('click',function(event) {
+        event.preventDefault();
+        var accounts = {};
+        $('.sbi-add-checkbox input').each(function(index) {
+            if ($(this).is(':checked')) {
+                var jsonSubmit = JSON.parse($(this).val());
+                jsonSubmit.access_token = $(this).closest('.sbi-managed-page').attr('data-token');
+                jsonSubmit.page_access_token = $(this).closest('.sbi-managed-page').attr('data-page-token');
+                accounts[index] = jsonSubmit;
+            }
+        });
+
+        $('.sbi_connected_accounts_wrap,#sbi_config_info').fadeTo("slow" , 0.5);
+        jQuery.ajax({
+            url: sbiA.ajax_url,
+            type: 'post',
+            data: {
+                action: 'sbi_connect_business_accounts',
+                accounts: JSON.stringify(accounts),
+                sbi_nonce: sbiA.sbi_nonce
+            },
+            success: function (data) {
+                if (data.trim().indexOf('{') === 0) {
+                    var connectedAccounts = JSON.parse(data);
+                    $('.sbi_connected_accounts_wrap').fadeTo("slow" , 1);
+                    $('#sbi_config_info').remove();
+                    $.each(connectedAccounts,function(index,savedToken) {
+                        console.log(savedToken);
+                        sbiAfterUpdateToken(savedToken,false);
+
+                    });
                 }
-            });
 
-            $('.sbi_connected_accounts_wrap,#sbi_config_info').fadeTo("slow" , 0.5);
-            jQuery.ajax({
-                url: sbiA.ajax_url,
-                type: 'post',
-                data: {
-                    action: 'sbi_connect_business_accounts',
-                    accounts: JSON.stringify(accounts),
-                    sbi_nonce: sbiA.sbi_nonce
-                },
-                success: function (data) {
-                    if (data.trim().indexOf('{') === 0) {
-                        var connectedAccounts = JSON.parse(data);
-                        $('.sbi_connected_accounts_wrap').fadeTo("slow" , 1);
-                        $('#sbi_config_info').remove();
-                        $.each(connectedAccounts,function(index,savedToken) {
-                            console.log(savedToken);
-                            sbiAfterUpdateToken(savedToken,false);
-
-                        });
-                    }
-
-                }
-            });
-        }
+            }
+        });
 
     });
 
     $('.sbi_modal_close').on('click', function(){
-        $('#sbi_config_info').remove();
+        if (jQuery('.sbi-need-to-connect').length) {
+            $('#sbi_config_info').hide();
+        } else {
+            $('#sbi_config_info').remove();
+        }
     });
     /* NEW API CODE */
     //Autofill the token and id
@@ -157,7 +170,7 @@ jQuery(document).ready(function($) {
                                 '</div>' +
                                 '</div>');
 
-                            $('#sbi_connect_account').click(function(event) {
+                            $('#sbi_connect_account').on('click',function(event) {
                                 event.preventDefault();
                                 $('#sbi_config_info').fadeOut(200);
                                 sbSaveToken(token,false);
@@ -225,6 +238,7 @@ jQuery(document).ready(function($) {
     }
 
     function sbiAfterUpdateToken(savedToken,saveID){
+        $('.sbi_no_accounts').remove();
         if (saveID) {
             sbSaveID(savedToken.user_id);
             $('.sbi_user_feed_ids_wrap').prepend(
@@ -267,7 +281,7 @@ jQuery(document).ready(function($) {
                     $('#sbi_connected_account_'+savedToken.user_id + ' .sbi_ca_username').prepend('<img class="sbi_ca_avatar" src="'+savedToken.profile_picture+'">');
                 }
             }
-            $('#sbi_connected_account_'+savedToken.user_id + ' .sbi_ca_username').find('span').text(sbiAccountType(savedToken.type));
+            $('#sbi_connected_account_'+savedToken.user_id + ' .sbi_ca_username').find('span').text(sbiAccountType(savedToken.type,false));
 
             $('#sbi_connected_account_'+savedToken.user_id).find('.sbi_ca_accesstoken .sbi_ca_token').text(savedToken.access_token);
             $('#sbi_connected_account_'+savedToken.user_id).find('.sbi_tooltip code').text('[instagram-feed accesstoken="'+savedToken.access_token+'"]');
@@ -280,6 +294,7 @@ jQuery(document).ready(function($) {
             } else {
                 var accountType = 'personal';
             }
+            var isPrivate = (typeof savedToken.private !== 'undefined');
 
             var avatarHTML = '';
             if (savedToken.profile_picture !== '') {
@@ -298,7 +313,7 @@ jQuery(document).ready(function($) {
 
                     '<div class="sbi_ca_username">'+
                     avatarHTML+
-                    '<strong>'+savedToken.username+'<span>'+sbiAccountType(accountType)+'</span></strong>'+
+                    '<strong>'+savedToken.username+'<span>'+sbiAccountType(accountType,isPrivate)+'</span></strong>'+
                     '</div>'+
 
                     '<div class="sbi_ca_actions">'+
@@ -357,9 +372,13 @@ jQuery(document).ready(function($) {
         });
     }
 
-    function sbiAccountType(accountType) {
+    function sbiAccountType(accountType,isPrivate) {
         if (accountType === 'basic') {
-            return 'personal (new API)';
+            var returnText = 'personal';
+            if (isPrivate) {
+                returnText += ' (private)'
+            }
+            return returnText;
         }
         return accountType;
     }
@@ -388,7 +407,7 @@ jQuery(document).ready(function($) {
     }
 
     $('.sbi_manually_connect_wrap').hide();
-    $('.sbi_manually_connect').click(function(event) {
+    $('.sbi_manually_connect').on('click',function(event) {
         event.preventDefault();
         if ( $('.sbi_manually_connect_wrap').is(':visible') ) {
             $('.sbi_manually_connect_wrap').slideUp(200);
@@ -438,7 +457,8 @@ jQuery(document).ready(function($) {
     });
 
     function sbiInitClickRemove(el) {
-        el.click(function() {
+        el.on('click',function(event) {
+            event.preventDefault();
             if (!$(this).closest('.sbi_connected_accounts_wrap').hasClass('sbi-waiting')) {
                 $(this).closest('.sbi_connected_accounts_wrap').addClass('sbi-waiting');
                 var accessToken = $(this).closest('.sbi_connected_account').attr('data-accesstoken'),
@@ -479,7 +499,7 @@ jQuery(document).ready(function($) {
     });
 
     function sbiInitUserRemove(el,targetClass) {
-        el.click(function(event) {
+        el.on('click',function(event) {
             event.preventDefault();
             targetClass = $('input[name=sb_instagram_type]:checked').val();
 
@@ -499,7 +519,7 @@ jQuery(document).ready(function($) {
     });
 
     function sbiInitUserAdd(el,targetClass) {
-        el.click(function(event) {
+        el.on('click',function(event) {
             targetClass = $('input[name=sb_instagram_type]:checked').val();
             event.preventDefault();
             var $clicked = $(this),
@@ -537,7 +557,7 @@ jQuery(document).ready(function($) {
                 permissions = $(this).attr('data-permissions'),
                 $addRemoveButton = $(this).find('.sbi_ca_actions .button-primary').first();
             $(this).removeClass('sbi_account_updated');
-            $addRemoveButton.removeAttr('disabled');
+            $addRemoveButton.prop('disabled',false);
 
             if (targetClass === 'tagged' && (type === 'personal' || permissions !== 'tagged')) {
                 $addRemoveButton.show();
@@ -546,11 +566,11 @@ jQuery(document).ready(function($) {
                 } else {
                     $addRemoveButton.html('Reconnect Account');
                 }
-                $addRemoveButton.attr('disabled',true).addClass('sbi_remove_from_user_feed').removeClass('sbi_use_in_user_feed');
+                $addRemoveButton.prop('disabled',true).addClass('sbi_remove_from_user_feed').removeClass('sbi_use_in_user_feed');
                 $(this).removeClass('sbi_account_active');
             } else if (targetClass === 'hashtag') {
                 $addRemoveButton.hide();
-                $addRemoveButton.attr('disabled',true).addClass('sbi_remove_from_user_feed').removeClass('sbi_use_in_user_feed');
+                $addRemoveButton.prop('disabled',true).addClass('sbi_remove_from_user_feed').removeClass('sbi_use_in_user_feed');
                 $(this).removeClass('sbi_account_active');
             } else {
                 $addRemoveButton.show();
@@ -578,7 +598,7 @@ jQuery(document).ready(function($) {
         });
     }sbiConAccountsAddRemoveUpdater();
 
-    $('input[name=sb_instagram_type]').change(sbiConAccountsAddRemoveUpdater);
+    $('input[name=sb_instagram_type]').on('change',sbiConAccountsAddRemoveUpdater);
 
 
 
@@ -586,7 +606,7 @@ jQuery(document).ready(function($) {
         jQuery(this).closest('.sbi_ca_info').find('.sbi_ca_accesstoken').slideToggle(200);
     });
 
-    $('#sbi_manual_submit').click(function(event) {
+    $('#sbi_manual_submit').on('click',function(event) {
         event.preventDefault();
         var $self = $(this);
         var accessToken = $('#sb_manual_at').val(),
@@ -604,7 +624,7 @@ jQuery(document).ready(function($) {
                 $('.sbi_manually_connect_wrap').show().prepend('<div class="sbi_user_id_error" style="display:block;">Please enter a valid access token</div>');
             }
         } else if (! error) {
-            $(this).attr('disabled',true);
+            $(this).prop('disabled',true);
             $(this).closest('.sbi_manually_connect_wrap').fadeOut();
             $('.sbi_connected_accounts_wrap').fadeTo("slow" , 0.5).find('.sbi_user_id_error').remove();
 
@@ -619,7 +639,7 @@ jQuery(document).ready(function($) {
                 },
                 success: function (data) {
                     $('.sbi_connected_accounts_wrap').fadeTo("slow" , 1);
-                    $self.removeAttr('disabled');
+                    $self.prop('disabled',false);
                     if ( data.indexOf('{') > -1) {
                         var savedToken = JSON.parse(data);
                         if (typeof savedToken.url !== 'undefined') {
@@ -644,7 +664,7 @@ jQuery(document).ready(function($) {
     // clear resized
     var $sbiClearResizedButton = $('#sbi_reset_resized');
 
-    $sbiClearResizedButton.click(function(event) {
+    $sbiClearResizedButton.on('click',function(event) {
         event.preventDefault();
 
         jQuery('#sbi-clear-cache-success').remove();
@@ -676,7 +696,7 @@ jQuery(document).ready(function($) {
         jQuery('.sbi-caching-cron-options').show();
     }
 
-    $('input[type=radio][name=sbi_caching_type]').change(function() {
+    $('input[type=radio][name=sbi_caching_type]').on('change',function() {
         if (this.value == 'page') {
             jQuery('.sbi-caching-cron-options').slideUp();
             jQuery('.sbi-caching-page-options').slideDown();
@@ -695,7 +715,7 @@ jQuery(document).ready(function($) {
     //Should we show anything initially?
     if(sbi_cache_cron_interval == '30mins' || sbi_cache_cron_interval == '1hour') $sbi_caching_time_settings.hide();
 
-    jQuery('#sbi_cache_cron_interval').change(function(){
+    jQuery('#sbi_cache_cron_interval').on('change',function(){
         sbi_cache_cron_interval = jQuery('#sbi_cache_cron_interval').val();
 
         if(sbi_cache_cron_interval == '30mins' || sbi_cache_cron_interval == '1hour'){
@@ -714,7 +734,7 @@ jQuery(document).ready(function($) {
 
 
     //clear backup caches
-    jQuery('#sbi_clear_backups').click(function(event) {
+    jQuery('#sbi_clear_backups').on('click',function(event) {
         jQuery('.sbi-success').remove();
         event.preventDefault();
         jQuery.ajax({
@@ -735,7 +755,7 @@ jQuery(document).ready(function($) {
     //sbi_reset_log
     var $sbiClearLog = $('#sbi_reset_log');
 
-    $sbiClearLog.click(function(event) {
+    $sbiClearLog.on('click',function(event) {
         event.preventDefault();
 
         jQuery('#sbi-clear-cache-success').remove();
@@ -758,7 +778,7 @@ jQuery(document).ready(function($) {
         }); // ajax call
     }); // clear_comment_cache click
 
-    $('.sb-opt-in').click(function(event) {
+    $('.sb-opt-in').on('click',function(event) {
         event.preventDefault();
 
         var $btn = jQuery(this);
@@ -767,7 +787,23 @@ jQuery(document).ready(function($) {
         sbiSubmitOptIn(true);
     }); // clear_comment_cache click
 
-    $('.sb-no-usage-opt-out').click(function(event) {
+    jQuery('#sbi-oembed-disable').on('click',function(e) {
+        e.preventDefault();
+        jQuery(this).addClass( 'loading' ).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+        jQuery.ajax({
+            url : sbiA.ajax_url,
+            type: 'post',
+            data: {
+                action : 'sbi_oembed_disable',
+                sbi_nonce : sbiA.sbi_nonce,
+            },
+            success: function (data) {
+                jQuery('#sbi-oembed-disable').closest('p').html(data);
+            }
+        });
+    });
+
+    $('.sb-no-usage-opt-out').on('click',function(event) {
         event.preventDefault();
 
         var $btn = jQuery(this);
@@ -790,130 +826,143 @@ jQuery(document).ready(function($) {
             }
         }); // ajax call
     }
-	
-	//Tooltips
+
+    //Tooltips
     jQuery('#sbi_admin').on('click', '.sbi_tooltip_link, .sbi_type_tooltip_link', function(){
         if( jQuery(this).hasClass('sbi_type_tooltip_link') ){
             jQuery(this).closest('.sbi_row').children('.sbi_tooltip').slideToggle();
         } else {
-            jQuery(this).siblings('.sbi_tooltip').slideToggle();
+            $el = jQuery(this);
+            if( jQuery(this).hasClass('sbi_tooltip_outside') ) $el = jQuery(this).parent();
+            $el.siblings('.sbi_tooltip').slideToggle();
         }
     });
 
-	//Shortcode labels
-	jQuery('#sbi_admin label').click(function(){
-    var $sbi_shortcode = jQuery(this).siblings('.sbi_shortcode');
-    if($sbi_shortcode.is(':visible')){
-      jQuery(this).siblings('.sbi_shortcode').css('display','none');
-    } else {
-      jQuery(this).siblings('.sbi_shortcode').css('display','block');
-    }  
-  });
-  jQuery('#sbi_admin label').hover(function(){
-    if( jQuery(this).siblings('.sbi_shortcode').length > 0 ){
-      jQuery(this).attr('title', 'Click for shortcode option').append('<code class="sbi_shortcode_symbol">[]</code>');
-    }
-  }, function(){
-    jQuery(this).find('.sbi_shortcode_symbol').remove();
-  });
+    //Shortcode labels
+    jQuery('#sbi_admin label').on('click',function(){
+        var $sbi_shortcode = jQuery(this).siblings('.sbi_shortcode');
+        var $el = jQuery(this).parent();
 
+        if($sbi_shortcode.is(':visible')){
+            $el.removeClass('sbi_shortcode_visible');
+            $el.find('.sbi_shortcode').css('display','none');
+        } else {
+            $el.addClass('sbi_shortcode_visible');
+            $el.find('.sbi_shortcode').css('display','block');
+        }
+    });
 
-  jQuery('#sbi_admin .sbi_lock').hover(function(){
-    jQuery(this).siblings('.sbi_pro_tooltip').show();
-  }, function(){
-    jQuery('.sbi_pro_tooltip').hide();
-  });
+    jQuery('#sbi_admin label').on('mouseenter mouseleave', function(e) {
+        switch(e.type) {
+            case 'mouseenter':
+                if( jQuery(this).siblings('.sbi_shortcode').length > 0 ){
+                    jQuery(this).attr('title', 'Click for shortcode option').append('<code class="sbi_shortcode_symbol">[]</code>');
+                }
+                break;
+            case 'mouseleave':
+                jQuery(this).find('.sbi_shortcode_symbol').remove();
+                break;
+        }
+    });
 
-  
+    jQuery('#sbi_admin .sbi_lock').on('mouseenter mouseleave', function(e) {
+        switch(e.type) {
+            case 'mouseenter':
+                jQuery(this).siblings('.sbi_pro_tooltip').show();
+                break;
+            case 'mouseleave':
+                jQuery('.sbi_pro_tooltip').hide();
+                break;
+        }
+    });
+    
+    //Add the color picker
+    if( jQuery('.sbi_colorpick').length > 0 ) jQuery('.sbi_colorpick').wpColorPicker();
 
+    //Check User ID is numeric
+    jQuery("#sb_instagram_user_id").on('change',function() {
 
-  //Add the color picker
-	if( jQuery('.sbi_colorpick').length > 0 ) jQuery('.sbi_colorpick').wpColorPicker();
+        var sbi_user_id = jQuery('#sb_instagram_user_id').val(),
+            $sbi_user_id_error = $(this).closest('td').find('.sbi_user_id_error'),
+            $sbi_other_user_error = $(this).closest('td').find('.sbi_other_user_error');
 
-	//Check User ID is numeric
-	jQuery("#sb_instagram_user_id").change(function() {
+        if (sbi_user_id.match(/[^0-9, _.-]/)) {
+            $sbi_user_id_error.fadeIn();
+        } else {
+            $sbi_user_id_error.fadeOut();
+        }
 
-		var sbi_user_id = jQuery('#sb_instagram_user_id').val(),
-			$sbi_user_id_error = $(this).closest('td').find('.sbi_user_id_error'),
-			$sbi_other_user_error = $(this).closest('td').find('.sbi_other_user_error');
+        //Check whether an ID from another account is being used
+        sbi_check_other_user_id(sbi_user_id, $sbi_other_user_error);
 
-		if (sbi_user_id.match(/[^0-9, _.-]/)) {
-  			$sbi_user_id_error.fadeIn();
-  		} else {
-  			$sbi_user_id_error.fadeOut();
-  		}
-
-  		//Check whether an ID from another account is being used
-  		sbi_check_other_user_id(sbi_user_id, $sbi_other_user_error);
-
-	});
-	function sbi_check_other_user_id(sbi_user_id, $sbi_other_user_error){
-		if (jQuery('#sb_instagram_at').length && jQuery('#sb_instagram_at').val() !== '' && sbi_user_id.length) {
+    });
+    function sbi_check_other_user_id(sbi_user_id, $sbi_other_user_error){
+        if (jQuery('#sb_instagram_at').length && jQuery('#sb_instagram_at').val() !== '' && sbi_user_id.length) {
             if(jQuery('#sb_instagram_at').val().indexOf(sbi_user_id) == -1 ){
                 $sbi_other_user_error.fadeIn();
             } else {
                 $sbi_other_user_error.fadeOut();
             }
-		}
-	}
-	//Check initially when settings load
-	sbi_check_other_user_id( jQuery('#sb_instagram_user_id').val(), $('td').find('.sbi_other_user_error') );
-
-	//Mobile width
-	var sb_instagram_feed_width = jQuery('#sbi_admin #sb_instagram_width').val(),
-			sb_instagram_width_unit = jQuery('#sbi_admin #sb_instagram_width_unit').val(),
-			$sb_instagram_width_options = jQuery('#sbi_admin #sb_instagram_width_options');
-
-	if (typeof sb_instagram_feed_width !== 'undefined') {
-
-		//Show initially if a width is set
-		if( (sb_instagram_feed_width.length > 1 && sb_instagram_width_unit == 'px') || (sb_instagram_feed_width !== '100' && sb_instagram_width_unit == '%') ) $sb_instagram_width_options.show();
-
-		jQuery('#sbi_admin #sb_instagram_width, #sbi_admin #sb_instagram_width_unit').change(function(){
-			sb_instagram_feed_width = jQuery('#sbi_admin #sb_instagram_width').val();
-			sb_instagram_width_unit = jQuery('#sbi_admin #sb_instagram_width_unit').val();
-
-			if( sb_instagram_feed_width.length < 2 || (sb_instagram_feed_width == '100' && sb_instagram_width_unit == '%') ) {
-				$sb_instagram_width_options.slideUp();			
-			} else {
-				$sb_instagram_width_options.slideDown();
-			}
-		});
-
-	}
-
-	//Scroll to hash for quick links
-  jQuery('#sbi_admin a').click(function() {
-    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-      var target = jQuery(this.hash);
-      target = target.length ? target : this.hash.slice(1);
-      if (target.length) {
-        jQuery('html,body').animate({
-          scrollTop: target.offset().top
-        }, 500);
-        return false;
-      }
+        }
     }
-  });
+    //Check initially when settings load
+    sbi_check_other_user_id( jQuery('#sb_instagram_user_id').val(), $('td').find('.sbi_other_user_error') );
 
-	//Support tab show video
-	jQuery('#sbi-play-support-video').on('click', function(e){
-		e.preventDefault();
-		jQuery('#sbi-support-video').show().attr('src', jQuery('#sbi-support-video').attr('src')+'&amp;autoplay=1' );
-	});
+    //Mobile width
+    var sb_instagram_feed_width = jQuery('#sbi_admin #sb_instagram_width').val(),
+        sb_instagram_width_unit = jQuery('#sbi_admin #sb_instagram_width_unit').val(),
+        $sb_instagram_width_options = jQuery('#sbi_admin #sb_instagram_width_options');
 
-	jQuery('#sbi_admin .sbi-show-pro').on('click', function(){
-		jQuery(this).parent().next('.sbi-pro-options').toggle();
-	});
+    if (typeof sb_instagram_feed_width !== 'undefined') {
 
-	/* Pro 3.0 JS */
+        //Show initially if a width is set
+        if( (sb_instagram_feed_width.length > 1 && sb_instagram_width_unit == 'px') || (sb_instagram_feed_width !== '100' && sb_instagram_width_unit == '%') ) $sb_instagram_width_options.show();
+
+        jQuery('#sbi_admin #sb_instagram_width, #sbi_admin #sb_instagram_width_unit').on('change',function(){
+            sb_instagram_feed_width = jQuery('#sbi_admin #sb_instagram_width').val();
+            sb_instagram_width_unit = jQuery('#sbi_admin #sb_instagram_width_unit').val();
+
+            if( sb_instagram_feed_width.length < 2 || (sb_instagram_feed_width == '100' && sb_instagram_width_unit == '%') ) {
+                $sb_instagram_width_options.slideUp();
+            } else {
+                $sb_instagram_width_options.slideDown();
+            }
+        });
+
+    }
+
+    //Scroll to hash for quick links
+    jQuery('#sbi_admin a').on('click',function() {
+        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+            var target = jQuery(this.hash);
+            target = target.length ? target : this.hash.slice(1);
+            if (target.length) {
+                jQuery('html,body').animate({
+                    scrollTop: target.offset().top
+                }, 500);
+                return false;
+            }
+        }
+    });
+
+    //Support tab show video
+    jQuery('#sbi-play-support-video').on('click', function(e){
+        e.preventDefault();
+        jQuery('#sbi-support-video').show().attr('src', jQuery('#sbi-support-video').attr('src')+'&amp;autoplay=1' );
+    });
+
+    jQuery('#sbi_admin .sbi-show-pro').on('click', function(){
+        jQuery(this).parent().next('.sbi-pro-options').toggle();
+    });
+
+    /* Pro 3.0 JS */
     function sbiUpdateLayoutTypeOptionsDisplay() {
         setTimeout(function(){
             jQuery('.sb_instagram_layout_settings').hide();
             jQuery('.sb_instagram_layout_settings.sbi_layout_type_'+jQuery('.sb_layout_type:checked').val()).show();
         }, 1);
     }
-    jQuery('.sb_layout_type').change(sbiUpdateLayoutTypeOptionsDisplay);
+    jQuery('.sb_layout_type').on('change',sbiUpdateLayoutTypeOptionsDisplay);
 
     jQuery('.sbi_close_options').on('click', function(){
         jQuery('.sb_instagram_layout_settings').hide();
@@ -933,7 +982,7 @@ jQuery(document).ready(function($) {
 
     }
     sbiUpdateHighlightOptionsDisplay();
-    jQuery('#sb_instagram_highlight_type').change(sbiUpdateHighlightOptionsDisplay);
+    jQuery('#sb_instagram_highlight_type').on('change',sbiUpdateHighlightOptionsDisplay);
 
     //sb_instagram_enable_email_report
     function sbiToggleEmail() {
@@ -943,7 +992,7 @@ jQuery(document).ready(function($) {
             jQuery('#sb_instagram_enable_email_report').closest('td').find('.sb_instagram_box').slideUp();
         }
     }sbiToggleEmail();
-    jQuery('#sb_instagram_enable_email_report').change(sbiToggleEmail);
+    jQuery('#sb_instagram_enable_email_report').on('change',sbiToggleEmail);
     if (jQuery('#sbi-goto').length) {
         jQuery('#sbi-goto').closest('tr').addClass('sbi-goto');
         $('html, body').animate({
@@ -965,15 +1014,15 @@ jQuery(document).ready(function($) {
     });
 
     //Selecting a post layout
-    jQuery('.sbi_layout_cell').click(function(){
+    jQuery('.sbi_layout_cell').on('click',function(){
         var $self = jQuery(this);
         $('.sb_layout_type').trigger('change');
-        $self.addClass('sbi_layout_selected').find('.sb_layout_type').attr('checked', 'checked');
+        $self.addClass('sbi_layout_selected').find('.sb_layout_type').prop('checked',true);
         $self.siblings().removeClass('sbi_layout_selected');
     });
 
     setTimeout( function() {
-        jQuery('.notice-dismiss').click(function() {
+        jQuery('.notice-dismiss').on('click',function() {
             if (jQuery(this).closest('.sbi-admin-notice').length) {
 
                 if (jQuery(this).closest('.sbi-admin-notice').find('.sbi-admin-error').length) {
@@ -1016,7 +1065,7 @@ jQuery(document).ready(function($) {
         jQuery('#sbi-notice-bar').show();
     }
 
-    jQuery('#sbi-notice-bar .dismiss').click(function(e) {
+    jQuery('#sbi-notice-bar .dismiss').on('click',function(e) {
         e.preventDefault();
         jQuery('#sbi-notice-bar').remove();
         jQuery.ajax({
@@ -1031,18 +1080,18 @@ jQuery(document).ready(function($) {
         });
     });
     /* removing padding */
-    if (jQuery('#sbi-admin-about').length) {
+    if (jQuery('#sbi-admin-about').length && ! jQuery('.sbi_more_plugins').length) {
         jQuery('#wpcontent').css('padding', 0);
     }
 
     /* Clear errors visit page */
     jQuery('.sbi-error-directions a').addClass('button button-primary');
-    jQuery('.sbi-error-directions.sbi-reconnect a').click(function(){
+    jQuery('.sbi-error-directions.sbi-reconnect a').on('click',function(){
         event.preventDefault();
         jQuery('.sbi_admin_btn').trigger('click');
     });
     jQuery('.sbi-clear-errors-visit-page').appendTo('.sbi-error-directions');
-    jQuery('.sbi-clear-errors-visit-page').click(function(event) {
+    jQuery('.sbi-clear-errors-visit-page').on('click',function(event) {
         event.preventDefault();
         var $btn = jQuery(this);
         $btn.prop( 'disabled', true ).addClass( 'loading' ).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
@@ -1060,7 +1109,71 @@ jQuery(document).ready(function($) {
             }
         }); // ajax call
     })
+
+    //Click event for other plugins in menu
+    $('.sbi_get_cff, .sbi_get_sbi, .sbi_get_ctf, .sbi_get_yt').parent().on('click', function(e){
+        e.preventDefault();
+
+        jQuery('.sb_cross_install_modal').remove();
+
+        $('#wpbody-content').prepend('<div class="sb_cross_install_modal"><div class="sb_cross_install_inner" id="sbi-admin-about"><div id="sbi-admin-addons"><div class="addons-container"><i class="fa fa-spinner fa-spin sbi-loader" aria-hidden="true"></i></div></div></div></div>');
+
+        var $self = $(this).find('span'),
+            sb_get_plugin = 'custom_twitter_feeds';
+
+        if( $self.hasClass('sbi_get_cff') ){
+            sb_get_plugin = 'custom_facebook_feed';
+        } else if( $self.hasClass('sbi_get_sbi') ){
+            sb_get_plugin = 'instagram_feed';
+        } else if( $self.hasClass('sbi_get_yt') ){
+            sb_get_plugin = 'feeds_for_youtube';
+        }
+
+        $get_plugins_url = sbiA.ajax_url.replace('admin-ajax.php', '');
+
+        //Get the quick install box from the about page
+        $('.sb_cross_install_modal .addons-container').load($get_plugins_url+'admin.php?page=sb-instagram-feed&tab=more #install_'+sb_get_plugin);
+    });
+
+    jQuery('.sbi-need-to-connect').on('click',function(e) {
+        e.preventDefault();
+
+        jQuery('#sbi_config_info').show();
+    });
+
+    jQuery('.sbi_show_gdpr_list').on('click', function(){
+        jQuery(this).closest('div').find('.sbi_gdpr_list').slideToggle();
+    });
+
+//Selecting a post style
+    jQuery('#sbi_gdpr_setting').on('change', function(){
+        sbiCheckGdprSetting( jQuery(this).val() );
+    });
+    function sbiCheckGdprSetting(option) {
+        if( option == 'yes' ){
+            jQuery('.sbi_gdpr_yes').show();
+            jQuery('.sbi_gdpr_no, .sbi_gdpr_auto').hide();
+        }
+        if( option == 'no' ){
+            jQuery('.sbi_gdpr_no').show();
+            jQuery('.sbi_gdpr_yes, .sbi_gdpr_auto').hide();
+        }
+        if( option == 'auto' ){
+            jQuery('.sbi_gdpr_auto').show();
+            jQuery('.sbi_gdpr_yes, .sbi_gdpr_no').hide();
+        }
+    }
+    sbiCheckGdprSetting();
+
+    // Locator
+    jQuery('.sbi-locator-more').on('click',function(e) {
+        e.preventDefault();
+        jQuery(this).closest('td').find('.sbi-full-wrap').show();
+        jQuery(this).closest('td').find('.sbi-condensed-wrap').hide();
+        jQuery(this).remove();
+    });
 });
+
 
 
 /* global smash_admin, jconfirm, wpCookies, Choices, List */
@@ -1132,7 +1245,9 @@ jQuery(document).ready(function($) {
                 }
 
                 // Display all addon boxes as the same height.
-                $( '.addon-item .details' ).matchHeight( { byrow: false, property: 'height' } );
+                if( $( '#sbi-admin-about.sbi-admin-wrap').length ){
+                    $( '#sbi-admin-about .addon-item .details' ).matchHeight( { byrow: false, property: 'height' } );
+                }
 
                 // Addons searching.
                 if ( $('#sbi-admin-addons-list').length ) {

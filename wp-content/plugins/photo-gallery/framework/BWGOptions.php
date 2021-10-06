@@ -11,10 +11,14 @@ class WD_BWG_Options {
   public $upload_thumb_width = 500;
   public $upload_thumb_height = 500;
   public $image_quality = 75;
+  public $lazyload_images = 0;
   public $preload_images = 1;
   public $preload_images_count = 10;
   public $show_hide_custom_post = 0;
+  public $noindex_custom_post = 1;
   public $show_hide_post_meta = 0;
+  public $tags_filter_and_or = 0;
+  public $gdpr_compliance = 0;
   public $save_ip = 1;
   public $image_right_click = 0;
   public $use_inline_stiles_and_scripts = 0;
@@ -22,6 +26,10 @@ class WD_BWG_Options {
   public $enable_wp_editor = 0;
   public $enable_seo = 1;
   public $read_metadata = 1;
+  public $auto_rotate = 0;
+  public $front_ajax = 0;
+  public $developer_mode = 0;
+  public $enable_date_parameter = 1;
 
   // Thumbnail
   public $thumb_width = 250;
@@ -40,6 +48,7 @@ class WD_BWG_Options {
   public $showthumbs_name = 0;
   public $show_gallery_description = 0;
   public $image_title_show_hover = 'hover';
+  public $show_thumb_description = 0;
   public $play_icon = 1;
   public $gallery_download = 0;
   public $ecommerce_icon_show_hover = 'none';
@@ -158,6 +167,8 @@ class WD_BWG_Options {
   public $carousel_play_pause_butt = 1;
   public $carousel_sort_by = 'order';
   public $carousel_order_by = 'asc';
+  public $carousel_show_gallery_title = 0;
+  public $carousel_show_gallery_description = 0;
   public $carousel_gallery_download = 0;
 
   // Album compact
@@ -169,7 +180,9 @@ class WD_BWG_Options {
   public $album_image_thumb_height = 140;
   public $album_enable_page = 1;
   public $albums_per_page = 30;
-  public $album_images_per_page = 30;
+  public $album_images_per_page = 30;  
+  public $compact_album_sort_by = 'order';
+  public $compact_album_order_by = 'asc';
   public $album_sort_by = 'order';
   public $album_order_by = 'asc';
   public $album_show_search_box = 0;
@@ -197,6 +210,8 @@ class WD_BWG_Options {
   public $album_masonry_enable_page = 1;
   public $albums_masonry_per_page = 30;
   public $album_masonry_images_per_page = 30;
+  public $masonry_album_sort_by = 'order';
+  public $masonry_album_order_by = 'asc';
   public $album_masonry_sort_by = 'order';
   public $album_masonry_order_by = 'asc';
   public $album_masonry_show_search_box = 0;
@@ -221,6 +236,8 @@ class WD_BWG_Options {
   public $album_extended_enable_page = 1;
   public $albums_extended_per_page = 30;
   public $album_extended_images_per_page = 30;
+  public $extended_album_sort_by = 'order';
+  public $extended_album_order_by = 'asc';
   public $album_extended_sort_by = 'order';
   public $album_extended_order_by = 'asc';
   public $album_extended_show_search_box = 0;
@@ -264,6 +281,7 @@ class WD_BWG_Options {
   public $autohide_lightbox_navigation = 0;
   public $popup_hit_counter = 0;
   public $popup_enable_rate = 0;
+  public $popup_enable_zoom = 0;
   public $popup_enable_fullsize_image = 0;
   public $popup_enable_download = 0;
   public $show_image_counts = 0;
@@ -272,7 +290,6 @@ class WD_BWG_Options {
   public $addthis_profile_id = '';
   public $popup_enable_facebook = 1;
   public $popup_enable_twitter = 1;
-  public $popup_enable_google = 1;
   public $popup_enable_pinterest = 0;
   public $popup_enable_tumblr = 0;
   public $popup_enable_ecommerce = 1;
@@ -280,12 +297,19 @@ class WD_BWG_Options {
   // Advanced
   public $autoupdate_interval = 30;
   public $instagram_access_token = '';
+  public $instagram_access_token_start_in = '';
+  public $instagram_access_token_expires_in = '';
+  public $instagram_user_id = '';
+  public $instagram_username = '';
   public $facebook_app_id = '';
   public $facebook_app_secret = '';
   public $permissions = 'manage_options';
   public $gallery_role = 0;
   public $album_role = 0;
   public $image_role = 0;
+  public $tag_role = 0;
+  public $theme_role = 0;
+  public $settings_role = 0;
 
   public $watermark_type = 'none';
   public $watermark_position = 'bottom-left';
@@ -324,16 +348,19 @@ class WD_BWG_Options {
         }
       }
     }
-
     if ( $this->images_directory === 'wp-content/uploads' ) {
       // If images directory has not been changed by user.
       $upload_dir = wp_upload_dir();
       $this->upload_dir = $upload_dir['basedir'] . '/photo-gallery';
       $this->upload_url = $upload_dir['baseurl'] . '/photo-gallery';
+      if ( is_ssl() ) {
+        $this->upload_url = str_replace('http://', 'https://', $this->upload_url);
+      }
     }
     else {
       // For old users, who have changed images directory.
-      $this->upload_dir = ABSPATH . '/' . $this->images_directory . '/photo-gallery';
+      // Using ABSPATH here instead of BWG()->abspath to avoid memory leak.
+      $this->upload_dir = BWG::get_abspath() . '/' . $this->images_directory . '/photo-gallery';
       $this->upload_url = site_url() . '/' . $this->images_directory . '/photo-gallery';
     }
 
@@ -354,5 +381,22 @@ class WD_BWG_Options {
 
     $this->jpeg_quality = $this->image_quality;
     $this->png_quality = 9 - round(9 * $this->image_quality / 100);
+
+    // Will access_token refresh in the last 30 dey.
+    if ( !empty( $this->instagram_access_token ) && !empty( $this->instagram_access_token_start_in ) && !empty( $this->instagram_access_token_expires_in ) ) {
+      $expires_time = $this->instagram_access_token_start_in + $this->instagram_access_token_expires_in - (30 * 24 * 60 * 60);
+      if ( time() >= $expires_time ) {
+        $instagram_access_token = WDWLibrary::refresh_instagram_access_token( $this->instagram_access_token, $this );
+        if ( isset( $instagram_access_token['access_token'] ) ) {
+          $this->instagram_access_token = $instagram_access_token['access_token'];
+          $this->instagram_access_token_start_in = time();;
+          $this->instagram_access_token_expires_in = $instagram_access_token['expires_in'];
+        }
+      }
+    }
+  }
+
+  public function __get($name) {
+    return isset($this->$name) ? $this->$name : '';
   }
 }

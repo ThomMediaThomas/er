@@ -1,32 +1,18 @@
 /**
  * 10Web plugins Gutenberg integration
- * version 2.0.2
+ * version 2.0.6
  */
 ( function ( blocks, element ) {
-  if ( !window['tw_gb'] ) {
-    window['tw_gb'] = {};
-  }
-  if ( !window['tw_gb'][tw_obj_translate.key] ) {
-    window['tw_gb'][tw_obj_translate.key] = {
-      title: tw_obj_translate.plugin_name,
-      titleSelect: tw_obj_translate.select,
-      iconUrl: tw_obj_translate.icon_url,
-      iconSvg: {
-      width: '20',
-        height: '20',
-        src: tw_obj_translate.icon_svg
-      },
-      isPopup: true,
-        data: {
-        shortcodeUrl: tw_obj_translate.url
-      }
-    }
-  }
-
   registerAllPluginBlocks();
 
   function registerAllPluginBlocks() {
-    var twPluginsData = window['tw_gb'];
+    var twPluginsData = JSON.parse(tw_obj_translate.blocks);
+    for ( var pluginId in window['tw_gb'] ) {
+      if ( !window['tw_gb'].hasOwnProperty( pluginId ) ) {
+        continue;
+      }
+      twPluginsData[pluginId] = window['tw_gb'][pluginId];
+    }
     if ( !twPluginsData ) {
       return;
     }
@@ -121,10 +107,11 @@
               }
             }
           }
+          jQuery(".edit-post-layout, .edit-post-layout__content").css({"z-index":"99999","overflow":"visible"});
           var elem = el( 'form', { className: 'tw-container' }, el( 'div', { className: 'tw-container-wrap' + (pluginData.containerClass ? ' ' + pluginData.containerClass : '') }, el( 'span', {
             className: "media-modal-close",
             onClick: close
-          }, el( "span", { className: "media-modal-icon" } ) ), el( 'iframe', { src: pluginData.data.shortcodeUrl + '&callback=' + shortcodeCbName + '&edit=' + shortcode_id } ) ) );
+          }, el( "span", { className: "media-modal-icon" } ) ), el( 'iframe', { src: pluginData.data.shortcodeUrl + '&callback=' + shortcodeCbName + '&edit=' + shortcode_id + '&shortcode=' + shortcode} ) ) );
           return elem;
         }
 
@@ -175,12 +162,20 @@
         }
 
         function showShortcode() {
+          if(pluginData.title=="Photo Gallery"){
+            var iconWidth = 'auto';
+            var iconHeight = 'auto';
+          }
+          else {
+            var iconWidth = '36px';
+            var iconHeight = '36px';
+          }
           return el( 'img', {
             src: pluginData.iconUrl,
             alt: pluginData.title,
             style: {
-              'height': "36px",
-              'width': "36px"
+              'height': iconHeight,
+              'width': iconWidth
             },
             onClick: function () {
               props.setAttributes( { popupOpened: true } );
@@ -189,6 +184,7 @@
         }
 
         function close() {
+          jQuery(".edit-post-layout, .edit-post-layout__content").css({"z-index":"0","overflow":"auto"});
           props.setAttributes( { popupOpened: false } );
         }
 

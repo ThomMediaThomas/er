@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.03.04
@@ -85,7 +88,7 @@ class FrmEmail {
 		$to = $this->prepare_email_setting( $this->settings['email_to'], $user_id_args );
 		$to = $this->explode_emails( $to );
 
-		$where = array(
+		$where  = array(
 			'it.field_id !' => 0,
 			'it.item_id'    => $this->entry->id,
 		);
@@ -298,7 +301,7 @@ class FrmEmail {
 
 		// Add the user info if it isn't already included
 		if ( $this->include_user_info && $prev_mail_body === $mail_body ) {
-			$data = maybe_unserialize( $this->entry->description );
+			$data      = $this->entry->description;
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
 			$this->maybe_add_ip( $mail_body );
 			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntriesHelper::get_browser( $data['browser'] ) . "\r\n";
@@ -331,6 +334,7 @@ class FrmEmail {
 		$args = array(
 			'entry'     => $this->entry,
 			'email_key' => $this->email_key,
+			'settings'  => $this->settings,
 		);
 
 		$this->attachments = apply_filters( 'frm_notification_attachment', array(), $this->form, $args );
@@ -431,7 +435,9 @@ class FrmEmail {
 		$sent = wp_mail( $recipient, $subject, $this->message, $header, $this->attachments );
 
 		if ( ! $sent ) {
-			$header    = 'From: ' . $this->from . "\r\n";
+			if ( is_array( $header ) ) {
+				$header = implode( "\r\n", $header );
+			}
 			$recipient = implode( ',', (array) $recipient );
 			$sent      = mail( $recipient, $subject, $this->message, $header );
 		}
@@ -449,7 +455,7 @@ class FrmEmail {
 	 * @return array
 	 */
 	private function package_header() {
-		$header   = array();
+		$header = array();
 
 		if ( ! empty( $this->cc ) ) {
 			$header[] = 'CC: ' . implode( ',', $this->cc );
@@ -522,6 +528,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param string $emails
+	 *
 	 * @return array|string $emails
 	 */
 	private function explode_emails( $emails ) {
@@ -637,6 +644,7 @@ class FrmEmail {
 			$parts = explode( '<', $email );
 			$email = trim( $parts[1], '>' );
 		}
+
 		return $email;
 	}
 
@@ -671,6 +679,7 @@ class FrmEmail {
 		if ( '' !== $name ) {
 			$email = $name . ' <' . $email . '>';
 		}
+
 		return $email;
 	}
 
@@ -773,7 +782,7 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function encode_subject( $subject ) {
-		if ( apply_filters( 'frm_encode_subject', 1, $subject ) ) {
+		if ( apply_filters( 'frm_encode_subject', false, $subject ) ) {
 			$subject = '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
 		}
 

@@ -21,6 +21,9 @@ function wpml_plugins_integration_setup() {
 		$wpseo_filters->init_hooks();
 		$metabox_hooks = new WPML_WPSEO_Metabox_Hooks( new WPML_Debug_BackTrace( phpversion() ), $wpml_url_converter, $pagenow );
 		$metabox_hooks->add_hooks();
+
+		$categories = new WPML_Compatibility_Wordpress_Seo_Categories();
+		$categories->add_hooks();
 	}
 	if ( class_exists( 'bbPress' ) ) {
 		$wpml_bbpress_api     = new WPML_BBPress_API();
@@ -65,6 +68,11 @@ function wpml_plugins_integration_setup() {
 
 	if ( class_exists( 'Tiny_Plugin' ) ) {
 		$factories_to_load[] = 'WPML_Compatibility_Tiny_Compress_Images_Factory';
+	}
+
+	global $DISQUSVERSION;
+	if ( $DISQUSVERSION ) {
+		$factories_to_load[] = 'WPML_Compatibility_Disqus_Factory';
 	}
 
 	$action_filter_loader = new WPML_Action_Filter_Loader();

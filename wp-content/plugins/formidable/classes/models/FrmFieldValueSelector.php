@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * A class for the field value selector
@@ -35,7 +38,6 @@ class FrmFieldValueSelector {
 	 * @since 2.03.05
 	 */
 	protected $options = array();
-
 
 	/**
 	 * @var string
@@ -137,7 +139,7 @@ class FrmFieldValueSelector {
 	 * @since 2.03.05
 	 */
 	protected function set_options() {
-		$field_obj = FrmFieldFactory::get_field_object( $this->db_row );
+		$field_obj     = FrmFieldFactory::get_field_object( $this->db_row );
 		$this->options = $field_obj->get_options( array() );
 	}
 

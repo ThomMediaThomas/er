@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -10,12 +13,6 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $type = 'captcha';
-
-	/**
-	 * @var bool
-	 * @since 3.0
-	 */
-	protected $has_for_label = false;
 
 	/**
 	 * @return string
@@ -31,8 +28,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return array(
 			'required'      => false,
 			'invalid'       => true,
-			'default_blank' => false,
 			'captcha_size'  => true,
+			'default'       => false,
 		);
 	}
 
@@ -41,6 +38,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function new_field_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
+
 		return array(
 			'invalid' => $frm_settings->re_msg,
 		);
@@ -75,8 +73,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return '';
 		}
 
-		$class_prefix = $this->class_prefix();
-		$captcha_size = $this->captcha_size();
+		$class_prefix  = $this->class_prefix();
+		$captcha_size  = $this->captcha_size();
 		$allow_mutiple = $frm_settings->re_multi;
 
 		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . 'g-recaptcha" data-sitekey="' . esc_attr( $frm_settings->pubkey ) . '" data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
@@ -91,14 +89,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function load_field_scripts( $args ) {
 		$api_js_url = $this->api_url();
 
-		wp_register_script( 'recaptcha-api', $api_js_url, array( 'formidable' ), '', true );
+		wp_register_script( 'recaptcha-api', $api_js_url, array( 'formidable' ), '3', true );
 		wp_enqueue_script( 'recaptcha-api' );
 	}
 
 	protected function api_url() {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
-		$frm_settings = FrmAppHelper::get_settings();
+		$frm_settings  = FrmAppHelper::get_settings();
 		$allow_mutiple = $frm_settings->re_multi;
 		if ( $allow_mutiple ) {
 			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
@@ -118,11 +116,13 @@ class FrmFieldCaptcha extends FrmFieldType {
 		} else {
 			$class_prefix = '';
 		}
+
 		return $class_prefix;
 	}
 
 	protected function allow_multiple() {
 		$frm_settings = FrmAppHelper::get_settings();
+
 		return $frm_settings->re_multi;
 	}
 
@@ -130,63 +130,75 @@ class FrmFieldCaptcha extends FrmFieldType {
 		// for reverse compatibility
 		$frm_settings = FrmAppHelper::get_settings();
 		$captcha_size = ( $this->field['captcha_size'] == 'default' ) ? 'normal' : $this->field['captcha_size'];
+
 		return ( $frm_settings->re_type == 'invisible' ) ? 'invisible' : $captcha_size;
 	}
 
-	public function validate( $args ) {
-		$errors = array();
-
-		if ( ! $this->should_validate() ) {
-			return $errors;
-		}
-
-		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
-			// If captcha is missing, check if it was already verified
-			if ( ! isset( $_POST['recaptcha_checked'] ) || ! wp_verify_nonce( $_POST['recaptcha_checked'], 'frm_ajax' ) ) {
-				// There was no captcha submitted
-				$errors[ 'field' . $args['id'] ] = __( 'The captcha is missing from this form', 'formidable' );
-			}
-			return $errors;
-		}
-
+	/**
+	 * @since 4.07
+	 * @param array $args
+	 * @return array
+	 */
+	protected function validate_against_api( $args ) {
+		$errors       = array();
 		$frm_settings = FrmAppHelper::get_settings();
-
-		$resp = $this->send_api_check( $frm_settings );
-		$response = json_decode( wp_remote_retrieve_body( $resp ), true );
+		$resp         = $this->send_api_check( $frm_settings );
+		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
 
 		if ( isset( $response['success'] ) && ! $response['success'] ) {
 			// What happens when the CAPTCHA was entered incorrectly
-			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
+			$invalid_message                 = FrmField::get_option( $this->field, 'invalid' );
 			$errors[ 'field' . $args['id'] ] = ( $invalid_message == '' ? $frm_settings->re_msg : $invalid_message );
 		} elseif ( is_wp_error( $resp ) ) {
-			$error_string = $resp->get_error_message();
-			$errors[ 'field' . $args['id'] ] = __( 'There was a problem verifying your recaptcha', 'formidable' );
+			$error_string                     = $resp->get_error_message();
+			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your recaptcha', 'formidable' );
 			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
 		}
 
 		return $errors;
 	}
 
+	/**
+	 * @param array $args
+	 * @return array
+	 */
+	public function validate( $args ) {
+		if ( ! $this->should_validate() ) {
+			return array();
+		}
+
+		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
+			// There was no captcha submitted.
+			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
+		}
+
+		return $this->validate_against_api( $args );
+	}
+
+	/**
+	 * @since 4.07
+	 * @return bool
+	 */
+	private function should_show_captcha() {
+		$frm_settings = FrmAppHelper::get_settings();
+		return ! empty( $frm_settings->pubkey );
+	}
+
 	protected function should_validate() {
-		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, stripslashes_deep( $_POST ) ); // WPCS: CSRF ok.
+		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, wp_unslash( $_POST ) ); // WPCS: CSRF ok.
 		if ( FrmAppHelper::is_admin() || $is_hidden_field ) {
 			return false;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( empty( $frm_settings->pubkey ) ) {
-			// don't require the captcha if it shouldn't be shown
-			return false;
-		}
-
-		return true;
+		// don't require the captcha if it shouldn't be shown
+		return $this->should_show_captcha();
 	}
 
 	protected function send_api_check( $frm_settings ) {
 		$arg_array = array(
-			'body'      => array(
+			'body' => array(
 				'secret'   => $frm_settings->privkey,
-				'response' => $_POST['g-recaptcha-response'], // WPCS: CSRF ok.
+				'response' => FrmAppHelper::get_param( 'g-recaptcha-response', '', 'post', 'sanitize_text_field' ),
 				'remoteip' => FrmAppHelper::get_ip_address(),
 			),
 		);

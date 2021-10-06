@@ -186,16 +186,21 @@ if(!sbi_js_exists) {
                         }
                         var feedOptions = {
                             cols : $self.attr('data-cols'),
-                            colsmobile : $self.attr('data-colsmobile') !== 'same' ? $self.attr('data-colsmobile') : $self.attr('data-cols'),
+                            colsmobile : typeof $self.attr('data-colsmobile') !== 'undefined' && $self.attr('data-colsmobile') !== 'same' ? $self.attr('data-colsmobile') : $self.attr('data-cols'),
                             num : $self.attr('data-num'),
                             imgRes : $self.attr('data-res'),
                             feedID : $self.attr('data-feedid'),
+                            postID : typeof $self.attr( 'data-postid' ) !== 'undefind' ? $self.attr( 'data-postid' ) : 'unknown',
                             shortCodeAtts : $self.attr('data-shortcode-atts'),
                             resizingEnabled : (flags.indexOf('resizeDisable') === -1),
                             imageLoadEnabled : (flags.indexOf('imageLoadDisable') === -1),
                             debugEnabled : (flags.indexOf('debug') > -1),
                             favorLocal : (flags.indexOf('favorLocal') > -1),
                             ajaxPostLoad : (flags.indexOf('ajaxPostLoad') > -1),
+                            gdpr : (flags.indexOf('gdpr') > -1),
+                            overrideBlockCDN : (flags.indexOf('overrideBlockCDN') > -1),
+                            consentGiven : false,
+                            locator : (flags.indexOf('locator') > -1),
                             autoMinRes : 1,
                             general : general
                         };
@@ -215,10 +220,15 @@ if(!sbi_js_exists) {
                 // enable header hover action
                 $('.sb_instagram_header').each(function () {
                     var $thisHeader = $(this);
-                    $thisHeader.find('.sbi_header_link').hover(function () {
-                        $thisHeader.find('.sbi_header_img_hover').addClass('sbi_fade_in');
-                    }, function () {
-                        $thisHeader.find('.sbi_header_img_hover').removeClass('sbi_fade_in');
+                    $thisHeader.find('.sbi_header_link').on('mouseenter mouseleave', function(e) {
+                        switch(e.type) {
+                            case 'mouseenter':
+                                $thisHeader.find('.sbi_header_img_hover').addClass('sbi_fade_in');
+                                break;
+                            case 'mouseleave':
+                                $thisHeader.find('.sbi_header_img_hover').removeClass('sbi_fade_in');
+                                break;
+                        }
                     });
                 });
 
@@ -251,12 +261,17 @@ if(!sbi_js_exists) {
             this.resizedImages = {};
             this.needsResizing = [];
             this.outOfPages = false;
+            this.page = 1;
             this.isInitialized = false;
         }
 
         SbiFeed.prototype = {
             init: function() {
                 var feed = this;
+                feed.settings.consentGiven = feed.checkConsent();
+                if ($(this.el).find('.sbi_photo').parent('p').length) {
+                    $(this.el).addClass('sbi_no_autop');
+                }
                 if ($(this.el).find('#sbi_mod_error').length) {
                     $(this.el).prepend($(this.el).find('#sbi_mod_error'));
                 }
@@ -273,12 +288,15 @@ if(!sbi_js_exists) {
                         sbi_timer = setTimeout(sbi_callback, sbi_ms);
                     };
                 })();
-                jQuery(window).resize(function () {
+                jQuery(window).on('resize',function () {
                     sbi_delay(function () {
                         feed.afterResize();
                     }, 500);
                 });
 
+                $(this.el).find('.sbi_item').each(function() {
+                    feed.lazyLoadCheck($(this));
+                });
             },
             initLayout: function() {
 
@@ -336,13 +354,16 @@ if(!sbi_js_exists) {
                     var $self = jQuery(this);
 
                     //Photo links
-                    //If lightbox is disabled
-                    $self.find('.sbi_photo').hover(function () {
-                        jQuery(this).fadeTo(200, 0.85);
-                    }, function () {
-                        jQuery(this).stop().fadeTo(500, 1);
+                    $self.find('.sbi_photo').on('mouseenter mouseleave', function(e) {
+                        switch(e.type) {
+                            case 'mouseenter':
+                                jQuery(this).fadeTo(200, 0.85);
+                                break;
+                            case 'mouseleave':
+                                jQuery(this).stop().fadeTo(500, 1);
+                                break;
+                        }
                     });
-
                 }); //End .sbi_item each
 
                 //Remove the new class after 500ms, once the sorting is done
@@ -359,6 +380,40 @@ if(!sbi_js_exists) {
                         time += 10;
                     });
                 }, 500);
+            },
+            lazyLoadCheck: function($item){
+                var feed = this;
+                if ($item.find('.sbi_photo').length && !$item.closest('.sbi').hasClass('sbi-no-ll-check')) {
+                    var imgSrcSet = feed.getImageUrls($item),
+                        maxResImage = typeof imgSrcSet[640] !== 'undefined' ?  imgSrcSet[640] : $item.find('.sbi_photo').attr('data-full-res');
+
+                    if (!feed.settings.consentGiven) {
+                        if (maxResImage.indexOf('scontent') > -1) {
+                            return;
+                        }
+                    }
+
+                    $item.find('.sbi_photo img').each(function() {
+                        if (maxResImage && typeof $(this).attr('data-src') !== 'undefined') {
+                            $(this).attr('data-src',maxResImage);
+                        }
+                        if (maxResImage && typeof $(this).attr('data-orig-src') !== 'undefined') {
+                            $(this).attr('data-orig-src',maxResImage);
+                        }
+                        $(this).on('load',function() {
+                            if (!$(this).hasClass('sbi-replaced')
+                                && $(this).attr('src').indexOf('placeholder') > -1) {
+                                $(this).addClass('sbi-replaced');
+                                if (maxResImage) {
+                                    $(this).attr('src',maxResImage);
+                                    if ($(this).closest('.sbi_imgLiquid_bgSize').length) {
+                                        $(this).closest('.sbi_imgLiquid_bgSize').css('background-image', 'url(' + maxResImage + ')');
+                                    }
+                                }
+                            }
+                        });
+                    });
+                }
             },
             afterNewImagesRevealed: function() {
                 this.listenForVisibilityChange();
@@ -382,7 +437,8 @@ if(!sbi_js_exists) {
             sendNeedsResizingToServer: function() {
                 var feed = this;
                 if (feed.needsResizing.length > 0 && feed.settings.resizingEnabled) {
-                    var itemOffset = $(this.el).find('.sbi_item').length;
+                    var itemOffset = $(this.el).find('.sbi_item').length,
+                        cacheAll = typeof feed.settings.general.cache_all !== 'undefined' ? feed.settings.general.cache_all : false;
 
                     var submitData = {
                         action: 'sbi_resized_images_submit',
@@ -390,6 +446,9 @@ if(!sbi_js_exists) {
                         offset: itemOffset,
                         feed_id: feed.settings.feedID,
                         atts: feed.settings.shortCodeAtts,
+                        location: feed.locationGuess(),
+                        post_id: feed.settings.postID,
+                        cache_all: cacheAll
                     };
                     var onSuccess = function(data) {
                         if (data.trim().indexOf('{') === 0) {
@@ -397,7 +456,29 @@ if(!sbi_js_exists) {
                             if (feed.settings.debugEnabled) {
                                 console.log(response);
                             }
+                            for (var property in response) {
+                                if (response.hasOwnProperty(property)) {
+                                    feed.resizedImages[property] = response[property];
+                                }
+                            }
+                            feed.maybeRaiseImageResolution();
+
+                            setTimeout(function() {
+                                feed.afterResize();
+                            },500);
                         }
+                    };
+                    sbiAjax(submitData,onSuccess);
+                } else if (feed.settings.locator) {
+                    var submitData = {
+                        action: 'sbi_do_locator',
+                        feed_id: feed.settings.feedID,
+                        atts: feed.settings.shortCodeAtts,
+                        location: feed.locationGuess(),
+                        post_id: feed.settings.postID
+                    };
+                    var onSuccess = function(data) {
+
                     };
                     sbiAjax(submitData,onSuccess);
                 }
@@ -415,12 +496,17 @@ if(!sbi_js_exists) {
             getNewPostSet: function () {
                 var $self = $(this.el),
                     feed = this;
+                feed.page ++;
+
                 var itemOffset = $self.find('.sbi_item').length,
                     submitData = {
                         action: 'sbi_load_more_clicked',
                         offset: itemOffset,
+                        page: feed.page,
                         feed_id: feed.settings.feedID,
                         atts: feed.settings.shortCodeAtts,
+                        location: feed.locationGuess(),
+                        post_id: feed.settings.postID,
                         current_resolution: feed.imageResolution
                     };
                 var onSuccess = function (data) {
@@ -509,6 +595,19 @@ if(!sbi_js_exists) {
                     return;
                 }
 
+                if (imgSrcSet.length < 1) {
+                    if ($item.find('.sbi_link_area').length) {
+                        $item.find('.sbi_link_area').attr('href',window.sbi.options.placeholder.replace('placeholder.png','thumb-placeholder.png'))
+                    }
+                    return;
+                } else if ($item.find('.sbi_link_area').length && $item.find('.sbi_link_area').attr('href') === window.sbi.options.placeholder.replace('placeholder.png','thumb-placeholder.png')
+                    || !feed.settings.consentGiven) {
+                    $item.find('.sbi_link_area').attr('href',imgSrcSet[imgSrcSet.length - 1])
+                }
+                if (typeof imgSrcSet[640] !== 'undefined') {
+                    $item.find('.sbi_photo').attr('data-full-res',imgSrcSet[640]);
+                }
+
                 $.each(imgSrcSet, function (index, value) {
                     if (value === currentUrl) {
                         currentRes = parseInt(index);
@@ -548,8 +647,10 @@ if(!sbi_js_exists) {
                         console.log('rais res for ' + currentUrl, reason);
                     }
                     var newUrl = imgSrcSet[newRes].split("?ig_cache_key")[0];
-                    $item.find('.sbi_photo img').attr('src', newUrl);
-                    $item.find('.sbi_photo').css('background-image', 'url("' + newUrl + '")');
+                    if (currentUrl !== newUrl) {
+                        $item.find('.sbi_photo img').attr('src', newUrl);
+                        $item.find('.sbi_photo').css('background-image', 'url("' + newUrl + '")');
+                    }
                     currentRes = newRes;
 
                     if (feed.settings.imgRes === 'auto') {
@@ -603,9 +704,9 @@ if(!sbi_js_exists) {
                 $item.find('img').on('error', function () {
                     if (!$(this).hasClass('sbi_img_error')) {
                         $(this).addClass('sbi_img_error');
-                        var sourceFromAPI = ($(this).attr('src').indexOf('media?size=') > -1 || $(this).attr('src').indexOf('cdninstagram') > -1 || $(this).attr('src').indexOf('fbcdn') > -1)
+                        var sourceFromAPI = ($(this).attr('src').indexOf('media/?size=') > -1 || $(this).attr('src').indexOf('cdninstagram') > -1 || $(this).attr('src').indexOf('fbcdn') > -1)
 
-                        if (!sourceFromAPI) {
+                        if (!sourceFromAPI && feed.settings.consentGiven) {
 
                             if ($(this).closest('.sbi_photo').attr('data-img-src-set') !== 'undefined') {
                                 var srcSet = JSON.parse($(this).closest('.sbi_photo').attr('data-img-src-set').replace(/\\\//g, '/'));
@@ -728,6 +829,9 @@ if(!sbi_js_exists) {
             getImageUrls: function ($item) {
                 var srcSet = JSON.parse($item.find('.sbi_photo').attr('data-img-src-set').replace(/\\\//g, '/')),
                     id = $item.attr('id').replace('sbi_', '');
+                if (!this.settings.consentGiven && !this.settings.overrideBlockCDN) {
+                    srcSet = [];
+                }
                 if (typeof this.resizedImages[id] !== 'undefined'
                     && this.resizedImages[id] !== 'video'
                     && this.resizedImages[id] !== 'pending'
@@ -847,7 +951,66 @@ if(!sbi_js_exists) {
                 }
 
                 return parseInt(returnCols);
-            }
+            },
+            checkConsent: function() {
+                if (this.settings.consentGiven || !this.settings.gdpr) {
+                    return true;
+                }
+                if (typeof CLI_Cookie !== "undefined") { // GDPR Cookie Consent by WebToffee
+                    if (CLI_Cookie.read(CLI_ACCEPT_COOKIE_NAME) !== null)  {
+
+                        this.settings.consentGiven = CLI_Cookie.read('cookielawinfo-checkbox-non-necessary') === 'yes';
+                    }
+
+                } else if (typeof window.cnArgs !== "undefined") { // Cookie Notice by dFactory
+                    var value = "; " + document.cookie,
+                        parts = value.split( '; cookie_notice_accepted=' );
+
+                    if ( parts.length === 2 ) {
+                        var val = parts.pop().split( ';' ).shift();
+
+                        this.settings.consentGiven = (val === 'true');
+                    }
+                } else if (typeof window.cookieconsent !== 'undefined') { // Complianz by Really Simple Plugins
+                    this.settings.consentGiven = sbiCmplzGetCookie('complianz_consent_status') === 'allow';
+                } else if (typeof window.Cookiebot !== "undefined") { // Cookiebot by Cybot A/S
+                    this.settings.consentGiven = Cookiebot.consented;
+                } else if (typeof window.BorlabsCookie !== 'undefined') { // Borlabs Cookie by Borlabs
+                    this.settings.consentGiven = window.BorlabsCookie.checkCookieConsent('instagram');
+                }
+
+                var evt = jQuery.Event('sbicheckconsent');
+                evt.feed = this;
+                jQuery(window).trigger(evt);
+
+                return this.settings.consentGiven; // GDPR not enabled
+            },
+            afterConsentToggled: function() {
+                if (this.checkConsent()) {
+                    var feed = this;
+                    feed.maybeRaiseImageResolution();
+
+                    setTimeout(function() {
+                        feed.afterResize();
+                    },500);
+                }
+            },
+            locationGuess: function() {
+                var $feed = $(this.el),
+                    location = 'content';
+
+                if ($feed.closest('footer').length) {
+                    location = 'footer';
+                } else if ($feed.closest('.header').length
+                    || $feed.closest('header').length) {
+                    location = 'header';
+                } else if ($feed.closest('.sidebar').length
+                    || $feed.closest('aside').length) {
+                    location = 'sidebar';
+                }
+
+                return location;
+            },
         };
 
         window.sbi_init = function() {
@@ -868,6 +1031,21 @@ if(!sbi_js_exists) {
             });
         }
 
+        function sbiCmplzGetCookie(cname) {
+            var name = cname + "="; //Create the cookie name variable with cookie name concatenate with = sign
+            var cArr = window.document.cookie.split(';'); //Create cookie array by split the cookie by ';'
+
+            //Loop through the cookies and return the cookie value if it find the cookie name
+            for (var i = 0; i < cArr.length; i++) {
+                var c = cArr[i].trim();
+                //If the name is the cookie string at position 0, we found the cookie and return the cookie value
+                if (c.indexOf(name) == 0)
+                    return c.substring(name.length, c.length);
+            }
+
+            return "";
+        }
+
     })(jQuery);
 
     jQuery(document).ready(function($) {
@@ -886,6 +1064,66 @@ if(!sbi_js_exists) {
             }
         }
         sbi_init();
+
+        // Cookie Notice by dFactory
+        $('#cookie-notice a').on('click',function() {
+            setTimeout(function() {
+                $.each(window.sbi.feeds,function(index){
+                    window.sbi.feeds[ index ].afterConsentToggled();
+                });
+            },1000);
+        });
+
+        // GDPR Cookie Consent by WebToffee
+        $('#cookie-law-info-bar a').on('click',function() {
+            setTimeout(function() {
+                $.each(window.sbi.feeds,function(index){
+                    window.sbi.feeds[ index ].afterConsentToggled();
+                });
+            },1000);
+        });
+
+        // GDPR Cookie Consent by WebToffee
+        $('.cli-user-preference-checkbox').on('click',function(){
+            setTimeout(function() {
+                $.each(window.sbi.feeds,function(index){
+                    window.sbi.feeds[ index ].settings.consentGiven = false;
+                    window.sbi.feeds[ index ].afterConsentToggled();
+                });
+            },1000);
+        });
+
+        // Cookiebot
+        $(window).on('CookiebotOnAccept', function (event) {
+            $.each(window.sbi.feeds,function(index){
+                window.sbi.feeds[ index ].settings.consentGiven = true;
+                window.sbi.feeds[ index ].afterConsentToggled();
+            });
+        });
+
+        // Complianz by Really Simple Plugins
+        $(document).on('cmplzAcceptAll', function (event) {
+            $.each(window.sbi.feeds,function(index){
+                window.sbi.feeds[ index ].settings.consentGiven = true;
+                window.sbi.feeds[ index ].afterConsentToggled();
+            });
+        });
+
+        // Complianz by Really Simple Plugins
+        $(document).on('cmplzRevoke', function (event) {
+            $.each(window.sbi.feeds,function(index){
+                window.sbi.feeds[ index ].settings.consentGiven = false;
+                window.sbi.feeds[ index ].afterConsentToggled();
+            });
+        });
+
+        // Borlabs Cookie by Borlabs
+        $(document).on('borlabs-cookie-consent-saved', function (event) {
+            $.each(window.sbi.feeds,function(index){
+                window.sbi.feeds[ index ].settings.consentGiven = false;
+                window.sbi.feeds[ index ].afterConsentToggled();
+            });
+        });
     });
 
 } // if sbi_js_exists

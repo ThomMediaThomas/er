@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.03.05
@@ -33,7 +36,7 @@ class FrmFieldOption {
 
 	public function __construct( $option_key, $option, $args = array() ) {
 		$this->option_key = $option_key;
-		$this->option = $option;
+		$this->option     = $option;
 		$this->set_option_label();
 		$this->set_saved_value();
 	}

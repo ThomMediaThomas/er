@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.04
@@ -123,14 +126,14 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_entry( $atts ) {
-		if ( is_object( $atts['entry'] ) ) {
+		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) ) {
 
 			if ( isset( $atts['entry']->metas ) ) {
 				$this->entry = $atts['entry'];
 			} else {
 				$this->entry = FrmEntry::getOne( $atts['entry']->id, true );
 			}
-		} else if ( $atts['id'] ) {
+		} elseif ( ! empty( $atts['id'] ) ) {
 			$this->entry = FrmEntry::getOne( $atts['id'], true );
 		}
 	}
@@ -143,7 +146,7 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_entry_values( $atts ) {
-		$entry_atts = $this->prepare_entry_attributes( $atts );
+		$entry_atts         = $this->prepare_entry_attributes( $atts );
 		$this->entry_values = new FrmEntryValues( $this->entry->id, $entry_atts );
 	}
 
@@ -159,7 +162,7 @@ class FrmEntryFormatter {
 	protected function prepare_entry_attributes( $atts ) {
 		$entry_atts = array();
 
-		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields' );
+		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields', 'entry' );
 		foreach ( $conditionally_add as $index ) {
 			if ( isset( $atts[ $index ] ) ) {
 				$entry_atts[ $index ] = $atts[ $index ];
@@ -181,11 +184,11 @@ class FrmEntryFormatter {
 
 			$this->format = 'array';
 
-		} else if ( $atts['format'] === 'json' ) {
+		} elseif ( $atts['format'] === 'json' ) {
 
 			$this->format = 'json';
 
-		} else if ( $atts['format'] === 'text' ) {
+		} elseif ( $atts['format'] === 'text' ) {
 
 			if ( $this->is_plain_text === true ) {
 				$this->format = 'plain_text_block';
@@ -219,7 +222,7 @@ class FrmEntryFormatter {
 	protected function init_is_plain_text( $atts ) {
 		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
 			$this->is_plain_text = true;
-		} else if ( $atts['format'] !== 'text' ) {
+		} elseif ( $atts['format'] !== 'text' ) {
 			$this->is_plain_text = true;
 		}
 	}
@@ -325,11 +328,11 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 */
 	protected function init_atts( $atts ) {
-		$atts['source'] = 'entry_formatter';
-		$atts['wpautop'] = false;
+		$atts['source']       = 'entry_formatter';
+		$atts['wpautop']      = false;
 		$atts['return_array'] = true;
 
-		$unset = array( 'id', 'entry', 'form_id', 'format', 'plain_text' );
+		$unset = array( 'id', 'entry', 'form_id', 'format' );
 		foreach ( $unset as $param ) {
 			if ( isset( $atts[ $param ] ) ) {
 				unset( $atts[ $param ] );
@@ -367,13 +370,13 @@ class FrmEntryFormatter {
 		if ( $this->format === 'json' ) {
 			$content = json_encode( $this->prepare_array() );
 
-		} else if ( $this->format === 'array' ) {
+		} elseif ( $this->format === 'array' ) {
 			$content = $this->prepare_array();
 
-		} else if ( $this->format === 'table' ) {
+		} elseif ( $this->format === 'table' ) {
 			$content = $this->prepare_html_table();
 
-		} else if ( $this->format === 'plain_text_block' ) {
+		} elseif ( $this->format === 'plain_text_block' ) {
 			$content = $this->prepare_plain_text_block();
 
 		} else {
@@ -484,6 +487,7 @@ class FrmEntryFormatter {
 		if ( $this->include_field_in_content( $field_value ) ) {
 
 			$displayed_value = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
+
 			$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
 
 			$has_separate_value = (bool) $field_value->get_field_option( 'separate_value' );
@@ -506,9 +510,9 @@ class FrmEntryFormatter {
 		$display_value = $this->prepare_display_value_for_plain_text_content( $display_value );
 
 		if ( 'rtl' == $this->direction ) {
-			$content .= $display_value . ' :' . $label . "\r\n";
+			$content .= wp_kses_post( $display_value . ' :' . $label ) . "\r\n";
 		} else {
-			$content .= $label . ': ' . $display_value . "\r\n";
+			$content .= wp_kses_post( $label . ': ' . $display_value ) . "\r\n";
 		}
 	}
 
@@ -544,7 +548,7 @@ class FrmEntryFormatter {
 
 		if ( $this->format === 'plain_text_block' ) {
 			$this->add_plain_text_row_for_included_extra( $field_value, $content );
-		} else if ( $this->format === 'table' ) {
+		} elseif ( $this->format === 'table' ) {
 			$this->add_html_row_for_included_extra( $field_value, $content );
 		}
 	}
@@ -564,7 +568,7 @@ class FrmEntryFormatter {
 
 		if ( $this->format === 'plain_text_block' ) {
 			$this->add_plain_text_row( $field_value->get_field_label(), $field_value->get_displayed_value(), $content );
-		} else if ( $this->format === 'table' ) {
+		} elseif ( $this->format === 'table' ) {
 			$value_args = $this->package_value_args( $field_value );
 			$this->add_html_row( $value_args, $content );
 		}
@@ -669,7 +673,7 @@ class FrmEntryFormatter {
 	protected function add_standard_row( $field_value, &$content ) {
 		if ( $this->format === 'plain_text_block' ) {
 			$this->add_plain_text_row( $field_value->get_field_label(), $field_value->get_displayed_value(), $content );
-		} else if ( $this->format === 'table' ) {
+		} elseif ( $this->format === 'table' ) {
 			$value_args = $this->package_value_args( $field_value );
 			$this->add_html_row( $value_args, $content );
 		}
@@ -686,9 +690,9 @@ class FrmEntryFormatter {
 	 */
 	protected function package_value_args( $field_value ) {
 		return array(
-			'label'       => $field_value->get_field_label(),
-			'value'       => $field_value->get_displayed_value(),
-			'field_type'  => $field_value->get_field_type(),
+			'label'      => $field_value->get_field_label(),
+			'value'      => $field_value->get_displayed_value(),
+			'field_type' => $field_value->get_field_type(),
 		);
 	}
 
@@ -705,9 +709,9 @@ class FrmEntryFormatter {
 			foreach ( $this->entry_values->get_user_info() as $user_info ) {
 
 				$value_args = array(
-					'label' => $user_info['label'],
-					'value' => $user_info['value'],
-					'field_type'  => 'none',
+					'label'      => $user_info['label'],
+					'value'      => $user_info['value'],
+					'field_type' => 'none',
 				);
 
 				$this->add_html_row( $value_args, $content );
@@ -810,7 +814,6 @@ class FrmEntryFormatter {
 		return $this->strip_html( $value );
 	}
 
-
 	/**
 	 * Prepare a field's display value for an HTML table
 	 *
@@ -823,7 +826,9 @@ class FrmEntryFormatter {
 	 */
 	protected function prepare_display_value_for_html_table( $display_value, $field_type = '' ) {
 		$display_value = $this->flatten_array( $display_value );
-		$display_value = str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
+		if ( ! isset( $this->atts['line_breaks'] ) || ! empty( $this->atts['line_breaks'] ) ) {
+			$display_value = str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
+		}
 
 		return $display_value;
 	}
@@ -878,7 +883,7 @@ class FrmEntryFormatter {
 				foreach ( $value as $key => $single_value ) {
 					$value[ $key ] = $this->strip_html( $single_value );
 				}
-			} else if ( $this->is_plain_text && ! is_array( $value ) ) {
+			} elseif ( $this->is_plain_text && ! is_array( $value ) ) {
 				if ( strpos( $value, '<img' ) !== false ) {
 					$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
 					$value = trim( $value );

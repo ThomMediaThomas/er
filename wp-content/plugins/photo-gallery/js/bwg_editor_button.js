@@ -1,18 +1,11 @@
-jQuery(window).load(function(){
+jQuery(window).on('load',function(){
   window.bwgDocumentReady = true;
   if (window.bwgTinymceRendered) {
     jQuery(document).trigger("onUploadImg");
   }
 });
 
-jQuery(document).ready(function() {
-  bwg_shortcode_ready();
-});
-jQuery(window).resize(function() {
-  bwg_shortcode_ready();
-});
-
-function bwg_shortcode_ready() {
+(function () {
   var width_window;
   var height_window;
   tinymce.create('tinymce.plugins.bwg_mce', {
@@ -91,7 +84,7 @@ function bwg_shortcode_ready() {
     },
     _do_bwg:function (ed) {
       return ed.replace(/\[Best_Wordpress_Gallery([^\]]*)\]/g, function (d, c) {
-        return '<img src="' + bwg_plugin_url + '/images/icons/gallery-icon.png" class="bwg_shortcode mceItem" title="Best_Wordpress_Gallery' + tinymce.DOM.encode(c) + '" />';
+        return '<img src="' + bwg_plugin_url + '/images/tw-gb/shortcode_new.jpg" class="bwg_shortcode mceItem" title="Best_Wordpress_Gallery' + tinymce.DOM.encode(c) + '" />';
       })
     },
     _get_bwg:function (b) {
@@ -113,4 +106,4 @@ function bwg_shortcode_ready() {
   if ( typeof bwg_set_shortcode_popup_dimensions == "function" ) {
     bwg_set_shortcode_popup_dimensions();
   }
-}
+})()

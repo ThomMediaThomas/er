@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -27,7 +30,7 @@ class FrmFieldEmail extends FrmFieldType {
 	}
 
 	/**
-	 * validate the email format
+	 * Validate the email format
 	 *
 	 * @param array $args
 	 *
@@ -38,6 +41,14 @@ class FrmFieldEmail extends FrmFieldType {
 		if ( $args['value'] != '' && ! is_email( $args['value'] ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
+
 		return $errors;
+	}
+
+	/**
+	 * @since 4.0.04
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'sanitize_email', $value );
 	}
 }

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -36,10 +39,10 @@ class FrmFieldUrl extends FrmFieldType {
 
 	protected function fill_default_atts( &$atts ) {
 		$defaults = array(
-			'sep' => ', ',
+			'sep'  => ', ',
 			'html' => false,
 		);
-		$atts = wp_parse_args( $atts, $defaults );
+		$atts     = wp_parse_args( $atts, $defaults );
 
 		if ( $atts['html'] ) {
 			$atts['sep'] = ' ';
@@ -74,7 +77,7 @@ class FrmFieldUrl extends FrmFieldType {
 			$images = '';
 			foreach ( (array) $value as $url ) {
 				$image_regex = '/(\.(?i)(jpg|jpeg|png|gif))$/';
-				$is_image = preg_match( $image_regex, $url );
+				$is_image    = preg_match( $image_regex, $url );
 				if ( $is_image ) {
 					$images .= '<img src="' . esc_attr( $url ) . '" class="frm_image_from_url" alt="" /> ';
 				} else {
@@ -85,5 +88,12 @@ class FrmFieldUrl extends FrmFieldType {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * @since 4.0.04
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'esc_url_raw', $value );
 	}
 }

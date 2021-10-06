@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 /**
  * @since 3.0
  */
@@ -10,7 +14,7 @@ class FrmFieldFormHtml {
 	private $html_id;
 
 	/**
-	 *   @var FrmFieldType
+	 * @var FrmFieldType
 	 */
 	private $field_obj;
 
@@ -83,8 +87,8 @@ class FrmFieldFormHtml {
 	 */
 	private function set_pass_args( $atts ) {
 		$this->pass_args = $atts;
-		$exclude = array( 'field_obj', 'html' );
 
+		$exclude = array( 'field_obj', 'html' );
 		foreach ( $exclude as $ex ) {
 			if ( isset( $atts[ $ex ] ) ) {
 				unset( $this->pass_args[ $ex ] );
@@ -167,7 +171,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function maybe_replace_description_shortcode( $wp_processed = false ) {
-		$is_html = 'html' === $this->field_obj->get_field_column( 'type' );
+		$is_html        = 'html' === $this->field_obj->get_field_column( 'type' );
 		$should_replace = ( $is_html && $wp_processed ) || ( ! $is_html && ! $wp_processed );
 		if ( $should_replace ) {
 			$this->replace_description_shortcode();
@@ -186,19 +190,36 @@ class FrmFieldFormHtml {
 	/**
 	 * Add an ID to the description for aria-describedby.
 	 * This ID was added to the HTML in v3.0.
+	 *
 	 * @since 3.0
 	 */
 	private function maybe_add_description_id() {
 		$description = $this->field_obj->get_field_column( 'description' );
 		if ( $description != '' ) {
+			$this->add_element_id( 'description', 'desc' );
+		}
+	}
 
-			preg_match_all( '/(\[if\s+description\])(.*?)(\[\/if\s+description\])/mis', $this->html, $inner_html );
-			if ( isset( $inner_html[2] ) && is_string( $inner_html[2] ) ) {
-				$has_id = strpos( $inner_html[2], ' id=' );
-				if ( ! $has_id ) {
-					$id = 'frm_desc_' . $this->html_id;
-					$this->html = str_replace( 'class="frm_description', 'id="' . esc_attr( $id ) . '" class="frm_description', $this->html );
-				}
+	/**
+	 * Insert an ID if it doesn't exist.
+	 *
+	 * @since 3.06.02
+	 */
+	private function add_element_id( $param, $id ) {
+		preg_match_all( '/(\[if\s+' . $param . '\])(.*?)(\[\/if\s+' . $param . '\])/mis', $this->html, $inner_html );
+		if ( ! isset( $inner_html[2] ) ) {
+			return;
+		}
+
+		if ( ! is_string( $inner_html[2] ) && count( $inner_html[2] ) === 1 ) {
+			$inner_html[2] = $inner_html[2][0];
+		}
+
+		if ( is_string( $inner_html[2] ) ) {
+			$has_id = strpos( $inner_html[2], ' id=' );
+			if ( ! $has_id ) {
+				$id = 'frm_' . $id . '_' . $this->html_id;
+				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
 			}
 		}
 	}
@@ -207,18 +228,33 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_error_shortcode() {
+		$this->maybe_add_error_id();
 		$error = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? $this->pass_args['errors'][ 'field' . $this->field_id ] : false;
 		FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
 	}
 
 	/**
-	 * replace [required_class]
+	 * Add an ID to the error message for aria-describedby.
+	 * This ID was added to the HTML in v3.06.02.
+	 *
+	 * @since 3.06.02
+	 */
+	private function maybe_add_error_id() {
+		if ( ! isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ) {
+			return;
+		}
+
+		$this->add_element_id( 'error', 'error' );
+	}
+
+	/**
+	 * Replace [required_class]
 	 *
 	 * @since 3.0
 	 */
 	private function replace_required_class() {
 		$required_class = FrmField::is_required( $this->field_obj->get_field() ) ? ' frm_required_field' : '';
-		$this->html = str_replace( '[required_class]', $required_class, $this->html );
+		$this->html     = str_replace( '[required_class]', $required_class, $this->html );
 	}
 
 	/**
@@ -266,6 +302,7 @@ class FrmFieldFormHtml {
 
 	/**
 	 * Remove [collapse_this] if it's still included after all processing
+	 *
 	 * @since 3.0
 	 *
 	 * @param string $html
@@ -284,7 +321,7 @@ class FrmFieldFormHtml {
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$tag = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
+			$tag            = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
 
 			$replace_with = '';
 
@@ -305,6 +342,7 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_input_shortcode( $shortcode_atts ) {
 		$shortcode_atts = $this->prepare_input_shortcode_atts( $shortcode_atts );
+
 		return $this->field_obj->include_front_field_input( $this->pass_args, $shortcode_atts );
 	}
 
@@ -315,7 +353,7 @@ class FrmFieldFormHtml {
 	 */
 	private function prepare_input_shortcode_atts( $shortcode_atts ) {
 		if ( isset( $shortcode_atts['opt'] ) ) {
-			$shortcode_atts['opt']--;
+			$shortcode_atts['opt'] --;
 		}
 
 		$field_class = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
@@ -325,9 +363,7 @@ class FrmFieldFormHtml {
 			unset( $shortcode_atts['class'] );
 		}
 
-		if ( isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ) {
-			$shortcode_atts['aria-invalid'] = 'true';
-		}
+		$shortcode_atts['aria-invalid'] = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
 
 		$this->field_obj->set_field_column( 'shortcodes', $shortcode_atts );
 
@@ -342,19 +378,19 @@ class FrmFieldFormHtml {
 	 */
 	private function add_class_to_label() {
 		$label_class = $this->field_obj->get_label_class();
-		$this->html = str_replace( '[label_position]', $label_class, $this->html );
+		$this->html  = str_replace( '[label_position]', $label_class, $this->html );
 		if ( $this->field_obj->get_field_column( 'label' ) == 'inside' && $this->field_obj->get_field_column( 'value' ) != '' ) {
 			$this->html = str_replace( 'frm_primary_label', 'frm_primary_label frm_visible', $this->html );
 		}
 	}
 
 	/**
-	 * replace [entry_key]
+	 * Replace [entry_key]
 	 *
 	 * @since 3.0
 	 */
 	private function replace_entry_key() {
-		$entry_key = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
+		$entry_key  = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
 		$this->html = str_replace( '[entry_key]', $entry_key, $this->html );
 	}
 
@@ -372,7 +408,6 @@ class FrmFieldFormHtml {
 		}
 		$this->html = str_replace( '[error_class]', $classes, $this->html );
 	}
-
 
 	/**
 	 * Get the classes for a field div

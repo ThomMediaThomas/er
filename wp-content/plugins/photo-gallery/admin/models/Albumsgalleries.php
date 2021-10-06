@@ -14,18 +14,39 @@ class AlbumsgalleriesModel_bwg {
    */
   public function get_rows_data($params, $total = FALSE) {
     global $wpdb;
-    $where = $params['search'] ? '`name` LIKE "%' . $params['search'] . '%"' : '';
+    $prepareArgs = array($params['album_id']);
+    $where = '';
+    if ( !current_user_can('manage_options') && BWG()->options->gallery_role ) {
+      $where .= " author=%d ";
+      $prepareArgs[] = get_current_user_id();
+      // because there are 2 $where one after another and there are no more variables between there in the request and you need a clear number of arguments for preparing query
+      $prepareArgs[] = get_current_user_id();
+    }
+    else {
+      $where .= " author>=0 ";
+    }
+    $limit = '';
+    if($params['search']) {
+      $where = '`name` LIKE "%s"';
+      $prepareArgs[] = "%" . $params['search'] . "%";
+      $prepareArgs[] = "%" . $params['search'] . "%";
+    }
     $order_by = $total ? '' : ' ORDER BY `' . $params['orderby'] . '` ' . $params['order'];
-    $limit = $total ? '' : ' LIMIT ' . $params['page_num'] . ',' . $params['items_per_page'];
-    $query = '(SELECT id, name, preview_image, random_preview_image, published, 1 as is_album FROM ' . $wpdb->prefix . 'bwg_album WHERE id <> ' . $params['album_id'] . ' ' . (($where) ? 'AND '. $where : '' ) . ')
-                UNION ALL
-              (SELECT id, name, preview_image, random_preview_image, published, 0 as is_album FROM ' . $wpdb->prefix . 'bwg_gallery ' . (($where) ? 'WHERE '. $where : '' ) . $order_by . $limit . ')';
+    if ( !$total ) {
+      $limit = ' LIMIT %d, %d';
+      $prepareArgs[] = $params['page_num'];
+      $prepareArgs[] = $params['items_per_page'];
 
+    }
+
+    $query = '(SELECT id, name, preview_image, random_preview_image, published, 1 as is_album FROM ' . $wpdb->prefix . 'bwg_album WHERE id <> %d ' . (($where) ? 'AND '. $where : '' ) . ')
+                UNION ALL
+              (SELECT id, name, preview_image, random_preview_image, published, 0 as is_album FROM ' . $wpdb->prefix . 'bwg_gallery ' . (($where) ? 'WHERE '. $where : '' )  . ')' . $order_by . $limit;
     if ($total) {
       $query = 'SELECT COUNT(*) FROM (' . $query . ') as temp';
-      return $wpdb->get_var($query);
+      return $wpdb->get_var( $wpdb->prepare($query, $prepareArgs) );
     }
-    $rows = $wpdb->get_results($query);
+    $rows = $wpdb->get_results( $wpdb->prepare($query, $prepareArgs) );
 
     return $rows;
   }

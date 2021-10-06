@@ -67,13 +67,13 @@ class AlbumsController_bwg {
    */
   public function execute() {
     $task = WDWLibrary::get('task');
-    $id = (int)WDWLibrary::get('current_id', 0);
+    $id = WDWLibrary::get('current_id', 0, 'intval');
     if ($task != 'display' && method_exists($this, $task)) {
       if ($task != 'edit') {
         check_admin_referer(BWG()->nonce, BWG()->nonce);
       }
-      $action = WDWLibrary::get('bulk_action', -1);
-      if ($action != -1) {
+      $action = WDWLibrary::get('bulk_action');
+      if ($action != '') {
         $this->bulk_action($action);
       }
       else {
@@ -102,14 +102,14 @@ class AlbumsController_bwg {
       $params['orderby'] = 'id';
     }
     $params['items_per_page'] = $this->items_per_page;
-    $page = (int)WDWLibrary::get('paged', 1);
+    $page = WDWLibrary::get('paged', 1, 'intval');
     if ( $page < 0 ) {
       $page = 1;
     }
     $page_num = $page ? ($page - 1) * $params['items_per_page'] : 0;
     $params['paged'] = $page;
     $params['page_num'] = $page_num;
-    $params['search'] = WDWLibrary::get('s', '');
+    $params['search'] = WDWLibrary::get('s');
 
     $params['total'] = $this->model->total($params);
     $params['rows'] = $this->model->get_rows_data($params);
@@ -136,8 +136,8 @@ class AlbumsController_bwg {
     $successfully_updated = 0;
     $url_arg = array('page' => $this->page, 'task' => 'display');
 
-    $check = WDWLibrary::get('check', '');
-    $all = WDWLibrary::get('check_all_items', '');
+    $check = WDWLibrary::get('check');
+    $all = WDWLibrary::get('check_all_items');
     $all = ($all == 'on' ? TRUE : FALSE);
 
     if (method_exists($this, $task)) {
@@ -202,7 +202,6 @@ class AlbumsController_bwg {
       'action' => 'addImages',
       'bwg_width' => '800',
       'bwg_height' => '550',
-      'extensions' => 'jpg,jpeg,png,gif',
       'callback' => 'bwg_add_preview_image',
       BWG()->nonce => wp_create_nonce('addImages'),
       'TB_iframe' => '1',
@@ -264,8 +263,12 @@ class AlbumsController_bwg {
    */
   public function publish( $id, $bulk = FALSE, $all = FALSE ) {
     global $wpdb;
-    $where = ($all ? '' : ' WHERE id=' . $id);
-    $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_album` SET published=1' . $where);
+    $where = ($all ? '' : ' WHERE id=%d');
+    if ( $where != '' ) {
+      $updated = $wpdb->query($wpdb->prepare('UPDATE `' . $wpdb->prefix . 'bwg_album` SET published=1' . $where, $id));
+    } else {
+      $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_album` SET published=1' . $where);
+    }
     $message = 2;
     if ($updated) {
       $message = 9;
@@ -293,8 +296,13 @@ class AlbumsController_bwg {
    */
   public function unpublish( $id, $bulk = FALSE, $all = FALSE ) {
     global $wpdb;
-    $where = ($all ? '' : ' WHERE id=' . $id);
-    $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_album` SET published=0' . $where);
+    $where = ($all ? '' : ' WHERE id=%d');
+    if ( $where != '' ) {
+      $updated = $wpdb->query($wpdb->prepare('UPDATE `' . $wpdb->prefix . 'bwg_album` SET published=0' . $where, $id));
+    } else {
+      $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_album` SET published=0' . $where);
+
+    }
     $message = 2;
     if ($updated) {
       $message = 10;

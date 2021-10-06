@@ -1,24 +1,24 @@
-=== WP HTML Mail - Email Designer ===
-Contributors: haet
-Tags: email template, html mail, email design, mail, email templates, ninja-forms, caldera-forms, wp-e-commerce, easy-digital-downloads, woocommerce, contact-form-7, mandrill, postman, gravityforms
+=== WordPress Email Template Designer - WP HTML Mail ===
+Contributors: codemiq,haet
+Tags: email template, html mail, email design, woocommerce email, ninja-forms, caldera-forms, wp-e-commerce, easy-digital-downloads, contact-form-7, mandrill, postman, gravityforms
 Requires at least: 5.0
-Tested up to: 5.4.1
+Tested up to: 5.7.1
 Requires PHP: 7.2
-Stable tag: 3.0
+Stable tag: 3.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-All in one email template solution for Ninja Forms, Caldera Forms, Gravity Forms, WooCommerce, CF7, Support Plus, EDD, ...
+All in one email template design solution for Ninja Forms, Caldera Forms, Gravity Forms, WooCommerce, CF7, Support Plus, EDD, ...
 
 == Description ==
-Beautiful responsive HTML mails, fully customizable without any coding knowledge 
-Create your own professional email template within a few minutes. 
+Beautiful WordPress emails for your contact form notifications, your WooCommerce and EDD transactional emails, WordPress core emails, BuddyPress and many more. 
+Create your own professional email design within a few minutes without any coding. 
 
-= See how it works =
+= See how we create an email template within two and a half minutes =
 
 https://youtu.be/h-bFpPqkAzk
 
-= Features = 
+= All in one email designer for your contact forms, WooCommerce, Easy Digital Downloads and many more... = 
 
 * **Responsive & Device independent:**
 Our e-mail template has been tested in all major desktop, web and mobile mailclients. 
@@ -36,67 +36,41 @@ Webclients do not override your styles, because we move all style definitions to
 Redirect all emails to your own email address for testing or for your staging system.
 * **Live Preview:**
 See all your changes immediately in the live preview.
-* **WooCommerce AddOn (PRO):**
-Customize design, text, products table, simply everything with our Drag & Drop MailBuilder [WooCommerce email templates](https://codemiq.com/en/downloads/wp-html-mail-woocommerce/)
-* **Easy Digital Downloads AddOn (PRO):**
-Read more about the [Easy Digital Downloads Email template](https://codemiq.com/en/downloads/wp-html-mail-easy-digital-downloads/)
 
 
 
-Turn email formatting on/off for specific plugins.
-Currently supported are
+= WooCommerce Drag & Drop Email Customizer =
 
-* Ninja Forms
-* Caldera Forms
-* Contact Form 7
-* Gravity Forms
-* Gravity Flow
-* HappyForms
-* WP Support Plus Responsive Ticket System
-* Birthday Emails
-* Ultimate WP Mail
-* Divi Theme contact forms
-* [BuddyPress](https://wordpress.org/plugins/wp-html-mail-buddypress/)
-* [WPForms and WPForms Lite](https://codemiq.com/en/downloads/wp-html-mail-wpforms/)
-* [WooCommerce](https://codemiq.com/en/downloads/wp-html-mail-woocommerce/)
-* [Easy Digital Downloads](https://codemiq.com/en/downloads/wp-html-mail-easy-digital-downloads/)
-* [Give – Donation and Fundraising](https://wordpress.org/plugins/wp-html-mail-give/)
-* TeraWallet
-* WP E-Commerce
-
-Allthough we didn't optimize WP HTML Mail for these plugins our users use it with many more plugins
-
-* ACF Advanced Forms
-* Elementor Forms
-* Events Made Easy
-* Formidable Forms
-* Learndash Notifications
-* Matador Jobs
-* Memberpress
-* Modern Events Calendar
-* Uncanny Owl Groups
-* ...
-
-
-
-= WooCommerce Email Template Extension =
-
-Use our WooCommerce extension to customize all your store emails. For all standard emails you can also edit the email content as well as the products table. 
-We recently added support for [WooCommerce Advanced Shipment Tracking](https://wordpress.org/plugins/woo-advanced-shipment-tracking/) and Amazon Payment gateway.
+Use our [WooCommerce email customizer addon](https://codemiq.com/en/downloads/wp-html-mail-woocommerce/) to customize all your store emails. For all standard emails you can also edit the email content as well as the products table. 
 Most emails from third party WooCommerce plugins can be styled and for some of them we created special integrations:
 
 * Barcodes from **YITH WooCommerce Bar Codes and QR Codes** can be placed anywhere in your Emails
 * You can change emails from **WooCommerce Order Status Manager**
 * Insert custom checkout fields to your emails with [Checkout Field Editor](https://wordpress.org/plugins/woo-checkout-field-editor-pro/)
 * **WooCommerce German Market** is fully integrated
-* In version 2.9 we integrated [AutomateWoo](https://automatewoo.com/?ref=42) so you can use your email template for your **abandoned cart mails** and other **automated emails**
+* With **AutomateWoo** you can use your email template for your **abandoned cart mails** and other **automated emails**
+* [WooCommerce Advanced Shipment Tracking](https://wordpress.org/plugins/woo-advanced-shipment-tracking/)
+You can try the plugin in [our WooCommerce Demo](https://wp-html-mail-woocommerce-demo.codemiq.com/).
+
+[get WooCommerce Email Customizer >](https://codemiq.com/en/plugins/wp-html-mail-woocommerce/)
 
 
-[more about WP HTML Mail](https://codemiq.com/en/plugins/wp-html-mail-email-templates/)
+
+
+= Easy Digital Downloads Email Customizer =
+
+Our second ecommerce extension is for Easy Digital Downloads. Using this simple add-on you can 
+
+* customize typography for items, variations and links
+* format the products table
+* see a preview of your EDD emails in desktop and mobile view
+
+[get Easy Digital Downloads Email Customizer >](https://codemiq.com/de/plugins/wp-html-mail-easy-digital-downloads/)
 
 
 https://youtu.be/RV8vUNCWOZw
 
+[more about WP HTML Mail](https://codemiq.com/en/plugins/wp-html-mail-email-templates/)
 
 = Works with most email delivery plugins =
 * [WP Offload SES](https://aff.deliciousbrains.com/idevaffiliate.php?id=21298_4_3_3)
@@ -115,6 +89,7 @@ https://youtu.be/RV8vUNCWOZw
 = Translations =
 
 The plugin is currently available in following languages
+
 * English (of course)
 * German
 * Spanish translation provided by [Jose](https://profiles.wordpress.org/jmbescos) from  [Ibidem Translations](http://www.ibidem-translations.com)
@@ -122,7 +97,7 @@ The plugin is currently available in following languages
 
 
 = > Want to get notified about new features and updates? =
-[Follow me on twitter](https://twitter.com/intent/user?screen_name=h_etzelstorfer)
+[Follow us on twitter](https://twitter.com/intent/user?screen_name=codemiq)
 
 
 == Installation ==
@@ -138,6 +113,43 @@ Extract the zip file and just drop the contents in the wp-content/plugins/ direc
 
 
 == Changelog ==
+
+= 3.0.8 =
+* changed inline css library
+* fixed missing links on header 
+* removed debug logs 
+* fixed CSRF and Self XSS vulnerabilities
+
+= 3.0.6 =
+* make URLs clickable in plain text email (eg. reset password)
+* fixed missing line breaks if multiple emails are sent at once
+
+
+= 3.0.5 =
+* Fixed a notice about REST endpoint
+* jQuery fixes for WP 5.6
+* fixed a warning initializing options with Polylang enabled
+
+
+= 3.0.4 =
+* added an option to disable overriding the sender by default (can still be enabled for individual plugins)
+
+
+= 3.0.3 =
+* JS and CSS updates for WP 5.5
+* optimized for Formidable Forms and WP Foro
+
+
+= 3.0.2 =
+* forgot to remove the webfonts tab in previous version which is still under development
+
+
+= 3.0.1 =
+* enabled transient caching for template library
+* changed the way content type is detected to also support filters
+* improved support for ShieldSecurity 
+* Header and Footer also translatable with Polylang now
+
 
 = 3.0 =
 * brand new react based template editor (for WP 5.4+)
@@ -336,6 +348,44 @@ Extract the zip file and just drop the contents in the wp-content/plugins/ direc
 
 == Frequently Asked Questions ==
 
+= Does it work for emails from plugin XYZ? =
+
+Our email designer has integrations for these plugins:
+
+* Ninja Forms
+* Caldera Forms
+* Contact Form 7
+* Gravity Forms
+* Gravity Flow
+* HappyForms
+* WP Support Plus Responsive Ticket System
+* Birthday Emails
+* Ultimate WP Mail
+* Divi Theme contact forms
+* [BuddyPress](https://wordpress.org/plugins/wp-html-mail-buddypress/)
+* [WPForms and WPForms Lite](https://codemiq.com/en/downloads/wp-html-mail-wpforms/)
+* [WooCommerce](https://codemiq.com/en/downloads/wp-html-mail-woocommerce/)
+* [Easy Digital Downloads](https://codemiq.com/en/downloads/wp-html-mail-easy-digital-downloads/)
+* [Give – Donation and Fundraising](https://wordpress.org/plugins/wp-html-mail-give/)
+* TeraWallet
+* WP E-Commerce
+* Formidable Forms
+* WP Foro
+
+Allthough we didn't optimize WP HTML Mail for these plugins our users use it with many more plugins
+
+* ACF Advanced Forms
+* Elementor Forms
+* Events Made Easy
+* Learndash Notifications
+* Matador Jobs
+* Memberpress
+* Modern Events Calendar
+* Uncanny Owl Groups
+* ShieldSecurity
+* ...
+
+
 = Can I send my newsletter campaigns with this plugin? =
 
 No, this is not a newsletter tool, it just makes your emails beautiful but doesn't send custom ones.
@@ -411,5 +461,7 @@ function customize_template_usage( $use_template, $mail ){
     return true;
 }
 `
+
+[another example](https://wordpress.org/support/topic/how-to-disable-template-for-certain-emails/)
 
 

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -17,18 +20,20 @@ class FrmFieldCheckbox extends FrmFieldType {
 	 */
 	protected $holds_email_values = true;
 
+	/**
+	 * Does the html for this field label need to include "for"?
+	 *
+	 * @var bool
+	 * @since 3.06.01
+	 */
+	protected $has_for_label = false;
+
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}
 
 	protected function include_form_builder_file() {
-		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-multiple.php';
-	}
-
-	protected function field_settings_for_type() {
-		return array(
-			'default_blank' => false,
-		);
+		return $this->include_front_form_file();
 	}
 
 	protected function new_field_settings() {
@@ -42,11 +47,31 @@ class FrmFieldCheckbox extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * Get the type of field being displayed.
+	 *
+	 * @since 4.02.01
+	 * @return array
+	 */
+	public function displayed_field_type( $field ) {
+		return array(
+			$this->type => true,
+		);
+	}
+
 	protected function extra_field_opts() {
 		$form_id = $this->get_field_column( 'form_id' );
+
 		return array(
 			'align' => FrmStylesController::get_style_val( 'check_align', ( empty( $form_id ) ? 'default' : $form_id ) ),
 		);
+	}
+
+	/**
+	 * @since 4.06
+	 */
+	protected function show_priority_field_choices( $args = array() ) {
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-images.php' );
 	}
 
 	protected function include_front_form_file() {

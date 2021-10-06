@@ -20,6 +20,8 @@ class AlbumsModel_bwg {
     $page_num = $params['page_num'];
     $search = $params['search'];
 
+    $prepareArgs = array();
+
     if ( !$total ) {
       $query = 'SELECT *';
     }
@@ -29,26 +31,31 @@ class AlbumsModel_bwg {
 
     $query .= ' FROM `' . $wpdb->prefix . 'bwg_album`';
     if ( !current_user_can('manage_options') && BWG()->options->album_role ) {
-      $query .= " WHERE author=" . get_current_user_id();
+      $query .= " WHERE author = %d";
+      $prepareArgs[] = get_current_user_id();
     }
     else {
-      $query .= " WHERE author>=0";
+      $query .= " WHERE author>=%d";
+      $prepareArgs[] = 0;
     }
 
     if ( $search ) {
-      $query .= ' AND `name` LIKE "%' . $search . '%"';
+      $query .= ' AND `name` LIKE %s';
+      $prepareArgs[] = "%" . $wpdb->esc_like($search) . "%";
     }
     if ( !$total ) {
       $query .= ' ORDER BY `' . $orderby . '` ' . $order;
-      $query .= ' LIMIT ' . $page_num . ',' . $page_per;
+      $query .= ' LIMIT %d, %d';
+      $prepareArgs[] = $page_num;
+      $prepareArgs[] = $page_per;
+
     }
     if ( !$total ) {
-      $rows = $wpdb->get_results($query);
+      $rows = $wpdb->get_results($wpdb->prepare($query, $prepareArgs));
     }
     else {
-      $rows = $wpdb->get_var($query);
+      $rows = $wpdb->get_var($wpdb->prepare($query, $prepareArgs));
     }
-
     return $rows;
 	}
 
@@ -73,12 +80,19 @@ class AlbumsModel_bwg {
    */
   public function delete( $id, $all = FALSE ) {
     global $wpdb;
-    $where = ($all ? '' : ' WHERE id=' . $id);
-    $alb_gal_where = ($all ? '' : ' AND alb_gal_id=' . $id);
+    $where = '';
+    $alb_gal_where = '';
+    $prepareArgs = array();
+
+    if ( !$all ) {
+      $where = ' WHERE id = %d';
+      $alb_gal_where = ' AND alb_gal_id = %d';
+      $prepareArgs[] = $id;
+    }
 
     // Remove custom post.
     if ( $all ) {
-      $wpdb->query('DELETE FROM `' . $wpdb->prefix . 'posts` WHERE `post_type`="bwg_album"');
+      $wpdb->query( $wpdb->prepare('DELETE FROM `' . $wpdb->prefix . 'posts` WHERE `post_type`=%s',"bwg_album") );
     }
     else {
       $row = $wpdb->get_row( $wpdb->prepare('SELECT `slug` FROM `' . $wpdb->prefix . 'bwg_album` WHERE id="%d"', $id) );
@@ -87,9 +101,13 @@ class AlbumsModel_bwg {
       }
     }
 
-    $delete = $wpdb->query('DELETE FROM `' . $wpdb->prefix . 'bwg_album`' . $where);
-    $wpdb->query('DELETE FROM `' . $wpdb->prefix . 'bwg_album_gallery` WHERE is_album="1"' . $alb_gal_where);
-
+    if ( !empty($prepareArgs) ) {
+        $delete = $wpdb->query($wpdb->prepare('DELETE FROM `' . $wpdb->prefix . 'bwg_album`' . $where, $prepareArgs));
+        $wpdb->query($wpdb->prepare('DELETE FROM `' . $wpdb->prefix . 'bwg_album_gallery` WHERE is_album="1"' . $alb_gal_where, $prepareArgs));
+    } else {
+        $delete = $wpdb->query('DELETE FROM `' . $wpdb->prefix . 'bwg_album`' . $where, $prepareArgs);
+        $wpdb->query('DELETE FROM `' . $wpdb->prefix . 'bwg_album_gallery` WHERE is_album="1"' . $alb_gal_where, $prepareArgs);
+    }
     if ( $delete ) {
       if ( $all ) {
         $message = 5;
@@ -129,39 +147,56 @@ class AlbumsModel_bwg {
 											ON
 												`a`.`id` = `ag`.`album_id`');
       if ( !empty($results) ) {
+        $dublicatedAlbumId = 0;
+        $album_id = 0;
         foreach ( $results as $row ) {
-          $album_row['name'] = $row->name;
-          $album_row['slug'] = $row->slug;
+          $album_row['name'] = WDWLibrary::get_unique_value('bwg_album', 'name', $row->name, 0);
+          $album_row['slug'] = WDWLibrary::get_unique_value('bwg_album', 'slug', $row->slug, 0);
           $album_row['description'] = $row->description;
           $album_row['preview_image'] = $row->preview_image;
           $album_row['random_preview_image'] = $row->random_preview_image;
           $album_row['order'] = $row->order;
           $album_row['author'] = $row->author;
           $album_row['published'] = $row->published;
-          // Insert bwg_album.
-          $album_id = $this->insert_data_to_db('bwg_album', $album_row);
+          $format = array(
+                          '%s',
+                          '%s',
+                          '%s',
+                          '%s',
+                          '%s',
+                          '%d',
+                          '%d',
+                          '%d',
+                        );
+          /* Check if album already inserted by id */
+          if ( $dublicatedAlbumId != $row->id ) {
+            // Insert bwg_album.
+            $album_id = $this->insert_data_to_db('bwg_album', $album_row, $format);
+            $dublicatedAlbumId = $row->id;
+          }
           if ( $album_id ) {
-            $slug = $album_row['slug'] . '-' . $album_id;
-            // Update bwg_album slug.
-            $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_album` SET `slug`="' . $slug . '"  WHERE id = ' . $album_id);
+            $format = array('%d');
             $album_gallery_row['album_id'] = $album_id;
             if ( $row->alb_gal_id ) {
               $album_gallery_row['alb_gal_id'] = $row->alb_gal_id;
+              $format[] = '%d';
             }
             if ( $row->is_album ) {
               $album_gallery_row['is_album'] = $row->is_album;
+              $format[] = '%d';
             }
             if ( $row->ag_order ) {
               $album_gallery_row['order'] = $row->ag_order;
+              $format[] = '%d';
             }
             // Insert bwg_album_gallery.
-            $album_gallery_id = $this->insert_data_to_db('bwg_album_gallery', $album_gallery_row);
+            $album_gallery_id = $this->insert_data_to_db('bwg_album_gallery', $album_gallery_row, $format);
             if ( $album_gallery_id ) {
               // Create custom post.
               $custom_post_params = array(
                 'id' => $album_id,
                 'title' => $album_row['name'],
-                'slug' => $slug,
+                'slug' => $album_row['slug'],
                 'type' => array(
                   'post_type' => 'album',
                   'mode' => '',
@@ -176,7 +211,7 @@ class AlbumsModel_bwg {
     }
     // Duplicate itme by id.
     else {
-      $rows = $wpdb->get_results('SELECT
+      $rows = $wpdb->get_results($wpdb->prepare('SELECT
 							`a`.*,
 							`ag`.alb_gal_id,
 							`ag`.is_album,
@@ -187,11 +222,11 @@ class AlbumsModel_bwg {
 						ON
 							(`a`.`id` = `ag`.`album_id`)
 						WHERE
-							`a`.`id` = ' . $id);
+							`a`.`id` = %d',$id));
       if ( $rows ) {
         $row = $rows[0];
-        $album_row['name'] = $row->name;
-        $album_row['slug'] = $row->slug;
+        $album_row['name'] = WDWLibrary::get_unique_value('bwg_album', 'name', $row->name, 0);
+        $album_row['slug'] = WDWLibrary::get_unique_value('bwg_album', 'slug', $row->slug, 0);
         $album_row['description'] = $row->description;
         $album_row['preview_image'] = $row->preview_image;
         $album_row['random_preview_image'] = $row->random_preview_image;
@@ -199,31 +234,42 @@ class AlbumsModel_bwg {
         $album_row['author'] = $row->author;
         $album_row['published'] = $row->published;
         // Insert bwg_album.
-        $album_id = $this->insert_data_to_db('bwg_album', $album_row);
+        $format = array(
+                        '%s',
+                        '%s',
+                        '%s',
+                        '%s',
+                        '%s',
+                        '%d',
+                        '%d',
+                        '%d',
+                      );
+        $album_id = $this->insert_data_to_db('bwg_album', $album_row, $format);
         if ( $album_id ) {
-          $slug = $album_row['slug'] . '-' . $album_id;
-          // Update bwg_album slug.
-          $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_album` SET `slug`="' . $slug . '"  WHERE id = ' . $album_id);
           $album_gallery_row['album_id'] = $album_id;
+          $format = array('%d');
           foreach ( $rows as $row ) {
             if ( $row->alb_gal_id ) {
               $album_gallery_row['alb_gal_id'] = $row->alb_gal_id;
+              $format[] = '%d';
             }
             if ( $row->is_album ) {
               $album_gallery_row['is_album'] = $row->is_album;
+              $format[] = '%d';
             }
             if ( $row->ag_order ) {
               $album_gallery_row['order'] = $row->ag_order;
+              $format[] = '%d';
             }
             // Insert bwg_album_gallery.
-            $album_gallery_id = $this->insert_data_to_db('bwg_album_gallery', $album_gallery_row);
+            $album_gallery_id = $this->insert_data_to_db('bwg_album_gallery', $album_gallery_row, $format);
           }
           $message_id = 11;
           // Create custom post.
           $custom_post_params = array(
             'id' => $album_id,
             'title' => $album_row['name'],
-            'slug' => $slug,
+            'slug' => $album_row['slug'],
             'type' => array(
               'post_type' => 'album',
               'mode' => '',
@@ -245,15 +291,19 @@ class AlbumsModel_bwg {
    * @return array|null|object|stdClass|void
    */
   public function get_row_data( $id = 0 ) {
+
     global $wpdb;
+    $prepareArgs = array();
     if ( $id != 0 ) {
       if ( !current_user_can('manage_options') && BWG()->options->album_role ) {
-        $where = " WHERE author = " . get_current_user_id();
+        $where = " WHERE author = %d";
+        $prepareArgs[] = get_current_user_id();
       }
       else {
         $where = " WHERE author >= 0 ";
       }
-      $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM `' . $wpdb->prefix . 'bwg_album`' . $where . ' AND id="%d"', $id));
+      $prepareArgs[] = $id;
+      $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM `' . $wpdb->prefix . 'bwg_album`' . $where . ' AND id="%d"', $prepareArgs));
     }
     else {
       $row = new stdClass();
@@ -269,6 +319,8 @@ class AlbumsModel_bwg {
     }
     $user_data = get_userdata($row->author);
     $row->author = ($user_data != FALSE ? $user_data->display_name : '');
+    $row->name = stripslashes(esc_html($row->name));
+    $row->description = stripslashes(esc_html($row->description));
 
     return $row;
   }
@@ -288,11 +340,11 @@ class AlbumsModel_bwg {
     $slug = WDWLibrary::get('slug');
     $slug = $this->create_unique_slug((empty($slug) ? $name : $slug), $id);
     $old_slug = WDWLibrary::get('old_slug');
-	$published = WDWLibrary::get('published', 0);
-    $preview_image = WDWLibrary::get('preview_image');
-    $description = WDWLibrary::get('description', '', FALSE);
+	  $published = WDWLibrary::get('published', 0, 'intval');
+    $preview_image = WDWLibrary::get('preview_image', '', 'esc_url_raw');
+    $description = WDWLibrary::strip_tags(htmlspecialchars_decode(WDWLibrary::get('description', '', 'wp_filter_post_kses')));
     $albumgallery_ids = WDWLibrary::get('albumgallery_ids');
-    $modified_date = WDWLibrary::get('modified_date', time());
+    $modified_date = WDWLibrary::get('modified_date', time(),'intval');
     $data = array(
       'name' => $name,
       'slug' => $slug,
@@ -301,8 +353,16 @@ class AlbumsModel_bwg {
       'published' => $published,
       'modified_date' => $modified_date
     );
+    $format = array(
+      '%s',
+      '%s',
+      '%s',
+      '%s',
+      '%d',
+      '%d'
+    );
     if ( $id ) {
-      $save = $wpdb->update($wpdb->prefix . 'bwg_album', $data, array( 'id' => $id ));
+      $save = $wpdb->update($wpdb->prefix . 'bwg_album', $data, array( 'id' => intval($id) ), $format);
     }
     else {
       $data['author'] = $author;
@@ -336,7 +396,7 @@ class AlbumsModel_bwg {
     $save = $this->save_album_gallery($id, $albumgallery_ids);
     // Set random image.
     $random_preview_image = (($preview_image == '') ? $this->get_image_for_album($id) : '');
-    $wpdb->update($wpdb->prefix . 'bwg_album', array( 'random_preview_image' => $random_preview_image ), array( 'id' => $id ));
+    $wpdb->update($wpdb->prefix . 'bwg_album', array( 'random_preview_image' => $random_preview_image ), array( 'id' => $id ), array('%s'));
     if ( $save !== FALSE ) {
       $message_id = 1;
     }
@@ -349,12 +409,13 @@ class AlbumsModel_bwg {
    *
    * @param string $table
    * @param array  $data
+   * @param array  $format
    *
    * @return array
    */
-  private function insert_data_to_db( $table, $data ) {
+  private function insert_data_to_db( $table, $data, $format = array() ) {
     global $wpdb;
-    $insert = $wpdb->insert($wpdb->prefix . $table, $data);
+    $insert = $wpdb->insert($wpdb->prefix . $table, $data, $format);
     if ( $insert ) {
       return $wpdb->insert_id;
     }
@@ -437,10 +498,10 @@ class AlbumsModel_bwg {
    */
   public function get_albums_galleries_data( $id = 0 ) {
     global $wpdb;
-    $query = '(SELECT t1.id, t2.name, t2.slug, t1.is_album, t1.alb_gal_id, t1.order, t2.preview_image, t2.random_preview_image, t2.published FROM ' . $wpdb->prefix . 'bwg_album_gallery as t1 INNER JOIN ' . $wpdb->prefix . 'bwg_album as t2 on t1.alb_gal_id = t2.id where t1.is_album="1" AND t1.album_id="' . $id . '")
+    $query = '(SELECT t1.id, t2.name, t2.slug, t1.is_album, t1.alb_gal_id, t1.order, t2.preview_image, t2.random_preview_image, t2.published FROM ' . $wpdb->prefix . 'bwg_album_gallery as t1 INNER JOIN ' . $wpdb->prefix . 'bwg_album as t2 on t1.alb_gal_id = t2.id where t1.is_album="1" AND t1.album_id="%d")
                 UNION
-            (SELECT t1.id, t2.name, t2.slug, t1.is_album, t1.alb_gal_id, t1.order, t2.preview_image, t2.random_preview_image, t2.published FROM ' . $wpdb->prefix . 'bwg_album_gallery as t1 INNER JOIN ' . $wpdb->prefix . 'bwg_gallery as t2 on t1.alb_gal_id = t2.id where t1.is_album="0" AND t1.album_id="' . $id . '") ORDER BY `order`';
-    $results = $wpdb->get_results($query);
+            (SELECT t1.id, t2.name, t2.slug, t1.is_album, t1.alb_gal_id, t1.order, t2.preview_image, t2.random_preview_image, t2.published FROM ' . $wpdb->prefix . 'bwg_album_gallery as t1 INNER JOIN ' . $wpdb->prefix . 'bwg_gallery as t2 on t1.alb_gal_id = t2.id where t1.is_album="0" AND t1.album_id="%d") ORDER BY `order`';
+    $results = $wpdb->get_results( $wpdb->prepare($query, $id, $id) );
     if ( !empty($results) ) {
       foreach ( $results as $result ) {
 			$preview_image = BWG()->plugin_url . '/images/no-image.png';

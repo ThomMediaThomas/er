@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.04
@@ -47,7 +50,6 @@ class FrmTableHTMLGenerator {
 	 */
 	private $td_style = '';
 
-
 	/**
 	 * FrmTableHTMLGenerator constructor.
 	 *
@@ -62,7 +64,6 @@ class FrmTableHTMLGenerator {
 		$this->init_direction( $atts );
 		$this->init_table_style();
 		$this->init_td_style();
-
 	}
 
 	/**
@@ -73,7 +74,7 @@ class FrmTableHTMLGenerator {
 	 * @param array $atts
 	 */
 	private function init_style_settings( $atts ) {
-		$style_settings = array(
+		$style_settings       = array(
 			'border_color' => 'dddddd',
 			'bg_color'     => 'f7f7f7',
 			'text_color'   => '444444',
@@ -92,6 +93,8 @@ class FrmTableHTMLGenerator {
 				$this->style_settings[ $key ] = $this->get_color_markup( $this->style_settings[ $key ] );
 			}
 		}
+
+		$this->style_settings['class'] = isset( $atts['class'] ) ? $atts['class'] : '';
 	}
 
 	/**
@@ -131,6 +134,10 @@ class FrmTableHTMLGenerator {
 			$this->table_style = ' style="' . esc_attr( 'font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
 			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';' ) . '"';
 
+		}
+
+		if ( ! empty( $this->style_settings['class'] ) ) {
+			$this->table_style .= ' class="' . esc_attr( $this->style_settings['class'] ) . '"';
 		}
 	}
 
@@ -205,7 +212,7 @@ class FrmTableHTMLGenerator {
 
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
-		} else if ( $this->use_inline_style ) {
+		} elseif ( $this->use_inline_style ) {
 			$tr_style = ' style="background-color:' . $this->table_row_background_color() . ';"';
 		} else {
 			$tr_style = '';
@@ -258,18 +265,22 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_two_cell_table_row( $label, $value ) {
-		$row = '<tr' . $this->tr_style() . '>';
+		$row = '<tr' . $this->tr_style();
+		if ( $value === '' ) {
+			$row .= ' class="frm-empty-row"';
+		}
+		$row .= '>';
+
+		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
+		$value = '<td' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
-			$first = $value;
-			$second = $label;
+			$row .= $value;
+			$row .= $label;
 		} else {
-			$first = $label;
-			$second = $value;
+			$row .= $label;
+			$row .= $value;
 		}
-
-		$row .= '<td' . $this->td_style . '>' . $first . '</td>';
-		$row .= '<td' . $this->td_style . '>' . $second . '</td>';
 
 		$row .= '</tr>' . "\r\n";
 

@@ -44,20 +44,25 @@ class AddTagsView_bwg extends AdminView_bwg {
 	  ?>
 	<div class="wd-table-container">
 		<?php
-    $image_id = WDWLibrary::get('image_id', 0);
+    $image_id = WDWLibrary::get('image_id', 0, 'intval');
     echo $this->title( array(
                'title' => $params['page_title'],
                'title_class' => 'wd-header',
                'add_new_button' => FALSE,
+                'popup_window' => TRUE,
                )
     );
     $params['page_url'] = add_query_arg(array('image_id' => $image_id), $params['page_url']);
 		?>
 		<div class="wp-search-wrap">
 			<?php echo $this->search(); ?>
-			<div class="tablenav top">
-				<?php echo $this->pagination($params['page_url'], $params['total'], $params['items_per_page']); ?>
-			</div>
+      <div class="tablenav top">
+        <div class="tablenav-pages">
+          <div class="displaying-num">
+            <?php printf(_n('%s item', '%s items', $params['total'], BWG()->prefix), $params['total']); ?>
+          </div>
+        </div>
+      </div>
 		</div>
       <div>
       <table class="adminlist table table-striped wp-list-table widefat fixed pages">
@@ -85,7 +90,7 @@ class AddTagsView_bwg extends AdminView_bwg {
                        data-name="<?php echo $row->name; ?>" />
               </th>
               <td class="column-primary column-title" data-colname="<?php _e('Name', BWG()->prefix); ?>">
-                <a class="cursor-pointer" onclick="<?php echo $image_id ? 'window.parent.bwg_add_tag(\'' . $image_id . '\', [\'' . $row->id . '\'],[\'' . htmlspecialchars(addslashes($row->name)) . '\'])' : 'bwg_bulk_add_tags(\'' . $row->id . '\')'; ?>;" id="a_<?php echo $row->id; ?>">
+                <a class="cursor-pointer" onclick="<?php echo $image_id ? 'window.parent.bwg_add_tag(\'' . $image_id . '\', [\'' . $row->id . '\'],[\'' . htmlspecialchars(addslashes($row->name)) . '\'])' : 'bwg_bulk_add_tags(\'' . $row->id . '\', \'' . 'add' . '\')'; ?>;" id="a_<?php echo $row->id; ?>">
                   <?php echo $row->name; ?>
                 </a>
               </td>
@@ -105,15 +110,16 @@ class AddTagsView_bwg extends AdminView_bwg {
 	<div class="media-frame-toolbar">
 		<div class="media-toolbar">
 		  <div class="media-toolbar-primary search-form">
-			<button class="button media-button button-primary button-large media-button-insert" type="button" onclick="<?php echo $image_id ? 'bwg_add_tags(\'' . $image_id . '\')' : 'bwg_bulk_add_tags()'; ?>"><?php _e('Add to image', BWG()->prefix); ?></button>
+      <button class="button media-button button button-large media-button-insert" type="button" onclick="<?php echo $image_id ? 'bwg_remove_tags(\'' . $image_id . '\')' : 'bwg_bulk_add_tags(\'' . '' . '\',\'' . 'remove' . '\')'; ?>"><?php _e('Remove from image', BWG()->prefix); ?></button>
+			<button class="button media-button button-primary button-large media-button-insert" type="button" onclick="<?php echo $image_id ? 'bwg_add_tags(\'' . $image_id . '\')' : 'bwg_bulk_add_tags(\'' . '' . '\',\'' . 'add' . '\')'; ?>"><?php _e('Add to image', BWG()->prefix); ?></button>
 		  </div>
 		</div>
 	</div>
 	<script>
-	jQuery(window).load(function() {
+	jQuery(window).on('load',function(){
 		jQuery("#loading_div", window.parent.document).hide();
 	});
-    </script>
+  </script>
     <?php
   }
 }

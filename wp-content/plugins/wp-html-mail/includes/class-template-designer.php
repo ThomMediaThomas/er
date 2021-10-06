@@ -47,19 +47,20 @@ class Haet_TemplateDesigner {
 	public function rest_api_init() {
 		register_rest_route( $this->api_base, '/themesettings', array(
             'methods' => 'GET',
-            'callback' => [ $this, 'getThemeSettings' ]
+			'callback' => [ $this, 'getThemeSettings' ],
+			'permission_callback' => '__return_true'
 		));
 		
 		register_rest_route( $this->api_base, '/themesettings', array(
             'methods' => 'POST',
-            'callback' => [ $this, 'saveThemeSettings' ]
+			'callback' => [ $this, 'saveThemeSettings' ],
+			'permission_callback' => '__return_true'
 		));
 	}
 
 
 	public function getThemeSettings(){
 		$theme_options = Haet_Mail()->get_theme_options('default');
-		$theme_options = Haet_Mail()->init_headerimg_placement( $theme_options );
 
         return new \WP_REST_Response( $theme_options );
 	}
@@ -116,7 +117,7 @@ class Haet_TemplateDesigner {
 			if( !array_key_exists( 'user_checked_settings_in_v3', $options ) || !$options['user_checked_settings_in_v3'] ){
 				?>
 				<div class="notice notice-success">
-					<p><?php _e( 'You successfully upgraded to our <strong>new email editor</strong>! Please <a href="' . get_admin_url(null,'options-general.php?page=wp-html-mail') . '">review your settings</a> to make sure everything still looks as expected.', 'wp-html-mail' ); ?></p>
+					<p><?php echo sprintf( __( 'You successfully upgraded to our <strong>new email editor</strong>! Please <a href="%1$s">review your settings</a> to make sure everything still looks as expected.', 'wp-html-mail' ), get_admin_url(null,'options-general.php?page=wp-html-mail') ); ?></p>
 				</div>
 				<?php
 			}

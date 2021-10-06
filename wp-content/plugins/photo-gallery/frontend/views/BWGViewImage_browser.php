@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class BWGViewImage_browser
  */
@@ -11,16 +10,16 @@ class BWGViewImage_browser extends BWGViewSite {
    * @param array $params
    * @param int $bwg
    */
-  public function display( $params = array(), $bwg = 0) {
+  public function display( $params = array(), $bwg = 0, $ajax = FALSE) {
     $theme_row = $params['theme_row'];
     $image_rows = $params['image_rows'];
-
     $image_title = $params['image_browser_title_enable'];
     $enable_image_description = $params['image_browser_description_enable'];
     $image_right_click = isset(BWG()->options->image_right_click) ? BWG()->options->image_right_click : 0;
     $page_nav = $image_rows['page_nav'];
     $images = $image_rows['images'];
     $items_per_page = array('images_per_page' => 1, 'load_more_image_count' => 1);
+    $lazyload = BWG()->options->lazyload_images;
     if ( $params['watermark_type'] == 'none' ) {
       $text_align = '';
       $vertical_align = '';
@@ -48,7 +47,6 @@ class BWGViewImage_browser extends BWGViewSite {
       $params['watermark_font_size'] = '';
     }
     $image_browser_image_title_align = (isset($theme_row->image_browser_image_title_align)) ? $theme_row->image_browser_image_title_align : 'top';
-
     $inline_style = $this->inline_styles($bwg, $theme_row, $params, $text_align, $vertical_align);
     if ( !WDWLibrary::elementor_is_active() ) {
       if ( !$params['ajax'] ) {
@@ -59,14 +57,12 @@ class BWGViewImage_browser extends BWGViewSite {
           echo '<style id="bwg-style-' . $bwg . '">' . $inline_style . '</style>';
         }
       }
+	  else {
+        echo '<style id="bwg-style-' . $bwg . '">' . $inline_style . '</style>';
+      }
     }
     else {
       echo '<style id="bwg-style-' . $bwg . '">' . $inline_style . '</style>';
-      echo '<script id="bwg-script-' . $bwg .'">
-        jQuery(document).ready(function () {
-          bwg_main_ready();
-        });
-      </script>';
     }
     $bwg_param = array(
       'is_pro' => BWG()->is_pro,
@@ -76,11 +72,13 @@ class BWGViewImage_browser extends BWGViewSite {
     $bwg_params = json_encode($bwg_param);
     ob_start();
     ?>
-    <div id="bwg_<?php echo $params['gallery_type'] . '_' . $bwg ?>" class="image_browser_images_conteiner_<?php echo $bwg; ?>" data-params='<?php echo $bwg_params ?>'>
+	  <div id="bwg_<?php echo $params['gallery_type'] . '_' . $bwg ?>" class="image_browser_images_conteiner_<?php echo $bwg; ?> bwg-container"
+         data-params='<?php echo $bwg_params ?>'
+         data-lightbox-url="<?php echo addslashes(add_query_arg($params['params_array'], admin_url('admin-ajax.php'))); ?>">
       <div class="image_browser_images_<?php echo $bwg; ?>">
         <?php
         foreach ( $images as $image_row ) {
-          $params['image_id'] = (isset($_POST['image_id']) ? esc_html($_POST['image_id']) : $image_row->id);
+          $params['image_id'] = WDWLibrary::get('image_id', $image_row->id, 'intval');
           $is_embed = preg_match('/EMBED/', $image_row->filetype) == 1 ? TRUE : FALSE;
           $is_embed_16x9 = ((preg_match('/EMBED/', $image_row->filetype) == 1 ? TRUE : FALSE) && (preg_match('/VIDEO/', $image_row->filetype) == 1 ? TRUE : FALSE) && !(preg_match('/INSTAGRAM/', $image_row->filetype) == 1 ? TRUE : FALSE));
           $is_embed_instagram_post = preg_match('/INSTAGRAM_POST/', $image_row->filetype) == 1 ? TRUE : FALSE;
@@ -117,8 +115,11 @@ class BWGViewImage_browser extends BWGViewSite {
                 }
                 if ( !$is_embed ) {
                   ?>
-                  <a style="position:relative;" <?php echo($params['thumb_click_action'] == 'open_lightbox' ? (' class="bwg_lightbox" data-image-id="' . $image_row->id . '"') : ($params['thumb_click_action'] == 'redirect_to_url' && $image_row->redirect_url ? 'href="' . $image_row->redirect_url . '" target="' . ($params['thumb_link_target'] ? '_blank' : '') . '"' : '')) ?>>
-                    <img class="skip-lazy bwg-item0 bwg_image_browser_img bwg_image_browser_img_<?php echo $bwg; ?>" src="<?php echo BWG()->upload_url . $image_row->image_url; ?>" alt="<?php echo $image_row->alt; ?>" />
+                  <a style="position:relative;" <?php echo($params['thumb_click_action'] == 'open_lightbox' ? (' class="bwg-a bwg_lightbox" data-image-id="' . $image_row->id . '" data-elementor-open-lightbox="no"') : ('class="bwg-a" ' . ($params['thumb_click_action'] == 'redirect_to_url' && $image_row->redirect_url ? 'href="' . $image_row->redirect_url . '" target="' . ($params['thumb_link_target'] ? '_blank' : '') . '"' : ''))) ?>>
+                    <img class="skip-lazy bwg-item0 bwg_image_browser_img bwg_image_browser_img_<?php echo $bwg; ?> <?php if( $lazyload ) { ?> bwg_lazyload lazy_loader<?php } ?>"
+                         src="<?php if( !$lazyload ) { echo BWG()->upload_url . $image_row->image_url; } else { echo BWG()->plugin_url."/images/lazy_placeholder.gif"; } ?>"
+                         data-original="<?php echo BWG()->upload_url . $image_row->image_url; ?>"
+                         alt="<?php echo $image_row->alt; ?>" />
                   </a>
                   <?php
                 }
@@ -187,7 +188,7 @@ class BWGViewImage_browser extends BWGViewSite {
                 ?>
                 <div class="bwg_image_browser_image_desp_<?php echo $bwg; ?>">
                   <div class="bwg_image_browser_image_description_<?php echo $bwg; ?>" id="alt<?php echo $image_row->id; ?>">
-                    <?php echo html_entity_decode($image_row->description); ?>
+                    <?php echo $image_row->description; ?>
                   </div>
                 </div>
                 <?php
@@ -211,7 +212,6 @@ class BWGViewImage_browser extends BWGViewSite {
     $theme_row->thumb_gal_title_shadow = $theme_row->image_browser_gal_title_shadow;
     $theme_row->thumb_gal_title_margin = $theme_row->image_browser_gal_title_margin;
     $theme_row->thumb_gal_title_align = $theme_row->image_browser_gal_title_align;
-
     if ( $params['ajax'] ) { /* Ajax response after ajax call for filters and pagination.*/
       parent::ajax_content($params, $bwg, $content);
     }
@@ -230,7 +230,7 @@ class BWGViewImage_browser extends BWGViewSite {
    * @param $vertical_align
    * @return string
    */
-  private function inline_styles($bwg, $theme_row, $params, $text_align, $vertical_align) {
+  public function inline_styles($bwg, $theme_row, $params, $text_align = '', $vertical_align ='') {
     ob_start();
     $image_browser_images_conteiner = WDWLibrary::spider_hex2rgb($theme_row->image_browser_full_bg_color);
     $bwg_image_browser_image = WDWLibrary::spider_hex2rgb($theme_row->image_browser_bg_color);
@@ -240,99 +240,99 @@ class BWGViewImage_browser extends BWGViewSite {
         box-sizing: border-box;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .image_browser_images_conteiner_<?php echo $bwg; ?>{
-				background-color: rgba(<?php echo $image_browser_images_conteiner['red']; ?>, <?php echo $image_browser_images_conteiner['green']; ?>, <?php echo $image_browser_images_conteiner['blue']; ?>, <?php echo number_format($theme_row->image_browser_full_transparent / 100, 2, ".", ""); ?>);
-				text-align: center;
-				width: 100%;
-				border-style: <?php echo $theme_row->image_browser_full_border_style;?>;
-				border-width: <?php echo $theme_row->image_browser_full_border_width;?>px;
-				border-color: #<?php echo $theme_row->image_browser_full_border_color;?>;
-				padding: <?php echo $theme_row->image_browser_full_padding; ?>;
-				border-radius: <?php echo $theme_row->image_browser_full_border_radius; ?>;
-				position:relative;
+		background-color: rgba(<?php echo $image_browser_images_conteiner['red']; ?>, <?php echo $image_browser_images_conteiner['green']; ?>, <?php echo $image_browser_images_conteiner['blue']; ?>, <?php echo number_format($theme_row->image_browser_full_transparent / 100, 2, ".", ""); ?>);
+		text-align: center;
+		width: 100%;
+		border-style: <?php echo $theme_row->image_browser_full_border_style;?>;
+		border-width: <?php echo $theme_row->image_browser_full_border_width;?>px;
+		border-color: #<?php echo $theme_row->image_browser_full_border_color;?>;
+		padding: <?php echo $theme_row->image_browser_full_padding; ?>;
+		border-radius: <?php echo $theme_row->image_browser_full_border_radius; ?>;
+		position:relative;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .image_browser_images_<?php echo $bwg; ?> {
-				display: inline-block;
-				-moz-box-sizing: border-box;
-				box-sizing: border-box;
-				font-size: 0;
-				text-align: center;
-				max-width: 100%;
-				width: <?php echo $params['image_browser_width']; ?>px;
+		display: inline-block;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		font-size: 0;
+		text-align: center;
+		max-width: 100%;
+		width: 100%;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .image_browser_image_buttons_conteiner_<?php echo $bwg; ?> {
-				text-align: <?php echo $theme_row->image_browser_align; ?>;
+		text-align: <?php echo $theme_row->image_browser_align; ?>;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .image_browser_image_buttons_<?php echo $bwg; ?> {
-				display: inline-block;
-				width:100%;
+		display: inline-block;
+		width:100%;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_image_<?php echo $bwg; ?> {
         background-color: rgba(<?php echo $bwg_image_browser_image['red']; ?>, <?php echo $bwg_image_browser_image['green']; ?>, <?php echo $bwg_image_browser_image['blue']; ?>, <?php echo number_format($theme_row->image_browser_transparent / 100, 2, ".", ""); ?>);
-				text-align: center;
-				display: inline-block;
-				vertical-align: middle;
-				margin: <?php echo $theme_row->image_browser_margin; ?>;
-				padding: <?php echo $theme_row->image_browser_padding; ?>;
-				border-radius: <?php echo $theme_row->image_browser_border_radius; ?>;
-				border: <?php echo $theme_row->image_browser_border_width; ?>px <?php echo $theme_row->image_browser_border_style; ?> #<?php echo $theme_row->image_browser_border_color; ?>;
-				box-shadow: <?php echo $theme_row->image_browser_box_shadow; ?>;
-				/*z-index: 100;*/
-				position: relative;
+		text-align: center;
+		display: inline-block;
+		vertical-align: middle;
+		margin: <?php echo $theme_row->image_browser_margin; ?>;
+		padding: <?php echo $theme_row->image_browser_padding; ?>;
+		border-radius: <?php echo $theme_row->image_browser_border_radius; ?>;
+		border: <?php echo $theme_row->image_browser_border_width; ?>px <?php echo $theme_row->image_browser_border_style; ?> #<?php echo $theme_row->image_browser_border_color; ?>;
+		box-shadow: <?php echo $theme_row->image_browser_box_shadow; ?>;
+		max-width: <?php echo $params['image_browser_width']; ?>px;
+		width: 100%;
+		/*z-index: 100;*/
+		position: relative;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_alt_<?php echo $bwg; ?>{
-				display: table;
-				width: 100%;
-				font-size: <?php echo $theme_row->image_browser_img_font_size; ?>px;
-				font-family: <?php echo $theme_row->image_browser_img_font_family; ?>;
-				color: #<?php echo $theme_row->image_browser_img_font_color; ?>;
-				text-align:<?php echo $theme_row->image_browser_image_description_align; ?>;
-				padding-left: 8px;
+		display: table;
+		width: 100%;
+		font-size: <?php echo $theme_row->image_browser_img_font_size; ?>px;
+		font-family: <?php echo $theme_row->image_browser_img_font_family; ?>;
+		color: #<?php echo $theme_row->image_browser_img_font_color; ?>;
+		text-align:<?php echo $theme_row->image_browser_image_description_align; ?>;
+		padding-left: 8px;
         word-break: break-word;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_img_<?php echo $bwg; ?> {
         padding: 0 !important;
-				max-width: 100% !important;
-				height: inherit !important;
-				width: 100%;				
+		max-width: 100% !important;
+		height: inherit !important;
+		width: 100%;
       }
       @media only screen and (max-width : 320px) {
-				#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .displaying-num_<?php echo $bwg; ?> {
-				  display: none;
-				}
-				#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_alt_<?php echo $bwg; ?> {
-				  font-size: 10px !important;
-				}
-				#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_watermark_text_<?php echo $bwg; ?>,
-				#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_watermark_text_<?php echo $bwg; ?>:hover {
-				  font-size: 10px !important;
-				  text-decoration: none;
-				  margin: 4px;
-				  font-family: <?php echo $params['watermark_font']; ?>;
-				  color: #<?php echo $params['watermark_color']; ?> !important;
-				  opacity: <?php echo number_format($params['watermark_opacity'] / 100, 2, ".", ""); ?>;
-			  	filter: Alpha(opacity=<?php echo $params['watermark_opacity']; ?>);
-          text-decoration: none;
-				  position: relative;
-				  z-index: 10141;
-				}
-				#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_image_description_<?php echo $bwg; ?> {
-          color: #<?php echo $theme_row->image_browser_img_font_color; ?>;
-				  display: table;
-				  width: 100%;
-				  text-align: left;
-				  font-size: 8px !important;
-				  font-family: <?php echo $theme_row->image_browser_img_font_family; ?>;
-				  padding: <?php echo $theme_row->image_browser_image_description_padding; ?>;
-				  /*word-break: break-all;*/
-				  border-style: <?php echo $theme_row->image_browser_image_description_border_style; ?>;
-				  background-color: #<?php echo $theme_row->image_browser_image_description_bg_color; ?>;
-				  border-radius: <?php echo $theme_row->image_browser_image_description_border_radius; ?>;
-				  border-width: <?php echo $theme_row->image_browser_image_description_border_width; ?>px;
-				}
-        
-				#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .tablenav-pages_<?php echo $bwg; ?> a {
-				  font-size: 10px !important;
-				}				
+		#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .displaying-num_<?php echo $bwg; ?> {
+		  display: none;
+		}
+		#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_alt_<?php echo $bwg; ?> {
+		  font-size: 10px !important;
+		}
+		#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_watermark_text_<?php echo $bwg; ?>,
+		#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_watermark_text_<?php echo $bwg; ?>:hover {
+		  font-size: 10px !important;
+		  text-decoration: none;
+		  margin: 4px;
+		  font-family: <?php echo $params['watermark_font']; ?>;
+		  color: #<?php echo $params['watermark_color']; ?> !important;
+		  opacity: <?php echo number_format($params['watermark_opacity'] / 100, 2, ".", ""); ?>;
+		  text-decoration: none;
+		  position: relative;
+		  z-index: 10141;
+		}
+		#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_image_description_<?php echo $bwg; ?> {
+		  color: #<?php echo $theme_row->image_browser_img_font_color; ?>;
+		  display: table;
+		  width: 100%;
+		  text-align: left;
+		  font-size: 8px !important;
+		  font-family: <?php echo $theme_row->image_browser_img_font_family; ?>;
+		  padding: <?php echo $theme_row->image_browser_image_description_padding; ?>;
+		  /*word-break: break-all;*/
+		  border-style: <?php echo $theme_row->image_browser_image_description_border_style; ?>;
+		  background-color: #<?php echo $theme_row->image_browser_image_description_bg_color; ?>;
+		  border-radius: <?php echo $theme_row->image_browser_image_description_border_radius; ?>;
+		  border-width: <?php echo $theme_row->image_browser_image_description_border_width; ?>px;
+		}
+		#bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .tablenav-pages_<?php echo $bwg; ?> a {
+		  font-size: 10px !important;
+		}
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_image_desp_<?php echo $bwg; ?> {
 				display: table;
@@ -343,17 +343,17 @@ class BWGViewImage_browser extends BWGViewSite {
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_image_description_<?php echo $bwg; ?> {
         color: #<?php echo $theme_row->image_browser_img_font_color; ?>;
-				display: table;
-				width: 100%;
-				text-align: left;
-				font-size: <?php echo $theme_row->image_browser_img_font_size; ?>px;
-				font-family: <?php echo$theme_row->image_browser_img_font_family; ?>;
-				padding: <?php echo $theme_row->image_browser_image_description_padding; ?>;
-				word-break: break-word;
-				border-style: <?php echo $theme_row->image_browser_image_description_border_style; ?>;
-				background-color: #<?php echo $theme_row->image_browser_image_description_bg_color; ?>;
-				border-radius: <?php echo $theme_row->image_browser_image_description_border_radius; ?>;
-				border-width: <?php echo $theme_row->image_browser_image_description_border_width; ?>px;
+		display: table;
+		width: 100%;
+		text-align: left;
+		font-size: <?php echo $theme_row->image_browser_img_font_size; ?>px;
+		font-family: <?php echo$theme_row->image_browser_img_font_family; ?>;
+		padding: <?php echo $theme_row->image_browser_image_description_padding; ?>;
+		word-break: break-word;
+		border-style: <?php echo $theme_row->image_browser_image_description_border_style; ?>;
+		background-color: #<?php echo $theme_row->image_browser_image_description_bg_color; ?>;
+		border-radius: <?php echo $theme_row->image_browser_image_description_border_radius; ?>;
+		border-width: <?php echo $theme_row->image_browser_image_description_border_width; ?>px;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_image_alt_<?php echo $bwg; ?> {
       	display:table;
@@ -365,60 +365,58 @@ class BWGViewImage_browser extends BWGViewSite {
       /*watermark*/
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_watermark_text_<?php echo $bwg; ?>,
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_watermark_text_<?php echo $bwg; ?>:hover {
-				text-decoration: none;
-				margin: 4px;
-				font-size: <?php echo $params['watermark_font_size']; ?>px;
-				font-family: <?php echo $params['watermark_font']; ?>;
-				color: #<?php echo $params['watermark_color']; ?> !important;
-				opacity: <?php echo number_format($params['watermark_opacity'] / 100, 2, ".", ""); ?>;
-				filter: Alpha(opacity=<?php echo $params['watermark_opacity']; ?>);
-				position: relative;
-				z-index: 10141;
+        text-decoration: none;
+        margin: 4px;
+        font-size: <?php echo $params['watermark_font_size']; ?>px;
+        font-family: <?php echo $params['watermark_font']; ?>;
+        color: #<?php echo $params['watermark_color']; ?> !important;
+        opacity: <?php echo number_format($params['watermark_opacity'] / 100, 2, ".", ""); ?>;
+        position: relative;
+        z-index: 10141;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_image_contain_<?php echo $bwg; ?>{
-				position: absolute;
-				text-align: center;
-				vertical-align: middle;
-				width: 100%;
-				height: 100%;
-				cursor: pointer;
+        position: absolute;
+        text-align: center;
+        vertical-align: middle;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_watermark_contain_<?php echo $bwg; ?>{
         display: table;
-				vertical-align: middle;
-				width: 100%;
-				height: 100%;
+        vertical-align: middle;
+        width: 100%;
+        height: 100%;
       }	 
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_watermark_cont_<?php echo $bwg; ?>{
         display: table-cell;
-				text-align: <?php echo $text_align; ?>;
-				position: relative;
-				vertical-align: <?php echo $vertical_align; ?>;
+        text-align: <?php echo $text_align; ?>;
+        position: relative;
+        vertical-align: <?php echo $vertical_align; ?>;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_watermark_<?php echo $bwg; ?>{
-				display: inline-block;
-				overflow: hidden;
-				position: relative;
-				vertical-align: middle;
-				z-index: 10140;
-				width: <?php echo $params['watermark_width'];?>px;
-				max-width: <?php echo (($params['watermark_width']) / ($params['image_browser_width'])) * 100 ; ?>%;
-				margin: 10px 10px 10px 10px ;
+		display: inline-block;
+		overflow: hidden;
+		position: relative;
+		vertical-align: middle;
+		z-index: 10140;
+		width: <?php echo $params['watermark_width'];?>px;
+		max-width: <?php echo (($params['watermark_width']) / ($params['image_browser_width'])) * 100 ; ?>%;
+		margin: 10px 10px 10px 10px ;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_watermark_text_<?php echo $bwg; ?>{
         display: inline-block;
-				overflow: hidden;
-				position: relative;
-				vertical-align: middle;
-				z-index: 10140;
-				margin: 10px 10px 10px 10px ;
+		overflow: hidden;
+		position: relative;
+		vertical-align: middle;
+		z-index: 10140;
+		margin: 10px 10px 10px 10px;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_image_browser_watermark_img_<?php echo $bwg; ?>{
-				max-width: 100%;
-				opacity: <?php echo number_format($params['watermark_opacity'] / 100, 2, ".", ""); ?>;
-				filter: Alpha(opacity=<?php echo $params['watermark_opacity']; ?>);
-				position: relative;
-				z-index: 10141;
+        max-width: 100%;
+        opacity: <?php echo number_format($params['watermark_opacity'] / 100, 2, ".", ""); ?>;
+        position: relative;
+        z-index: 10141;
       }
       #bwg_container1_<?php echo $bwg; ?> #bwg_container2_<?php echo $bwg; ?> .bwg_none_selectable {
         -webkit-touch-callout: none;

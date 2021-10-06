@@ -8,7 +8,8 @@ class UninstallModel_bwg {
    * Delete images folder.
    */
   public function delete_folder() {
-    if ( isset($_POST['bwg_delete_files']) ) {
+    $delete_files = WDWLibrary::get('bwg_delete_files');
+    if ( !empty($delete_files) ) {
       function delfiles($del_file) {
         if (is_dir($del_file)) {
           $del_folder = scandir($del_file);
@@ -66,16 +67,20 @@ class UninstallModel_bwg {
       $wpdb->query("DROP TABLE IF EXISTS `" . $table . "`");
     }
     delete_option("wd_bwg_version");
+    delete_option('wd_bwg_initial_version');
     delete_option("bwg_subscribe_done");
     delete_option("wd_bwg_options");
     delete_option('tenweb_notice_status');
     delete_user_meta(get_current_user_id(), 'bwg_photo_gallery');
     delete_option('tenweb_notice_status');
+    delete_option('tenweb_notice_version');
+
     if ( isset($_COOKIE['bwg_image_asc_or_desc']) ) {
       $_COOKIE['bwg_image_asc_or_desc'] = '';
     }
     if ( isset($_COOKIE['bwg_image_order_by']) ) {
       $_COOKIE['bwg_image_order_by'] = '';
     }
+    do_action( 'bwg_uninstall_after' );
   }
 }

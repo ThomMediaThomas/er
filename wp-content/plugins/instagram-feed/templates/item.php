@@ -3,7 +3,7 @@
  * Smash Balloon Instagram Feed Item Template
  * Adds an image, link, and other data for each post in the feed
  *
- * @version 2.2 Instagram Feed by Smash Balloon
+ * @version 2.9 Instagram Feed by Smash Balloon
  *
  */
 
@@ -11,7 +11,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
-$classes = SB_Instagram_Display_Elements::get_item_classes( $settings, $offset );
+$classes = SB_Instagram_Display_Elements::get_item_classes( $settings, $post );
 $post_id = SB_Instagram_Parse::get_post_id( $post );
 $timestamp = SB_Instagram_Parse::get_timestamp( $post );
 $media_type = SB_Instagram_Parse::get_media_type( $post );
@@ -48,7 +48,7 @@ $img_screenreader = apply_filters( 'sbi_img_screenreader', $img_screenreader, $p
 ?>
 <div class="sbi_item sbi_type_<?php echo esc_attr( $media_type ); ?><?php echo esc_attr( $classes ); ?>" id="sbi_<?php echo esc_html( $post_id ); ?>" data-date="<?php echo esc_html( $timestamp ); ?>">
     <div class="sbi_photo_wrap">
-        <a class="sbi_photo" href="<?php echo esc_url( $permalink ); ?>" target="_blank" rel="noopener nofollow" data-full-res="<?php echo esc_url( $media_full_res ); ?>" data-img-src-set="<?php echo esc_attr( wp_json_encode( $media_all_sizes_json ) ); ?>"<?php echo $sbi_photo_style_element; ?>>
+        <a class="sbi_photo" href="<?php echo esc_url( $permalink ); ?>" target="_blank" rel="noopener nofollow" data-full-res="<?php echo esc_url( $media_full_res ); ?>" data-img-src-set="<?php echo esc_attr( sbi_json_encode( $media_all_sizes_json ) ); ?>"<?php echo $sbi_photo_style_element; ?>>
             <span class="sbi-screenreader"><?php echo esc_html( $img_screenreader ); ?></span>
             <?php echo $maybe_carousel_icon; ?>
 	        <?php echo $maybe_video_icon; ?>

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -37,15 +40,22 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	public function prepare_field_html( $args ) {
-		$args = $this->fill_display_field_values( $args );
-
-		$user_ID = get_current_user_id();
-		$user_ID = ( $user_ID ? $user_ID : '' );
-		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // WPCS: CSRF ok.
-		$updating = ( isset( $args['action'] ) && $args['action'] == 'update' );
-		$value = ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
+		$args  = $this->fill_display_field_values( $args );
+		$value = $this->get_field_value( $args );
 
 		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>' . "\n";
+	}
+
+	/**
+	 * @since 4.03.06
+	 */
+	protected function get_field_value( $args ) {
+		$user_ID      = get_current_user_id();
+		$user_ID      = ( $user_ID ? $user_ID : '' );
+		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // WPCS: CSRF ok.
+		$action       = ( isset( $args['action'] ) ? $args['action'] : ( isset( $args['form_action'] ) ? $args['form_action'] : '' ) );
+		$updating     = $action == 'update';
+		return ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
 	}
 
 	public function validate( $args ) {
@@ -73,6 +83,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );
+
 		return FrmFieldsHelper::get_user_display_name( $value, $user_info, $atts );
 	}
 
@@ -82,6 +93,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 * From the get_display_name() function
 	 *
 	 * @since 3.0
+	 *
 	 * @param $atts
 	 *
 	 * @return string
@@ -94,7 +106,7 @@ class FrmFieldUserID extends FrmFieldType {
 				$user_info = $atts['show'];
 			}
 		} else {
-			$user_info = 'display_name';
+			$user_info = apply_filters( 'frm_user_id_display', 'display_name' );
 		}
 
 		return $user_info;
@@ -108,5 +120,12 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	protected function prepare_import_value( $value, $atts ) {
 		return FrmAppHelper::get_user_id_param( trim( $value ) );
+	}
+
+	/**
+	 * @since 4.0.04
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'intval', $value );
 	}
 }

@@ -114,23 +114,24 @@ FullScreenAbstract.prototype = {
 	_saveAndApplyStyles: function() {
 		var $elem = $(this._fullScreenElement);
 		this.__savedStyles = {};
-		for (var property in this.__options.styles) {
+		for (var property in this._DEFAULT_OPTIONS.styles) {
 			/* save */
 			this.__savedStyles[property] = this._fullScreenElement.style[property];
 			/* apply */
-			this._fullScreenElement.style[property] = this.__options.styles[property];
+			this._fullScreenElement.style[property] = this._DEFAULT_OPTIONS.styles[property];
 		}
-		if (this.__options.toggleClass) {
-			$elem.addClass(this.__options.toggleClass);
+		if (this._DEFAULT_OPTIONS.toggleClass) {
+			$elem.addClass(this._DEFAULT_OPTIONS.toggleClass);
 		}
 	},
 	_revertStyles: function() {
 		var $elem = $(this._fullScreenElement);
-		for (var property in this.__options.styles) {
-			this._fullScreenElement.style[property] = this.__savedStyles[property];
+		for (var property in this._DEFAULT_OPTIONS.styles) {
+			if (this.__savedStyles[property] !== undefined)
+				$elem[0].style[property] = this.__savedStyles[property];
 		}
-		if (this.__options.toggleClass) {
-			$elem.removeClass(this.__options.toggleClass);
+		if (this._DEFAULT_OPTIONS.toggleClass) {
+			$elem.removeClass(this._DEFAULT_OPTIONS.toggleClass);
 		}
 	},
 	open: function(elem, options) {

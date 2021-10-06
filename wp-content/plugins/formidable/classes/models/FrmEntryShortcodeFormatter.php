@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.04
@@ -83,6 +86,7 @@ class FrmEntryShortcodeFormatter {
 	 * Initialize the form_id property
 	 *
 	 * @since 2.04
+	 *
 	 * @param $form_id
 	 */
 	protected function init_form_id( $form_id ) {
@@ -147,7 +151,7 @@ class FrmEntryShortcodeFormatter {
 
 		if ( $this->format == 'array' ) {
 			$content = $this->get_array();
-		} else if ( $this->is_plain_text_format() ) {
+		} elseif ( $this->is_plain_text_format() ) {
 			$content = $this->get_plain_text();
 		} else {
 			$content = $this->get_table();

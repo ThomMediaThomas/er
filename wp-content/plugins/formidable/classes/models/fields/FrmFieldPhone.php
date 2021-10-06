@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -29,6 +32,14 @@ class FrmFieldPhone extends FrmFieldType {
 
 	protected function html5_input_type() {
 		$frm_settings = FrmAppHelper::get_settings();
+
 		return $frm_settings->use_html ? 'tel' : 'text';
+	}
+
+	/**
+	 * @since 4.0.04
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
 	}
 }

@@ -25,8 +25,12 @@ class OptionsController_bwg {
     );
     $built_in_watermark_fonts = array();
     foreach (scandir(path_join(BWG()->plugin_dir, 'fonts')) as $filename) {
-      if (strpos($filename, '.') === 0) continue;
-      else $built_in_watermark_fonts[] = $filename;
+      if ( strpos($filename, '.') === 0 || strpos($filename, 'twbb') !== FALSE ) {
+        continue;
+      }
+      else {
+        $built_in_watermark_fonts[] = $filename;
+      }
     }
     $params['built_in_watermark_fonts'] = $built_in_watermark_fonts;
     $params['watermark_fonts'] = array(
@@ -41,8 +45,8 @@ class OptionsController_bwg {
       'monospace' => 'Monospace',
       'serif' => 'Serif',
     );
-    $params['page_title'] = __('Edit options', BWG()->prefix);
-    $params['active_tab'] = WDWLibrary::get('active_tab', 0);
+    $params['page_title'] = __('Global Settings', BWG()->prefix);
+    $params['active_tab'] = WDWLibrary::get('active_tab', 0, 'intval');
     $params['gallery_type'] = WDWLibrary::get('gallery_type', 'thumbnails');
     $params['album_type'] = WDWLibrary::get('album_type', 'album_compact_preview');
     $params['gallery_types_name'] = array(
@@ -63,6 +67,7 @@ class OptionsController_bwg {
       $this->$task($params);
     }
     else {
+      do_action('bwg_options_execute_task', $task);
       $this->display($params);
     }
   }
@@ -75,10 +80,9 @@ class OptionsController_bwg {
   public function display($params = array()) {
     $row = new WD_BWG_Options();
     // Set Instagram access token.
-    $instagram_access_token = WDWLibrary::get('access_token');
-    if ( $instagram_access_token ) {
+    if ( isset( $_GET[ 'wdi_access_token' ] ) ) {
       ob_end_clean();
-      $success = $this->model->set_instagram_access_token($instagram_access_token);
+      $success = $this->model->set_instagram_access_token( false );
       if ( $success ) {
         wp_redirect( add_query_arg( array('page' => $this->page .'&instagram_token=' . time() ), admin_url('admin.php')) );
       }
@@ -93,7 +97,7 @@ class OptionsController_bwg {
 													BWG()->nonce => wp_create_nonce(BWG()->nonce),
 												), admin_url('admin-ajax.php') );
 
-	$params['instagram_return_url'] = 'https://api.instagram.com/oauth/authorize/?client_id=54da896cf80343ecb0e356ac5479d9ec&scope=basic+public_content&redirect_uri=http://api.web-dorado.com/instagram/?return_url=' . urlencode( admin_url('admin.php?page=options_bwg')) . '&response_type=token';
+    $params['instagram_return_url'] = 'https://api.instagram.com/oauth/authorize/?app_id=734781953985462&scope=user_profile,user_media&redirect_uri=https://instagram-api.10web.io/instagram/personal/&state=' . urlencode( admin_url('admin.php?options_bwg')) . '&response_type=code';
     $params['instagram_reset_href'] =  add_query_arg( array(
 														'page' => $this->page,
 														'task' => 'reset_instagram_access_token',
@@ -111,7 +115,7 @@ class OptionsController_bwg {
   public function reset( $params = array() ) {
     $params['row'] = new WD_BWG_Options(true);
     $params['page'] = $this->page;
-	$params['imgcount'] = $this->model->get_image_count();
+  	$params['imgcount'] = $this->model->get_image_count();
     $params['options_url_ajax'] = add_query_arg( array(
 													'action' => 'options_' . BWG()->prefix,
 													BWG()->nonce => wp_create_nonce(BWG()->nonce),
@@ -146,14 +150,14 @@ class OptionsController_bwg {
 
   public function save_db() {
     $row = new WD_BWG_Options();
-    if (isset($_POST['old_images_directory'])) {
-      $row->old_images_directory = esc_html(stripslashes($_POST['old_images_directory']));
+    if ( WDWLibrary::get('old_images_directory') ) {
+      $row->old_images_directory = WDWLibrary::get('old_images_directory');
     }
 
-    if (isset($_POST['images_directory'])) {
-      $row->images_directory = esc_html(stripslashes($_POST['images_directory']));
-      if (!is_dir(ABSPATH . $row->images_directory) || (is_dir(ABSPATH . $row->images_directory . '/photo-gallery') && $row->old_images_directory && $row->old_images_directory != $row->images_directory)) {
-        if (!is_dir(ABSPATH . $row->images_directory)) {
+    if ( WDWLibrary::get('images_directory', '', 'sanitize_text_field') ) {
+      $row->images_directory = WDWLibrary::get('images_directory', '', 'sanitize_text_field');
+      if (!is_dir(BWG()->abspath . $row->images_directory) || (is_dir(BWG()->abspath . $row->images_directory . '/photo-gallery') && $row->old_images_directory && $row->old_images_directory != $row->images_directory)) {
+        if (!is_dir(BWG()->abspath . $row->images_directory)) {
           echo WDWLibrary::message_id(0, __('Uploads directory doesn\'t exist. Old value is restored.', BWG()->prefix), 'error');
         }
         else {
@@ -167,23 +171,25 @@ class OptionsController_bwg {
           if (!is_dir($upload_dir['basedir'] . '/photo-gallery')) {
             mkdir($upload_dir['basedir'] . '/photo-gallery', 0755);
           }
-          $row->images_directory = str_replace(ABSPATH, '', $upload_dir['basedir']);
+          $row->images_directory = str_replace(BWG()->abspath, '', $upload_dir['basedir']);
         }
       }
     }
 
     foreach ($row as $name => $value) {
       if ($name == 'autoupdate_interval') {
-        $autoupdate_interval = (isset($_POST['autoupdate_interval_hour']) && isset($_POST['autoupdate_interval_min']) ? ((int) $_POST['autoupdate_interval_hour'] * 60 + (int) $_POST['autoupdate_interval_min']) : null);
+        $autoupdate_interval_hour = WDWLibrary::get('autoupdate_interval_hour', 0, 'intval');
+        $autoupdate_interval_min = WDWLibrary::get('autoupdate_interval_min', 1, 'intval');
+        $autoupdate_interval = ( isset($autoupdate_interval_hour) && isset($autoupdate_interval_min) ? ($autoupdate_interval_hour * 60 + $autoupdate_interval_min) : null);
         /*minimum autoupdate interval is 1 min*/
         $row->autoupdate_interval = isset($autoupdate_interval) && $autoupdate_interval >= 1 ? $autoupdate_interval : 30;
       }
-      else if ($name != 'images_directory' && isset($_POST[$name])) {
-        $row->$name = esc_html(stripslashes($_POST[$name]));
+      else if ( $name != 'images_directory' ) {
+        $row->$name = WDWLibrary::get($name, $row->$name);
       }
     }
     $save = update_option('wd_bwg_options', json_encode($row), 'no');
-    if (isset($_POST['recreate']) && $_POST['recreate'] == "resize_image_thumb") {
+    if ( WDWLibrary::get('recreate') == "resize_image_thumb" ) {
       $this->resize_image_thumb();
       echo WDWLibrary::message_id(0, __('All thumbnails are successfully recreated.', BWG()->prefix));
     }
@@ -191,11 +197,11 @@ class OptionsController_bwg {
     if ( $save ) {
       // Move images folder to the new direction if image directory has been changed.
       if ($row->old_images_directory && $row->old_images_directory != $row->images_directory) {
-        rename(ABSPATH . $row->old_images_directory . '/photo-gallery', ABSPATH . $row->images_directory . '/photo-gallery');
+        rename(BWG()->abspath . $row->old_images_directory . '/photo-gallery', BWG()->abspath . $row->images_directory . '/photo-gallery');
       }
 
-      if (!is_dir(ABSPATH . $row->images_directory . '/photo-gallery')) {
-        mkdir(ABSPATH . $row->images_directory . '/photo-gallery', 0755);
+      if (!is_dir(BWG()->abspath . $row->images_directory . '/photo-gallery')) {
+        mkdir(BWG()->abspath . $row->images_directory . '/photo-gallery', 0755);
       }
       else {
         echo WDWLibrary::message_id(0, __('Item Succesfully Saved.', BWG()->prefix));
@@ -214,8 +220,7 @@ class OptionsController_bwg {
   }
 
   public function image_set_watermark($params = array()) {
-	  $limitstart = WDWLibrary::get('limitstart');
-
+	$limitstart = WDWLibrary::get('limitstart', 0, 'intval');
     /*  Update options only first time of the loop  */
     if ( $limitstart == 0 ) {
 		$update_options = array(
@@ -224,18 +229,19 @@ class OptionsController_bwg {
 		);
 		if ( $update_options['built_in_watermark_type'] == 'text' ){
 			$update_options['built_in_watermark_text'] = WDWLibrary::get('built_in_watermark_text');
-			$update_options['built_in_watermark_font_size'] = WDWLibrary::get('built_in_watermark_font_size');
+			$update_options['built_in_watermark_font_size'] = WDWLibrary::get('built_in_watermark_font_size', 20, 'intval');
 			$update_options['built_in_watermark_font'] = WDWLibrary::get('built_in_watermark_font');
 			$update_options['built_in_watermark_color'] = WDWLibrary::get('built_in_watermark_color');
+      $update_options['built_in_watermark_opacity'] = WDWLibrary::get('built_in_opacity');
 		} 
 		else {
-			$update_options['built_in_watermark_size'] = WDWLibrary::get('built_in_watermark_size');
-			$update_options['built_in_watermark_url'] = WDWLibrary::get('built_in_watermark_url');
+			$update_options['built_in_watermark_size'] = WDWLibrary::get('built_in_watermark_size', 20, 'intval');
+			$update_options['built_in_watermark_url'] = WDWLibrary::get('built_in_watermark_url', '', 'esc_url');
 		}
 		$this->model->update_options_by_key( $update_options );
     }
 
-	  $error = false;
+	$error = false;
     if ( ini_get('allow_url_fopen') == 0 ) {
       $error = true;
       $message = WDWLibrary::message_id(0, __('http:// wrapper is disabled in the server configuration by allow_url_fopen=0.', $this->prefix), 'error');
@@ -256,21 +262,21 @@ class OptionsController_bwg {
   }
 
   public function image_recover_all($params = array()) {
-    $limitstart = WDWLibrary::get('limitstart');
+    $limitstart = WDWLibrary::get('limitstart', 0, 'intval');
     WDWLibrary::bwg_image_recover_all(0, $limitstart);
   }
 
   public function resize_image_thumb($params = array()) {
     global $wpdb;
-    $max_width = WDWLibrary::get('img_option_width');
-    $max_height = WDWLibrary::get('img_option_height');
-    $limitstart = WDWLibrary::get('limitstart');
+    $max_width = WDWLibrary::get('img_option_width', 500, 'intval');
+    $max_height = WDWLibrary::get('img_option_height', 500, 'intval');
+    $limitstart = WDWLibrary::get('limitstart', 0, 'intval');
 
     /*  Update options only first time of the loop  */
     if ( $limitstart == 0 ) {
       $this->model->update_options_by_key( array('upload_thumb_width' => $max_width,'upload_thumb_height' => $max_height ) );
     }
-    $img_ids = $wpdb->get_results('SELECT id, thumb_url, filetype FROM ' . $wpdb->prefix . 'bwg_image LIMIT 50 OFFSET ' . $limitstart);
+    $img_ids = $wpdb->get_results($wpdb->prepare('SELECT id, thumb_url, filetype FROM ' . $wpdb->prefix . 'bwg_image LIMIT 50 OFFSET %d', $limitstart));
     foreach ($img_ids as $img_id) {
       if ( preg_match('/EMBED/', $img_id->filetype) == 1 ) {
         continue;

@@ -43,6 +43,7 @@ class GalleriesView_bwg extends AdminView_bwg {
                                                     'task' => 'edit',
                                                   ), admin_url('admin.php')),
                         ),
+                        'add_new_button_text' => __('Add new gallery', BWG()->prefix),
                         'how_to_button' => true,
                       ));
     echo $this->search();
@@ -54,8 +55,8 @@ class GalleriesView_bwg extends AdminView_bwg {
       ?>
     </div>
     <table class="images_table adminlist table table-striped wp-list-table widefat fixed pages media bwg-gallery-lists">
-      <thead>
-		<td class="col_drag" data-page-number="<?php echo $params['page_num']; ?>" data-ordering-url="<?php echo $params['galleries_ordering_ajax_url']; ?>"><?php _e('Drag&Drop', BWG()->prefix); ?></td>
+      <thead class="alternate">
+		    <td class="col_drag" data-page-number="<?php echo $params['page_num']; ?>" data-ordering-url="<?php echo $params['galleries_ordering_ajax_url']; ?>"></td>
         <td id="cb" class="column-cb check-column">
           <label class="screen-reader-text" for="cb-select-all-1"><?php _e('Title', BWG()->prefix); ?></label>
           <input id="check_all" type="checkbox">
@@ -67,9 +68,10 @@ class GalleriesView_bwg extends AdminView_bwg {
       <tbody id="bwg-table-sortable" class="bwg-ordering">
       <?php
       if ( $params['rows'] ) {
+        $alternate = 'class="alternate"';
         foreach ( $params['rows'] as $row ) {
           $user = get_userdata($row->author);
-          $alternate = (!isset($alternate) || $alternate == '') ? 'class="alternate"' : '';
+          $alternate = (isset($alternate) && $alternate == 'class="alternate"') ? '' : 'class="alternate"';
           $edit_url = add_query_arg(array(
                                       'page' => $params['page'],
                                       'task' => 'edit',
@@ -79,6 +81,7 @@ class GalleriesView_bwg extends AdminView_bwg {
                                          'task' => ($row->published ? 'unpublish' : 'publish'),
                                          'current_id' => $row->id,
                                        ), $params['page_url']);
+          $duplicate_url = add_query_arg(array( 'task' => 'duplicate', 'current_id' => $row->id ), $params['page_url']);
           $delete_url = add_query_arg(array( 'task' => 'delete', 'current_id' => $row->id ), $params['page_url']);
           $preview_url =  WDWLibrary::get_custom_post_permalink( array('slug' => $row->slug, 'post_type' => 'gallery' ));
           $preview_image = BWG()->plugin_url . '/images/no-image.png';
@@ -93,11 +96,11 @@ class GalleriesView_bwg extends AdminView_bwg {
           }
           ?>
           <tr id="tr_<?php echo $row->id; ?>" <?php echo $alternate; ?>>
-			<th class="connectedSortable col_drag handles ui-sortable-handle">
-			  <div title="<?php _e('Drag to re-order', BWG()->prefix); ?>" class="wd-drag handle dashicons dashicons-move"></div>
-			  <input class="wd-id" id="id_input_<?php echo $row->id; ?>" name="id_input_<?php echo $row->id; ?>" type="hidden" size="1" value="<?php echo $row->id; ?>" />
-			  <input class="wd-order" id="order_input_<?php echo $row->id; ?>" name="order_input_<?php echo $row->id; ?>" type="hidden" size="1" value="<?php echo $row->order; ?>" />
-			</th>
+            <th class="connectedSortable col_drag handles ui-sortable-handle">
+              <div title="<?php _e('Drag to re-order', BWG()->prefix); ?>" class="wd-drag handle dashicons dashicons-move"></div>
+              <input class="wd-id" id="id_input_<?php echo $row->id; ?>" name="id_input_<?php echo $row->id; ?>" type="hidden" size="1" value="<?php echo $row->id; ?>" />
+              <input class="wd-order" id="order_input_<?php echo $row->id; ?>" name="order_input_<?php echo $row->id; ?>" type="hidden" size="1" value="<?php echo $row->order; ?>" />
+            </th>
             <th class="check-column">
               <input type="checkbox" id="check_<?php echo $row->id; ?>" name="check[<?php echo $row->id; ?>]" onclick="spider_check_all(this)" />
             </th>
@@ -117,6 +120,7 @@ class GalleriesView_bwg extends AdminView_bwg {
                 <span><a href="<?php echo $edit_url; ?>"><?php _e('Edit', BWG()->prefix); ?></a> |</span>
                 <span><a href="<?php echo $publish_url; ?>"><?php echo($row->published ? __('Unpublish', BWG()->prefix) : __('Publish', BWG()->prefix)); ?></a> |</span>
                 <span class="trash"><a onclick="if (!confirm('<?php echo addslashes(__('Do you want to delete selected item?', BWG()->prefix)); ?>')) {return false;}" href="<?php echo $delete_url; ?>"><?php _e('Delete', BWG()->prefix); ?></a> |</span>
+                <span><a href="<?php echo $duplicate_url; ?>"><?php _e('Duplicate', BWG()->prefix); ?></a> |</span>
                 <span><a target="_blank" href="<?php echo $preview_url; ?>"><?php _e('Preview', BWG()->prefix); ?></a></span>
               </div>
               <button class="toggle-row" type="button">
@@ -124,7 +128,7 @@ class GalleriesView_bwg extends AdminView_bwg {
               </button>
             </td>
             <td class="col_count" data-colname="<?php _e('Images count', BWG()->prefix); ?>"><?php echo $row->images_count; ?></td>
-            <td data-colname="<?php _e('Author', BWG()->prefix); ?>"><?php echo ($user) ? $user->display_name : ''; ?></td>
+            <td data-colname="<?php _e('Author', BWG()->prefix); ?>" class="col-author"><?php echo ($user) ? $user->display_name : ''; ?></td>
           </tr>
           <?php
         }
@@ -168,6 +172,7 @@ class GalleriesView_bwg extends AdminView_bwg {
     );
 
     echo $this->form(ob_get_clean(), $form_attr);
+
   }
 
   /**
@@ -194,17 +199,19 @@ class GalleriesView_bwg extends AdminView_bwg {
       ?>
     </div>
     <div id="message_div" class="wd_updated" style="display: none;"></div>
-    <div class="bwg-page-header">
-      <div class="wd-page-title wd-header">
-        <h1 class="wp-heading-inline"><?php _e('Gallery title', BWG()->prefix); ?></h1>
-        <input type="text" id="name" name="name" class="bwg_requried" value="<?php echo !empty($row->name) ? $row->name : ''; ?>">
+    <div class="bwg-page-header wd-list-view-header">
+      <div class="wd-page-title wd-header wd-list-view-header-left">
+        <div>
+          <h1 class="wp-heading-inline bwg-heading"><?php _e('Gallery title', BWG()->prefix); ?></h1>
+          <input type="text" id="name" name="name" class="bwg_requried" value="<?php echo !empty($row->name) ? $row->name : ''; ?>">
+        </div>
         <div class="bwg-page-actions">
           <?php
           if ( $params['shortcode_id'] ) {
             require BWG()->plugin_dir . '/framework/howto/howto.php';
           }
           ?>
-          <button class="button button-primary button-large" onclick="if (spider_check_required('name', 'Title') || bwg_check_instagram_gallery_input('<?php echo BWG()->options->instagram_access_token ?>') ) {return false;};
+          <button class="tw-button-primary button-large" onclick="if (spider_check_required('name', 'Title') || bwg_check_instagram_gallery_input('<?php echo BWG()->options->instagram_access_token ?>') ) {return false;};
             spider_set_input_value('task', 'save');
             spider_set_input_value('ajax_task', '');
             spider_set_input_value('bulk-action-selector-top', '-1');
@@ -212,12 +219,17 @@ class GalleriesView_bwg extends AdminView_bwg {
             <?php echo ($params['id']) ? __('Update', BWG()->prefix) : __('Publish', BWG()->prefix); ?>
           </button>
           <?php if ( $params['id'] && $params['preview_action'] ) { ?>
-            <a href="<?php echo $params['preview_action'] ?>" target="_blank" class="button button-large">
+            <a href="<?php echo $params['preview_action'] ?>" target="_blank" class="tw-button-secondary">
               <?php _e('Preview', BWG()->prefix); ?>
             </a>
           <?php } ?>
         </div>
       </div>
+        <?php
+        if (!BWG()->is_pro) {
+          WDWLibrary::topbar_upgrade_ask_question();
+        }
+        ?>
       <div class="bwg-clear"></div>
     </div>
     <div class="wd-table meta-box-sortables">
@@ -314,28 +326,25 @@ class GalleriesView_bwg extends AdminView_bwg {
                     <div class="wd-group">
                       <label class="wd-label" for="gallery_type"><?php _e('Gallery content type', BWG()->prefix); ?></label>
                       <select <?php echo ( !empty($params['rows'][0]) ) ? 'disabled' : ''; ?> name="gallery_type" id="gallery_type" onchange="bwg_gallery_type('<?php echo BWG()->options->instagram_access_token ?>');">
-                        <option value="" <?php echo(($params['gallery_type'] == '') ? 'selected="selected"' : ''); ?>>
-                          <?php _e('Mixed', BWG()->prefix); ?>
-                        </option>
-                        <option value="instagram" <?php echo(($params['gallery_type'] == 'instagram') ? 'selected="selected"' : ''); ?>>
-                          <?php _e('Instagram only', BWG()->prefix); ?>
-                        </option>
                         <?php
-                        if ( has_action('init_display_facebook_gallery_options_bwg') && $current_id != 0 ) { ?>
-                        <option value="facebook" <?php echo(($params['gallery_type'] == 'facebook') ? 'selected="selected"' : ''); ?>>
-                          <?php _e('Facebook', BWG()->prefix); ?>
-                        </option>
-                        <?php } ?>
+                        foreach ($params['gallery_types'] as $id => $type) {
+                          ?>
+                          <option value="<?php echo $id; ?>" <?php echo(($params['gallery_type'] == $id) ? 'selected="selected"' : ''); ?>>
+                            <?php echo $type; ?>
+                          </option>
+                          <?php
+                        }
+                        ?>
                       </select>
                       <input type="text" id="gallery_type_old" name="gallery_type_old" value="<?php echo $row->gallery_type; ?>" style='display:none;' />
 					  <?php if ( empty($params['rows'][0]) ) { ?>
-                      <p class="description"><?php _e('Select the type of the gallery content. Mixed galleries can include all supported items, or you can choose to have only Instagram and only Facebook images.', BWG()->prefix); ?></p>
+                      <p class="description"><?php _e('Select the type of gallery content. Mixed galleries can include all supported items. Alternatively, you can showcase images from one specific source only.', BWG()->prefix); ?></p>
 					  <?php } else { ?>
-                      <p class="description"><?php _e('Gallery type cannot be changed, since it is not empty. In case you would like to have Instagram or Facebook gallery, please create a new one.', BWG()->prefix); ?></p>
+                      <p class="description"><?php _e('Gallery type cannot be changed, as it is not empty. If you would like to show images from another source, please create a new gallery.', BWG()->prefix); ?></p>
 					  <?php } ?>
                     </div>
                     <!-- instagram gallery -->
-                    <div id="add_instagram_gallery" <?php echo($params['gallery_type'] == 'instagram' ? '' : 'style="display:none"'); ?>>
+                    <div id="add_instagram_gallery" class="bwg-gallery-type-options" <?php echo($params['gallery_type'] == 'instagram' ? '' : 'style="display:none"'); ?>>
                       <div class="wd-group" id='tr_autogallery_image_number'>
                         <label class="wd-label" for="autogallery_image_number"><?php _e('Number of Instagram recent posts to add to gallery', BWG()->prefix); ?> </label>
                         <input type="number" id="autogallery_image_number" name="autogallery_image_number" value="<?php echo $row->autogallery_image_number; ?>" />
@@ -360,17 +369,20 @@ class GalleriesView_bwg extends AdminView_bwg {
                         <input id="instagram_gallery_add_button" class="button-primary" type="button" onclick="bwg_add_instagram_gallery('<?php echo BWG()->options->instagram_access_token ?>');" value="<?php _e('Add Instagram Gallery', BWG()->prefix); ?>" />
                       </div>
                     </div>
-                    <div id="add_facebook_gallery" <?php echo($params['gallery_type'] == 'facebook' ? '' : 'style="display:none"'); ?>>
+                    <div id="add_facebook_gallery" class="bwg-gallery-type-options" <?php echo($params['gallery_type'] == 'facebook' ? '' : 'style="display:none"'); ?>>
                       <?php
                       if ( has_action('init_display_facebook_gallery_options_bwg') ) {
                         do_action('init_display_facebook_gallery_options_bwg', $params);
                       }
                       else {
-                        $link = '<a href="https://10web.io/plugins/wordpress-photo-gallery/" target="_blank">' . __('Photo Gallery Facebook Integration', BWG()->prefix) . '</a>';
+                        $link = '<a href="' . BWG()->plugin_link . BWG()->utm_source . '" target="_blank">' . __('Photo Gallery Facebook Integration', BWG()->prefix) . '</a>';
                         echo '<div class="error inline"><p>' . sprintf(__("Please install %s add-on to use this feature.", BWG()->prefix), $link) . '</p></div>';
                       }
                       ?>
                     </div>
+                    <?php
+                    do_action('bwg_gallery_type_options', $params);
+                    ?>
                   </div>
                 </div>
               </div>
@@ -385,13 +397,21 @@ class GalleriesView_bwg extends AdminView_bwg {
   }
 
   public function image_display( $params = array() ) {
+	if( $params['row'] ) {
+	  $is_google_photos = ($params['row']->gallery_type == 'google_photos') ? TRUE : FALSE;
+	}
     $ids_string = '';
     ?>
     <div class="buttons_div_left">
-      <a href="<?php echo $params['add_images_action']; ?>" id="add_image_bwg" onclick="jQuery('#loading_div').show();" class="button button-primary button-large thickbox thickbox-preview" title="<?php _e("Add Images", BWG()->prefix); ?>" onclick="return false;" style="margin-bottom:5px; <?php if ( $params['gallery_type'] != '' ) { echo 'display:none';} ?>">
+      <a href="<?php echo $params['add_images_action']; ?>" id="add_image_bwg" onclick="jQuery('#loading_div').show();jQuery( '#paged' ).val( 1 );jQuery( '#ajax_task' ).val( 'ajax_apply' );
+      spider_ajax_save( 'bwg_gallery' );" class="button button-primary button-large thickbox thickbox-preview"
+         title="<?php _e("Add Images", BWG()->prefix); ?>" onclick="return false;"
+         style="margin-bottom:5px; <?php if ( $params['gallery_type'] != '' ) {
+           echo 'display:none';
+         } ?>">
         <?php _e('Add Images', BWG()->prefix); ?>
       </a>
-      <input type="button" class="button button-secondary button-large" onclick="<?php echo (BWG()->is_demo ? 'alert(\'' . addslashes(__('This option is disabled in demo.', BWG()->prefix)) . '\');' : 'spider_media_uploader(event, true);'); ?>return false;" value="<?php _e("Import from Media Library", BWG()->prefix); ?>" style="<?php if ( $params['gallery_type'] != '' ) { echo 'display:none';} ?>" />
+      <input type="button" id="import_image_bwg" class="button button-secondary button-large" onclick="<?php echo (BWG()->is_demo ? 'alert(\'' . addslashes(__('This option is disabled in demo.', BWG()->prefix)) . '\');' : 'spider_media_uploader(event, true);'); ?>return false;" value="<?php _e("Import from Media Library", BWG()->prefix); ?>" style="<?php if ( $params['gallery_type'] != '' ) { echo 'display:none';} ?>" />
       <?php
       /*(re?)define ajax_url to add nonce only in admin*/
       ?>
@@ -403,18 +423,27 @@ class GalleriesView_bwg extends AdminView_bwg {
       } ?>" type="button" onclick="jQuery('.opacity_add_embed').show(); jQuery('#add_embed_help').hide(); return false;" value="<?php _e('Embed Media', BWG()->prefix); ?>" />
       <input id="show_bulk_embed" class="button button-secondary button-large" title="<?php _e('Social Bulk Embed', BWG()->prefix); ?>" style="<?php if ( $params['gallery_type'] != '' ) {
         echo 'display:none';
-      } ?>" type="button" onclick="<?php echo (!BWG()->is_pro ? 'alert(\'' . addslashes(__('This option is disabled in free version.', BWG()->prefix)) . '\');' : 'jQuery(\'.opacity_bulk_embed\').show();'); ?> return false;" value="<?php _e('Social Bulk Embed', BWG()->prefix); ?>" />
+      } ?>" type="button" onclick="<?php echo (!BWG()->is_pro ? 'alert(\'' . addslashes(__('This option is available in Premium version', BWG()->prefix)) . '\');' : 'jQuery(\'.opacity_bulk_embed\').show();'); ?> return false;" value="<?php _e('Social Bulk Embed', BWG()->prefix); ?>" />
       <?php
       if ( is_plugin_active('image-optimizer-wd/io-wd.php') && !empty($params['rows']) ) {
         ?><a href="<?php echo add_query_arg(array('page' => 'iowd_settings', 'target' => 'wd_gallery'), admin_url('admin.php')); ?>" class="button button-primary button-large" target="_blank"><?php _e("Optimize Images", BWG()->prefix); ?></a><?php
       }
       ?>
     </div>
-    <div class="opacity_resize_image opacity_add_embed opacity_image_desc opacity_bulk_embed bwg_opacity_media" onclick="jQuery('.opacity_add_embed').hide(); jQuery('.opacity_bulk_embed').hide(); jQuery('.opacity_resize_image').hide(); jQuery('.opacity_image_desc').hide();"></div>
+    <div class="clear"></div>
+    <div class="opacity_image_alt opacity_image_description opacity_image_redirect opacity_resize_image opacity_add_embed opacity_image_desc opacity_bulk_embed bwg_opacity_media"
+         onclick="
+         jQuery('.opacity_image_alt').hide();
+         jQuery('.opacity_image_description').hide();
+         jQuery('.opacity_image_redirect').hide();
+         jQuery('.opacity_add_embed').hide();
+         jQuery('.opacity_bulk_embed').hide();
+         jQuery('.opacity_resize_image').hide();
+         jQuery('.opacity_image_desc').hide();"></div>
 
     <!-- Media Embed -->
     <div id="add_embed" class="opacity_add_embed bwg_add_embed">
-      <input type="text" id="embed_url" name="embed_url" value="" placeholder="<?php _e('Enter YouTube, Vimeo, Instagram, Facebook, Flickr or Dailymotion URL here.', BWG()->prefix); ?>"/>
+      <input type="text" id="embed_url" name="embed_url" value="" placeholder="<?php _e('Enter YouTube, Vimeo, Instagram, Flickr or Dailymotion URL here.', BWG()->prefix); ?>"/>
       <input class="button button-primary button-large" type="button" onclick="if (bwg_get_embed_info('embed_url')) {jQuery('.opacity_add_embed').hide();} return false;" value="<?php _e('Add to gallery', BWG()->prefix); ?>" />
       <input class="button button-secondary button-large" type="button" onclick="jQuery('.opacity_add_embed').hide(); return false;" value="<?php _e('Cancel', BWG()->prefix); ?>" />
       <p class="description"></p>
@@ -422,7 +451,7 @@ class GalleriesView_bwg extends AdminView_bwg {
       <div class="spider_description">
         <div>
           <p class="spider_description_title"><?php _e('<b>Youtube</b> URL example:', BWG()->prefix); ?></p>
-          <input type="text" value="https://www.youtube.com/watch?v=fa4RLjE-yM8" disabled="disabled">
+          <input type="text" value="https://www.youtube.com/watch?v=pA8-5qaMBqM" disabled="disabled">
         </div>
         <div>
           <p class="spider_description_title"><?php _e('<b>Vimeo</b> URL example:', BWG()->prefix); ?></p>
@@ -431,7 +460,6 @@ class GalleriesView_bwg extends AdminView_bwg {
         <div>
           <p class="spider_description_title"><?php _e('<b>Instagram</b> URL example:', BWG()->prefix); ?></p>
           <input type="text" value="https://instagram.com/p/ykvv0puS4u" disabled="disabled">
-          <p class="description"><?php _e('Add', BWG()->prefix); ?> "<i style="text-decoration:underline;"><?php _e('post', BWG()->prefix); ?></i>" <?php _e('to the end of URL if you want to embed the whole Instagram post, not only its content.', BWG()->prefix); ?></p>
         </div>
         <?php
         if ( !empty($params['facebook_embed']['media']) && !empty($params['facebook_embed']['media']['body']) ) {
@@ -510,33 +538,64 @@ class GalleriesView_bwg extends AdminView_bwg {
       <input class="button button-secondary button-large" type="button" onclick="jQuery('.opacity_resize_image').hide(); return false;" value="<?php _e("Cancel", BWG()->prefix); ?>" />
       </div>
     </div>
-    <!-- Edit from bulk block -->
-    <div id="add_desc" class="opacity_image_desc bwg_image_desc">
+
+
+    <!-- Edit from bulk block alt/title -->
+    <div id="add_alt" class="opacity_image_alt bwg_image_desc">
+
       <div>
         <span class="bwg_popup_label">
           <?php _e('Alt/Title: ', BWG()->prefix); ?>
         </span>
         <input class="bwg_popup_input" type="text" id="title" name="title" value="" />
+        <p class="description"><?php _e('Leave blank and click to "Save changes" to delete Alt/Titles.', BWG()->prefix); ?></p>
       </div>
+      <br>
+      <div class="edit_cont_buttons">
+        <input class="button button-primary button-large" type="button" onclick="spider_set_input_value('ajax_task', 'image_edit_field');
+                                                                                 spider_ajax_save('bwg_gallery');
+                                                                                 jQuery('.opacity_image_alt').hide();
+                                                                                 return false;" value="<?php _e('Save changes', BWG()->prefix); ?>" />
+        <input class="button button-secondary button-large" type="button" onclick="jQuery('.opacity_image_alt').hide(); return false;" value="<?php echo __('Cancel', BWG()->prefix); ?>" />
+      </div>
+    </div>
+
+    <!-- Edit from bulk block redirect url -->
+    <div id="add_red_url" class="opacity_image_redirect bwg_image_desc">
       <div>
         <span class="bwg_popup_label">
           <?php _e('Redirect URL: ', BWG()->prefix); ?>
         </span>
         <input class="bwg_popup_input" type="text" id="redirecturl" name="redirecturl" value="" />
+        <p class="description"><?php _e('Leave blank and click to "Save changes" to delete Redirect URLs.', BWG()->prefix); ?></p>
       </div>
+      <br>
+      <div class="edit_cont_buttons">
+        <input class="button button-primary button-large" type="button" onclick="spider_set_input_value('ajax_task', 'image_edit_field');
+                                                                                 spider_ajax_save('bwg_gallery');
+                                                                                 jQuery('.opacity_image_redirect').hide();
+                                                                                 return false;" value="<?php _e('Save changes', BWG()->prefix); ?>" />
+        <input class="button button-secondary button-large" type="button" onclick="jQuery('.opacity_image_redirect').hide(); return false;" value="<?php echo __('Cancel', BWG()->prefix); ?>" />
+      </div>
+    </div>
+
+    <!-- Edit from bulk block description -->
+    <div id="add_desc" class="opacity_image_description bwg_image_desc">
       <div>
         <span class="bwg_popup_label">
           <?php _e('Description: ', BWG()->prefix); ?>
         </span>
         <textarea class="bwg_popup_input" type="text" id="desc" name="desc"></textarea>
+        <p class="description"><?php _e('Leave blank and click to "Save changes" to delete Descriptions.', BWG()->prefix); ?></p>
+
       </div>
       <br>
       <div class="edit_cont_buttons">
-        <input class="button button-primary button-large" type="button" onclick="spider_set_input_value('ajax_task', 'image_edit');
+        <input class="button button-primary button-large" type="button" onclick="spider_set_input_value('ajax_task', 'image_edit_field');
                                                                                  spider_ajax_save('bwg_gallery');
-                                                                                 jQuery('.opacity_image_desc').hide();
-                                                                                 return false;" value="<?php _e('Update', BWG()->prefix); ?>" />
-        <input class="button button-secondary button-large" type="button" onclick="jQuery('.opacity_image_desc').hide(); return false;" value="<?php echo __('Cancel', BWG()->prefix); ?>" />
+                                                                                 jQuery('.opacity_image_description').hide();
+                                                                                 return false;" value="<?php _e('Save changes', BWG()->prefix); ?>" />
+        <input class="button button-secondary button-large" type="button" onclick="jQuery('.opacity_image_description').hide(); return false;" value="<?php echo __('Cancel', BWG()->prefix); ?>" />
       </div>
     </div>
     <div class="ajax-msg wd-hide">
@@ -564,12 +623,15 @@ class GalleriesView_bwg extends AdminView_bwg {
     <?php echo $this->search(array('sorting' => true)); ?>
     <div class="tablenav top">
       <?php
-      echo $this->bulk_actions($params['actions'], TRUE, 'image_bulk_action');
+      if( !$is_google_photos ) {
+          echo $this->bulk_actions($params['actions'], TRUE, 'image_bulk_action');
+      }
       echo $this->pagination($params['page_url'], $params['total'], $params['items_per_page']);
       ?>
     </div>
     <table id="images_table" class="images_table adminlist table table-striped wp-list-table widefat fixed pages media">
-      <thead>
+      <thead class="alternate">
+      <?php if( !$is_google_photos ) { ?>
         <td class="col_drag" data-page-number="<?php echo $params['page_num']; ?>">
           <?php if ($params['orderby'] == 'order') { ?>
           <select title="<?php _e('Show order column', BWG()->prefix); ?>" onchange="wd_showhide_weights(true);return false;">
@@ -589,30 +651,20 @@ class GalleriesView_bwg extends AdminView_bwg {
           <label class="screen-reader-text" for="cb-select-all-1"><?php _e('Filename', BWG()->prefix); ?></label>
           <input id="check_all" type="checkbox" />
         </td>
+      <?php } ?>
         <td class="col_num">#</td>
-        <th class="column-primary"><?php _e('Image', BWG()->prefix); ?></th>
-        <th class="col_alt"><?php _e('Alt/Title', BWG()->prefix); ?></th>
-        <th class="col_desc"><?php _e('Description', BWG()->prefix); ?></th>
-        <th class="col_redirect">
-          <?php _e('Redirect URL', BWG()->prefix); ?>
-          <i class="wd-info dashicons dashicons-info" data-id="wd-info-redirect"></i>
-          <div id="wd-info-redirect" class="wd-hide">
-            <p><?php
-              $link = '<a target="_blank" href="'.add_query_arg(array('page' => 'options_bwg'), admin_url('admin.php')).'">'. __('Options > General', BWG()->prefix) . '</a>';
-              echo sprintf(__('To activate this feature, go to %s, then set "Image click action" to "Redirect to URL". Please use absolute URLs when specifying the links.', BWG()->prefix), $link);
-              ?>
-            </p>
-          </div>
-        </th>
-        <th class="col_tag"><?php _e('Tags', BWG()->prefix); ?></th>
+        <th class="column-primary column-title"><?php _e('Image', BWG()->prefix); ?></th>
+        <th></th>
       </thead>
       <tbody id="tbody_arr" data-meta="<?php echo BWG()->options->read_metadata; ?>" class="bwg-ordering">
       <?php
       if ( $params['rows'] ) {
         $i = $params['page_num'];
+        $alternate = 'alternate';
         foreach ( $params['rows'] as $row ) {
           $alternate = (!isset($alternate) || $alternate == '') ? 'alternate' : '';
           $temp = $row->id == 'tempid' ? TRUE : FALSE;
+          $is_oembed_instagram_post = ( $row->filetype == 'EMBED_OEMBED_INSTAGRAM_POST' ) ? TRUE : FALSE;
           $is_embed = preg_match('/EMBED/', $row->filetype) == 1 ? TRUE : FALSE;
           $is_facebook_post = ($row->filetype == 'EMBED_OEMBED_FACEBOOK_POST') ? TRUE : FALSE;
           $fb_post_url = ($is_facebook_post) ? $row->filename : '';
@@ -654,6 +706,7 @@ class GalleriesView_bwg extends AdminView_bwg {
           $add_tag_url = add_query_arg(array('image_id' => $row->id, 'TB_iframe' => '1'),  $params['add_tags_action']);
           ?>
           <tr id="tr_<?php echo $row->id; ?>" class="<?php echo $alternate; ?><?php echo $temp ? ' wd-template wd-hide' : ''; ?>">
+              <?php if( !$is_google_photos ) { ?>
             <th class="<?php if ($params['orderby'] == 'order') echo 'connectedSortable'; ?> col_drag handles ui-sortable-handle">
               <div title="<?php _e('Drag to re-order', BWG()->prefix); ?>" class="wd-drag handle dashicons dashicons-move <?php if ($params['orderby'] != 'order') echo 'wd-hide'; ?>"></div>
               <input class="wd-hide wd-order" id="order_input_<?php echo $row->id; ?>" name="order_input_<?php echo $row->id; ?>" type="text" size="1" value="<?php echo $row->order; ?>" />
@@ -661,10 +714,13 @@ class GalleriesView_bwg extends AdminView_bwg {
             <th class="check-column">
               <input type="checkbox" id="check_<?php echo $row->id; ?>" name="check[<?php echo $row->id; ?>]" onclick="spider_check_all(this)" />
             </th>
+                <?php } ?>
             <th class="col_num"><?php echo $temp ? 'tempnum' : ++$i; ?></th>
             <td class="column-primary column-title" data-colname="<?php _e('Filename', BWG()->prefix); ?>">
               <strong class="has-media-icon">
+                <?php if ( !$is_oembed_instagram_post ) { ?>
                 <a class="thickbox thickbox-preview" onclick="jQuery('#loading_div').show();" href="<?php echo $image_link; ?>">
+                <?php } ?>
                   <span class="media-icon image-icon">
                     <img id="image_thumb_<?php echo $row->id; ?>" class="preview-image gallery_image_thumb <?php echo $temp ? '' : 'bwg_no_border' ?>" title="<?php echo $row->filename; ?>" <?php echo $temp ? 'tempthumb_src=""' : ''; ?>  alt="" data-src = "<?php echo $temp ? '' : $image_url ?>" />
                   </span>
@@ -676,16 +732,20 @@ class GalleriesView_bwg extends AdminView_bwg {
                     <p><?php echo __("Size", BWG()->prefix) . ': ' . $row->size; ?></p>
                     <p><?php echo __("Type", BWG()->prefix) . ': ' . $row->filetype; ?></p>
                   </div>
+                <?php if ( !$is_oembed_instagram_post ) { ?>
                 </a>
+                <?php } ?>
                 <?php if ( !$row->published ) { ?>
                   — <span class="post-state"><?php _e('Unpublished', BWG()->prefix); ?></span>
-                <?php }
-                ?>
+                <?php } ?>
               </strong>
+                <?php if( !$is_google_photos) {
+                  $svg_check = strpos(strtolower($row->filetype), 'svg') > -1 ? true : false;
+                  ?>
               <div class="row-actions">
-                <span class="wd-image-actions <?php echo ( !$is_embed && ( $params['gallery_type'] == '' ) ? '' : ' wd-hide' ); ?>"><a class="<?php echo (BWG()->is_demo || !BWG()->wp_editor_exists ? '' : 'thickbox thickbox-preview'); ?>" href="<?php echo (BWG()->is_demo ? 'javascript:alert(\'' . addslashes(__('This option is disabled in demo.', BWG()->prefix)) . '\');' : (BWG()->wp_editor_exists ? $edit_link : 'javascript:alert(\'' . addslashes(__('Image edit functionality is not supported by your web host.', BWG()->prefix)) . '\');')); ?>"><?php _e('Edit', BWG()->prefix); ?></a> |</span>
-                <span class="wd-image-actions <?php echo ( !$is_embed && ( $params['gallery_type'] == '' ) ? '' : ' wd-hide' ); ?>"><a class="<?php echo (BWG()->is_demo || !BWG()->wp_editor_exists ? '' : 'thickbox thickbox-preview'); ?>" href="<?php echo (BWG()->is_demo ? 'javascript:alert(\'' . addslashes(__('This option is disabled in demo.', BWG()->prefix)) . '\');' : (BWG()->wp_editor_exists ? $crop_link : 'javascript:alert(\'' . addslashes(__('Image edit functionality is not supported by your web host.', BWG()->prefix)) . '\');')); ?>"><?php _e('Crop Thumbnail', BWG()->prefix); ?></a> |</span>
-                <span class="wd-image-actions <?php echo ( !$is_embed && ( $params['gallery_type'] == '' ) ? '' : ' wd-hide' ); ?>"><a onclick="<?php echo (BWG()->is_demo ? 'alert(\'' . addslashes(__('This option is disabled in demo.', BWG()->prefix)) . '\');' : 'if (confirm(\'' . addslashes(__('Do you want to reset the image?', BWG()->prefix)) . '\')) { spider_set_input_value(\'ajax_task\', \'image_reset\'); spider_set_input_value(\'image_current_id\', \'' . $row->id . '\'); spider_ajax_save(\'bwg_gallery\'); } return false;'); ?>"><?php _e('Reset', BWG()->prefix); ?></a> |</span>
+                <span class="wd-image-actions <?php echo ( !$svg_check && !$is_embed && ( $params['gallery_type'] == '' ) ? '' : ' wd-hide' ); ?>"><a class="<?php echo (BWG()->is_demo || !BWG()->wp_editor_exists ? '' : 'thickbox thickbox-preview'); ?>" href="<?php echo (BWG()->is_demo ? 'javascript:alert(\'' . addslashes(__('This option is disabled in demo.', BWG()->prefix)) . '\');' : (BWG()->wp_editor_exists ? $edit_link : 'javascript:alert(\'' . addslashes(__('Image edit functionality is not supported by your web host.', BWG()->prefix)) . '\');')); ?>"><?php _e('Edit', BWG()->prefix); ?></a> |</span>
+                <span class="wd-image-actions <?php echo ( !$svg_check && !$is_embed && ( $params['gallery_type'] == '' ) ? '' : ' wd-hide' ); ?>"><a class="<?php echo (BWG()->is_demo || !BWG()->wp_editor_exists ? '' : 'thickbox thickbox-preview'); ?>" href="<?php echo (BWG()->is_demo ? 'javascript:alert(\'' . addslashes(__('This option is disabled in demo.', BWG()->prefix)) . '\');' : (BWG()->wp_editor_exists ? $crop_link : 'javascript:alert(\'' . addslashes(__('Image edit functionality is not supported by your web host.', BWG()->prefix)) . '\');')); ?>"><?php _e('Crop Thumbnail', BWG()->prefix); ?></a> |</span>
+                <span class="wd-image-actions <?php echo ( !$svg_check && !$is_embed && ( $params['gallery_type'] == '' ) ? '' : ' wd-hide' ); ?>"><a onclick="<?php echo (BWG()->is_demo ? 'alert(\'' . addslashes(__('This option is disabled in demo.', BWG()->prefix)) . '\');' : 'if (confirm(\'' . addslashes(__('Do you want to reset the image?', BWG()->prefix)) . '\')) { spider_set_input_value(\'ajax_task\', \'image_reset\'); spider_set_input_value(\'image_current_id\', \'' . $row->id . '\'); spider_ajax_save(\'bwg_gallery\'); } return false;'); ?>"><?php _e('Reset', BWG()->prefix); ?></a> |</span>
                 <span><a onclick="spider_set_input_value('ajax_task', 'image_<?php echo $row->published ? 'unpublish' : 'publish'; ?>');
                     spider_set_input_value('image_current_id', '<?php echo $row->id; ?>');
                     spider_ajax_save('bwg_gallery');"><?php echo($row->published ? __('Unpublish', BWG()->prefix) : __('Publish', BWG()->prefix)); ?></a> |</span>
@@ -697,58 +757,83 @@ class GalleriesView_bwg extends AdminView_bwg {
                     return false;
                     }"><?php _e('Delete', BWG()->prefix); ?></a></span>
               </div>
+                <?php } ?>
               <button class="toggle-row" type="button">
                 <span class="screen-reader-text"><?php _e('Show more details', BWG()->prefix); ?></span>
               </button>
             </td>
-            <td data-colname="<?php _e('Alt/Title', BWG()->prefix); ?>">
-              <textarea rows="4" id="image_alt_text_<?php echo $row->id; ?>" name="image_alt_text_<?php echo $row->id; ?>"><?php echo $row->alt; ?></textarea>
-            </td>
-            <td class="col_desc" data-colname="<?php _e('Description', BWG()->prefix); ?>">
-              <textarea rows="4" id="image_description_<?php echo $row->id; ?>" name="image_description_<?php echo $row->id; ?>"><?php echo $row->description; ?></textarea>
-              <?php
-              if ( function_exists('BWGEC') ) {
-                $priselist_name = $row->priselist_name ? "Pricelist: " . $row->priselist_name : "Not for sale";
-                $unset = $priselist_name == "Not for sale" ? "" : " <span onclick='bwg_remove_pricelist(this);' data-image-id= '" . $row->id . "' data-pricelist-id='" . $row->pricelist_id . "' class ='spider_delete_img_small' style='margin-top: -2px;margin-left: 3px;'></span>";
-                echo "<div><strong>" . $priselist_name . " </strong>" . $unset . "</div>";
-                $not_set_text = $row->not_set_items == 1 ? __('Selected pricelist item longest dimension greater than some original images dimensions.', BWG()->prefix) : "";
-                echo "<small id='priselist_set_error" . $row->id . "' style='color:#B41111;' >" . $not_set_text . "</small>";
-                echo "<input type='hidden' id='pricelist_id_" . $row->id . "' value='" . $row->pricelist_id . "'>";
-              }
-              ?>
-            </td>
-            <td data-colname="<?php _e('Redirect URL', BWG()->prefix); ?>" class="redirect_cont">
-              <textarea rows="4" onkeypress="prevent_new_line(event)" class="bwg_redirect_url" id="redirect_url_<?php echo $row->id; ?>" name="redirect_url_<?php echo $row->id; ?>"><?php echo $row->redirect_url; ?></textarea>
-            </td>
-            <td data-colname="<?php _e('Tags', BWG()->prefix); ?>">
-              <div class="tags_div<?php echo count($row->tags) > 1 ? '' : ' wd-hide'; ?>" id="tags_div_<?php echo $row->id; ?>">
+            <td class="column-data">
+              <div class="bwg-td-container">
+                <div class="bwg-td-item">
+                  <label class="wd-table-label" for="image_alt_text_<?php echo $row->id; ?>"><?php _e('Alt/Title', BWG()->prefix); ?></label>
+                  <textarea rows="4" id="image_alt_text_<?php echo $row->id; ?>" <?php disabled($is_google_photos) ?> name="image_alt_text_<?php echo $row->id; ?>"><?php echo $row->alt; ?></textarea>
+                </div>
+                <div class="bwg-td-item">
+                  <label class="wd-table-label" for="image_description_<?php echo $row->id; ?>"><?php _e('Description', BWG()->prefix); ?></label>
+                  <textarea rows="4" id="image_description_<?php echo $row->id; ?>" <?php disabled($is_google_photos) ?> name="image_description_<?php echo $row->id; ?>"><?php echo $row->description; ?></textarea>
+                </div>
+                <?php
+                  if ( function_exists('BWGEC') ) {
+                    $priselist_name = $row->priselist_name ? "Pricelist: " . $row->priselist_name : "Not for sale";
+                    $unset = $priselist_name == "Not for sale" ? "" : " <span onclick='bwg_remove_pricelist(this);' data-image-id= '" . $row->id . "' data-pricelist-id='" . $row->pricelist_id . "' class ='spider_delete_img_small' style='margin-top: -2px;margin-left: 3px;'></span>";
+                    echo "<div class=\"bwg-td-item\"><div><strong>" . $priselist_name . " </strong>" . $unset . "</div>";
+                    $not_set_text = $row->not_set_items == 1 ? __('Selected pricelist item longest dimension greater than some original images dimensions.', BWG()->prefix) : "";
+                    echo "<small id='priselist_set_error" . $row->id . "' style='color:#B41111;' >" . $not_set_text . "</small>";
+                    echo "<input type='hidden' id='pricelist_id_" . $row->id . "' value='" . $row->pricelist_id . "'></div>";
+                  }
+                  ?>
                 <?php
                 $tags_id_string = '';
-                if ( $row->tags ) {
-                  foreach ( $row->tags as $row_tag_data ) {
-                    ?>
-                    <div class="tag_div<?php echo $row_tag_data->term_id == 'temptagid' ? ' wd-tag-template wd-hide' : ''; ?>" id="<?php echo $row->id; ?>_tag_<?php echo $row_tag_data->term_id; ?>">
-                      <span class="tag_name"><?php echo $row_tag_data->name; ?></span>
-                      <span class="dashicons dashicons-no-alt wd-delete-tag" title="<?php _e('Remove tag', BWG()->prefix); ?>" onclick="bwg_remove_tag('<?php echo $row_tag_data->term_id; ?>', '<?php echo $row->id; ?>')" />
-                    </div>
+                if( !$is_google_photos ) {
+				?>
+                <div class="bwg-td-item bwg-td-item-redirect-url">
+                  <label class="wd-table-label" for="redirect_url_<?php echo $row->id; ?>"><?php _e('Redirect URL', BWG()->prefix); ?></label>
+                  <i class="wd-info dashicons dashicons-info" data-id="wd-info-redirect"></i>
+                  <div id="wd-info-redirect" class="wd-hide">
+                    <p><?php
+                      $link = '<a target="_blank" href="'.add_query_arg(array('page' => 'options_bwg'), admin_url('admin.php')).'">'. __('Options > General', BWG()->prefix) . '</a>';
+                      echo sprintf(__('To activate this feature, go to %s, then set "Image click action" to "Redirect to URL". Please use absolute URLs when specifying the links.', BWG()->prefix), $link);
+                      ?>
+                    </p>
+                  </div>
+                  <textarea rows="4" onkeypress="prevent_new_line(event)" class="bwg_redirect_url" id="redirect_url_<?php echo $row->id; ?>" name="redirect_url_<?php echo $row->id; ?>"><?php echo $row->redirect_url; ?></textarea>
+                </div>
+                <div class="bwg-td-item bwg-td-item-tags">
+                  <label class="wd-table-label"><?php _e('Tags', BWG()->prefix); ?></label>
+                  <div class="tags_div<?php echo count($row->tags) > 1 ? '' : ' tags_div_empty'; ?>">
                     <?php
-                    $tags_id_string .= ($row_tag_data->term_id == 'temptagid' ? '' : ($row_tag_data->term_id . ','));
-                  }
-                }
-                ?>
+                    if ( $row->tags ) {
+                      ?>
+                      <div id="tags_div_<?php echo $row->id; ?>">
+                      <?php
+                      foreach ( $row->tags as $row_tag_data ) {
+                        ?>
+                        <div class="tag_div<?php echo $row_tag_data->term_id == 'temptagid' ? ' wd-tag-template wd-hide' : ''; ?>" id="<?php echo $row->id; ?>_tag_<?php echo $row_tag_data->term_id; ?>">
+                          <span class="tag_name"><?php echo $row_tag_data->name; ?></span>
+                          <span class="dashicons dashicons-no-alt wd-delete-tag" title="<?php _e('Remove tag', BWG()->prefix); ?>" onclick="bwg_remove_tag('<?php echo $row_tag_data->term_id; ?>', '<?php echo $row->id; ?>')" />
+                        </div>
+                        <?php
+                        $tags_id_string .= ($row_tag_data->term_id == 'temptagid' ? '' : ($row_tag_data->term_id . ','));
+                      }
+                      ?>
+                      </div>
+                      <?php
+                    }
+                    ?>
+                    <a onclick="jQuery('#loading_div').show();" href="<?php echo $add_tag_url; ?>" class="thickbox thickbox-preview"><span class="dashicons dashicons-plus"></span><?php _e('Add tag', BWG()->prefix); ?></a>
+                  </div>
+                </div>
+                <?php } ?>
+                <input type="hidden" value="<?php echo $tags_id_string; ?>" id="tags_<?php echo $row->id; ?>" name="tags_<?php echo $row->id; ?>" />
+                <input type="hidden" id="image_url_<?php echo $row->id; ?>" name="image_url_<?php echo $row->id; ?>" value="<?php echo $row->pure_image_url; ?>" />
+                <input type="hidden" id="thumb_url_<?php echo $row->id; ?>" name="thumb_url_<?php echo $row->id; ?>" value="<?php echo $row->pure_thumb_url; ?>" />
+                <input type="hidden" id="input_filename_<?php echo $row->id; ?>" name="input_filename_<?php echo $row->id; ?>" value="<?php echo $row->filename; ?>" />
+                <input type="hidden" id="input_date_modified_<?php echo $row->id; ?>" name="input_date_modified_<?php echo $row->id; ?>" value="<?php echo $row->date; ?>" />
+                <input type="hidden" id="input_resolution_<?php echo $row->id; ?>" name="input_resolution_<?php echo $row->id; ?>" value="<?php echo $row->resolution; ?>" />
+                <input type="hidden" id="input_resolution_thumb_<?php echo $row->id; ?>" name="input_resolution_thumb_<?php echo $row->id; ?>" value="<?php echo $row->resolution_thumb; ?>" />
+                <input type="hidden" id="input_size_<?php echo $row->id; ?>" name="input_size_<?php echo $row->id; ?>" value="<?php echo $row->size; ?>" />
+                <input type="hidden" id="input_filetype_<?php echo $row->id; ?>" name="input_filetype_<?php echo $row->id; ?>" value="<?php echo $row->filetype; ?>" />
               </div>
-              <div class="row-actions">
-                <a onclick="jQuery('#loading_div').show();" href="<?php echo $add_tag_url; ?>" class="thickbox thickbox-preview"><?php _e('Add tag', BWG()->prefix); ?></a>
-              </div>
-
-              <input type="hidden" value="<?php echo $tags_id_string; ?>" id="tags_<?php echo $row->id; ?>" name="tags_<?php echo $row->id; ?>" />
-              <input type="hidden" id="image_url_<?php echo $row->id; ?>" name="image_url_<?php echo $row->id; ?>" value="<?php echo $row->pure_image_url; ?>" />
-              <input type="hidden" id="thumb_url_<?php echo $row->id; ?>" name="thumb_url_<?php echo $row->id; ?>" value="<?php echo $row->pure_thumb_url; ?>" />
-              <input type="hidden" id="input_filename_<?php echo $row->id; ?>" name="input_filename_<?php echo $row->id; ?>" value="<?php echo $row->filename; ?>" />
-              <input type="hidden" id="input_date_modified_<?php echo $row->id; ?>" name="input_date_modified_<?php echo $row->id; ?>" value="<?php echo $row->date; ?>" />
-              <input type="hidden" id="input_resolution_<?php echo $row->id; ?>" name="input_resolution_<?php echo $row->id; ?>" value="<?php echo $row->resolution; ?>" />
-              <input type="hidden" id="input_size_<?php echo $row->id; ?>" name="input_size_<?php echo $row->id; ?>" value="<?php echo $row->size; ?>" />
-              <input type="hidden" id="input_filetype_<?php echo $row->id; ?>" name="input_filetype_<?php echo $row->id; ?>" value="<?php echo $row->filetype; ?>" />
             </td>
           </tr>
           <?php
@@ -769,7 +854,7 @@ class GalleriesView_bwg extends AdminView_bwg {
       <input type="hidden" id="image_current_id" name="image_current_id" value="" />
       <input type="hidden" id="total" name="total" value="<?php echo $params['total']; ?>" />
       <input type="hidden" id="added_tags_id" name="added_tags_id" value="" />
-      <a class="wd-add-tags thickbox thickbox-preview wd-hide" href="<?php echo add_query_arg(array('TB_iframe' => '1'),  $params['add_tags_action']); ?>"></a>
+      <input type="hidden" id="added_tags_act" name="added_tags_act" value="" />
       <?php
       if (class_exists('BWGEC')) {
         $query_url = admin_url('admin-ajax.php');
@@ -787,6 +872,7 @@ class GalleriesView_bwg extends AdminView_bwg {
       <?php } ?>
       <input type="hidden" id="remove_pricelist" value="" />
     </div>
+    <a class="wd-add-tags thickbox thickbox-preview wd-hide" href="<?php echo add_query_arg(array('TB_iframe' => '1'),  $params['add_tags_action']); ?>"></a>
     <div class="tablenav bottom">
       <?php echo $this->pagination($params['page_url'], $params['total'], $params['items_per_page']); ?>
     </div>

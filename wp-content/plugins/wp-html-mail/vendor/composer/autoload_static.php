@@ -7,10 +7,9 @@ namespace Composer\Autoload;
 class ComposerStaticInit9ed2230ac70257f403e8e80f0f3a3d71
 {
     public static $prefixLengthsPsr4 = array (
-        'v' => 
+        'T' => 
         array (
-            'voku\\helper\\' => 12,
-            'voku\\CssToInlineStyles\\' => 23,
+            'TijsVerkoyen\\CssToInlineStyles\\' => 31,
         ),
         'S' => 
         array (
@@ -23,13 +22,9 @@ class ComposerStaticInit9ed2230ac70257f403e8e80f0f3a3d71
     );
 
     public static $prefixDirsPsr4 = array (
-        'voku\\helper\\' => 
+        'TijsVerkoyen\\CssToInlineStyles\\' => 
         array (
-            0 => __DIR__ . '/..' . '/voku/simple_html_dom/src/voku/helper',
-        ),
-        'voku\\CssToInlineStyles\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/voku/css-to-inline-styles/src',
+            0 => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src',
         ),
         'Symfony\\Component\\CssSelector\\' => 
         array (

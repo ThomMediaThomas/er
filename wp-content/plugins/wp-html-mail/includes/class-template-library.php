@@ -5,7 +5,7 @@ class Haet_Template_Library {
     private $min_template_version = '3.0';
     private $max_template_version = '3.0';
 
-    public function get_templates( $force_reload = true ){
+    public function get_templates( $force_reload = false ){
         if ( false === ( $templates = get_transient( 'haet_mail_templates' ) ) || $force_reload ) {
             // this code runs when there is no valid transient set
             $request = wp_remote_get( $this->api_url . 'templates/' );
@@ -42,7 +42,7 @@ class Haet_Template_Library {
         
         $request_body = wp_remote_retrieve_body( $request );
         $new_options = json_decode( $request_body, true );
-error_log( print_r( $new_options, true) );
+
 		if( $new_options ){
 			$options = array_merge($saved_options,$new_options);
 

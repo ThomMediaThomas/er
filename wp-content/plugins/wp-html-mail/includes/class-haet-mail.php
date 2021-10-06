@@ -32,6 +32,7 @@ final class Haet_Mail {
 		return array(
 			'fromname' 				=> 	get_bloginfo('name'),
 			'fromaddress'			=> 	get_bloginfo('admin_email'),
+			'disable_sender'		=>  false,
 			'testmode'				=>	false,
 			'testmode_recipient'	=>	'',
 			'use_classic_template_editor' => false
@@ -45,9 +46,10 @@ final class Haet_Mail {
 	function send_test() {
 		$email = $_POST['email'];
 		echo $email;		
-		wp_mail( $email, 'WP HTML mail - TEST', '<h1>Lorem ipsum dolor sit amet</h1>
-			<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed <a href="#">diam nonumy</a> eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.<br>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-			<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>',
+		wp_mail( 
+			$email, 
+			'WP HTML mail - TEST', 
+			$this->get_demo_content(),
 			'Content-Type: text/html'
 		);
 		wp_die();
@@ -126,13 +128,12 @@ final class Haet_Mail {
 	}
 
 	function get_theme_options($theme) {
-		$options = $this->get_default_theme_options();
-		 
-		$haet_mail_options = get_option('haet_mail_theme_options');
-		if (!empty($haet_mail_options)) {
-			foreach ($haet_mail_options as $key => $option)
-				$options[$key] = $option;
-		}				
+		$defaults = $this->get_default_theme_options();
+		$options = get_option('haet_mail_theme_options');
+
+		if( $options )
+			$options = $this->init_headerimg_placement( $options );
+		$options = wp_parse_args( $options, $defaults );
 		update_option('haet_mail_theme_options', $options);
 		return $options;
 	}
@@ -188,7 +189,6 @@ final class Haet_Mail {
 		$this->process_admin_page_actions();
 		
 		$theme_options = $this->get_theme_options('default');
-		$theme_options = $this->init_headerimg_placement( $theme_options );
 
 		$plugin_options = Haet_Sender_Plugin::get_plugin_options();
 		if( isset($_POST['enable_import_theme_options']) && $_POST['enable_import_theme_options'] && isset($_POST['import_theme_options']) ){
@@ -278,12 +278,11 @@ final class Haet_Mail {
 			}			
 		}
 		
+		$tabs['webfonts'] 	=  __('Webfonts', 'wp-html-mail');
 		$tabs['plugins']	=  __('Plugins','wp-html-mail');
 
-		// removed after 2.7.3 because custom templates caused confusion
-		// added again in 2.8 to add "settings reset" buttons
 		$tabs['advanced']	=  __('Advanced','wp-html-mail');
-		
+
 		include HAET_MAIL_PATH.'views/admin/settings.php';
 	
 	}
@@ -334,10 +333,10 @@ final class Haet_Mail {
 
 	function save_options($saved_options){    
 		$new_options = $_POST['haet_mail'];
+		if ( ! isset( $_POST[ 'email_options_nonce' ] ) ||
+            ! wp_verify_nonce( $_POST[ 'email_options_nonce' ], 'save_email_options' ) )
+            return $saved_options;
 		$options = array_merge($saved_options,$new_options);
-		if(isset($_POST['reload_haet_mailtemplate'])){
-			$options = $this->get_default_theme_options();
-		}
 
 		update_option('haet_mail_options', $options);
 		return $options;
@@ -361,7 +360,7 @@ final class Haet_Mail {
 
 	private function import_theme_options( $new_options, $saved_options ){
 		$new_options = json_decode( stripslashes( $new_options ), true );
-		error_log( print_r( $new_options,true ) );
+		
 		if( $new_options ){
 			$options = array_merge($saved_options,$new_options);
 
@@ -418,6 +417,13 @@ final class Haet_Mail {
 		return ( is_array( $email_name ) && count( $email_name ) > 1 );
 	}
 
+	// https://stackoverflow.com/questions/3904482/match-url-pattern-in-php-using-a-regular-expression/15690891#15690891
+	// match all URLs except those preceded with " or ' which indicates the URL is already part of an attribute src="htt or href="htt...
+	private function make_urls_clickable($html){
+		return preg_replace(
+			'/\b(?<!"|\')(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/s', 
+			'<a href="$1">$1</a>', $html);
+	}
 
 
 	function style_mail($email){
@@ -425,6 +431,9 @@ final class Haet_Mail {
 		$theme_options = $this->get_theme_options('default');
 		$template = $this->get_template($theme_options);
   
+		if( $this->is_debug_mode() )
+			$original_email = $email;
+
 		$sender_plugin = Haet_Sender_Plugin::detect_plugin($email);
 		if(!$sender_plugin)
 			$use_template = true;
@@ -440,7 +449,20 @@ final class Haet_Mail {
 			if( is_array( $headers_string ) )
 				$headers_string =  implode( "\n", $headers_string );
 
-			$is_plaintext = ( stripos($headers_string, 'Content-Type:') === false || stripos($headers_string, 'Content-Type: text/plain') !== false );
+			// remove our own filter (just in case it is still set because of a previous email)
+			remove_filter('wp_mail_content_type',array($this, 'set_mail_content_type'),20);
+
+			// check the content type passed via wp_mail and the 
+			// content type passed via filter. If one them is text/html 
+			// the sender already did his work and we don't have to escape 
+			// the content anymore.
+			$is_plaintext = ( 
+					( 
+						stripos( $headers_string, 'Content-Type:' ) === false 
+						|| stripos( $headers_string, 'Content-Type: text/plain' ) !== false 
+					)
+					&& apply_filters( 'wp_mail_content_type', 'text/plain' ) != 'text/html'
+				);
 
 
 			if( $sender_plugin ){
@@ -458,10 +480,13 @@ final class Haet_Mail {
 					$email['message'] = htmlentities($email['message']);
 				
 					$email['message'] = wpautop($email['message']);
+					
 				}elseif( $is_plaintext && isset( $options['invalid_contenttype_to_html'] ) && $options['invalid_contenttype_to_html'] ) {
 					// user has explicitly decided to interpret text as html
 					// but if the text doesn't contain any html tags but \n it get's merged into a single line
 					// see: https://wordpress.org/support/topic/password-recover-link/
+					
+					
 					if( !preg_match('/<[^h][^>]*>/m', $email['message'], $output_array) 
 						&& strpos( $email['message'], "\n" ) !== false ){
 						// found no HTML tags but line breaks
@@ -469,10 +494,22 @@ final class Haet_Mail {
 						//replace links like <http://... with <a href="http://..."
 						// removed in 2.9.1 because we should not convert plaintext to html 
 						// added again in 2.9.2 because of the password reset link
+						// not necessary anymore sind WP 5.4 but we keep it for a while for backwards compatibility
 						$email['message'] = preg_replace('/\<http(.*)\>/', '<a href="http$1">http$1</a>', $email['message']); 
 					}
-
 				}
+
+				if( $is_plaintext ){
+					// nor matter whether or not invalid_contenttype_to_html is set
+
+					// SINCE 3.0.6: in WP version 5.4 the brackets around the password reset link 
+					// have been removed ( https://core.trac.wordpress.org/ticket/44589 )
+					// some email client now show the link as plain text not as link
+					// https://wordpress.org/support/topic/no-links-9/
+					// we keep the line preg_replace('/\<http... below for backwards compatibility and add a general URL matcher here
+					$email['message'] = $this->make_urls_clickable( $email['message'] );
+				}
+				
 			}
 
 			// drop <style> blocks in content
@@ -506,7 +543,9 @@ final class Haet_Mail {
 			$email['message'] = $this->prepare_email_for_delivery($email['message']);
 		}
 		
-		$use_sender = !$sender_plugin || $sender_plugin->use_sender();
+		$use_sender = !isset( $options['disable_sender'] ) || !$options['disable_sender'];
+		if( $sender_plugin )
+			$use_sender = $sender_plugin->use_sender();
 		$use_sender = apply_filters( 'haet_mail_use_sender', $use_sender, array('to' => $email['to'], 'subject' => $email['subject'], 'message' => $email['message'], 'headers' => $email['headers'], 'attachments' => $email['attachments'], 'sender_plugin' => ($sender_plugin?$sender_plugin->get_plugin_name():null)) );
 
 		if ( $use_sender ){
@@ -539,7 +578,9 @@ final class Haet_Mail {
             $debug .= '=====GET:'.print_r($_GET,true)."\n\n";
             $debug .= 'SENDER-PLUGIN: '.print_r($sender_plugin,true)."\n\n";
             $debug .= 'ACTIVE-PLUGINS: <pre>'.print_r(Haet_Sender_Plugin::get_active_plugins(),true)."\n\n";
-            
+			$debug .= 'is_plaintext: ' . ( $is_plaintext ? 'YES' : 'NO' ) . "\n";
+			$debug .= '===== ORIGINAL EMAIL====='."\n";
+            $debug .= print_r( $original_email, true );
             file_put_contents( $debug_filename, $debug );
 			$email['attachments'][] = $debug_filename;
 		}
@@ -633,17 +674,22 @@ final class Haet_Mail {
 
 	private function get_header( $options ){
 		$headerimg_placement = $options['headerimg_placement'];
+		$link_header = apply_filters( 'haet_mail_link_header', true );
+
 		if( !$headerimg_placement ) 
 			$headerimg_placement = 'replace_text';
 
 		$headertext_field_key = $this->multilanguage->get_translateable_theme_options_key( $options, 'headertext' );
-		$headertext = $options[$headertext_field_key];
+		if( array_key_exists( $headertext_field_key, $options ) )
+			$headertext = $options[$headertext_field_key];
+		else
+			$headertext = $options['header'];
 		$headertext = str_replace( '  ', ' &nbsp;', $headertext );
 
 		$headerimg_field_key = $this->multilanguage->get_translateable_theme_options_key( $options, 'headerimg' );
 
 		if( $headerimg_placement != 'just_text' 
-			&& isset($options[$headerimg_field_key]) 
+			&& array_key_exists( $headerimg_field_key, $options )  
 			&& strlen($options[$headerimg_field_key])>5 ){
 
 			$width = isset($options['headerimg_width']) && intval( $options['headerimg_width'] ) ? $options['headerimg_width'] : 0;
@@ -659,6 +705,8 @@ final class Haet_Mail {
 										( $height ? ' height="' . $height . '" ' : '' ) .
 										'
 										alt="'.$alt_text.'">';
+			if( $link_header )
+				$headerimg = '<a href="' . get_home_url() . '">' . $headerimg . '</a>';
 
 			if( !$options['headerimg_align'] )
 				$options['headerimg_align'] = $options['headeralign'];
@@ -668,6 +716,9 @@ final class Haet_Mail {
 			$headerimg_placement = 'just_text';
 		}
 
+		if( $link_header )
+			$headertext = '<a href="' . get_home_url() . '">' . $headertext . '</a>';
+			
 		switch( $headerimg_placement ){
 			case 'just_text':
 				$header = $headertext;
@@ -683,7 +734,7 @@ final class Haet_Mail {
 							style="text-align: <?php echo $options['headerimg_align']; ?>;">
 							<?php echo $headerimg; ?>
 						</td>
-					<tr>
+					</tr>
 				</table>
 				<?php
 				$header = ob_get_clean();
@@ -702,7 +753,7 @@ final class Haet_Mail {
 								">
 							<?php echo $headerimg; ?>
 						</td>
-					<tr>
+					</tr>
 					<tr>
 						<td 
 							class="header-text"
@@ -710,7 +761,7 @@ final class Haet_Mail {
 							style="text-align: <?php echo $options['headeralign']; ?>">
 							<?php echo $headertext; ?>
 						</td>
-					<tr>
+					</tr>
 				</table>
 				<?php
 				$header = ob_get_clean();
@@ -726,7 +777,7 @@ final class Haet_Mail {
 							style="text-align: <?php echo $options['headeralign']; ?>">
 							<?php echo $headertext; ?>
 						</td>
-					<tr>
+					</tr>
 					<tr>
 						<td 
 							class="header-image" 
@@ -737,15 +788,13 @@ final class Haet_Mail {
 								">
 							<?php echo $headerimg; ?>
 						</td>
-					<tr>
+					</tr>
 				</table>
 				<?php
 				$header = ob_get_clean();
 				break;
 		}
 
-		if( apply_filters( 'haet_mail_link_header', true ) )
-			$header = '<a href="' . get_home_url() . '">' . $header . '</a>';
 
 		return $header;
 	}
@@ -756,7 +805,7 @@ final class Haet_Mail {
 		$template=$this->load_template_file('default');
 		
 		$options['headertext'] = apply_filters( 'haet_mail_header', $this->get_header( $options ) );
-
+		
 		if( !$options['headerbackground'] )
 			$options['headerbackground'] = 'transparent';
 
@@ -767,8 +816,10 @@ final class Haet_Mail {
 			$options['footerbackground'] = 'transparent';
 
 		$footer_field_key = $this->multilanguage->get_translateable_theme_options_key( $options, 'footer' );
-
-		$options[$footer_field_key] = stripslashes( $options[$footer_field_key] );
+		if( array_key_exists( $footer_field_key, $options ) )
+			$options[$footer_field_key] = stripslashes( $options[$footer_field_key] );
+		else
+			$options[$footer_field_key] = $options['footer'];
 		$options['footer'] = apply_filters( 'haet_mail_footer', $options[$footer_field_key] );
 
 		foreach ($options as $option => $value) {
@@ -816,15 +867,13 @@ final class Haet_Mail {
 	function inline_css($html){
 		require_once(HAET_MAIL_PATH.'/vendor/autoload.php');
 
-		$cssToInlineStyles = new voku\CssToInlineStyles\CssToInlineStyles( $html );
-
-		$cssToInlineStyles->setExcludeConditionalInlineStylesBlock(false);
-		$cssToInlineStyles->setUseInlineStylesBlock(true);
-		return $cssToInlineStyles->convert();
+		$cssToInlineStyles = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles();
+		return $cssToInlineStyles->convert($html);
 	}
 
 
-	function get_fonts(){
+
+	public function get_default_fonts(){
 		return array(
 			'Arial, Helvetica, sans-serif' 		=>	'Arial',
 			'Helvetica, Arial, sans-serif' 		=>	'Helvetica',
@@ -836,6 +885,11 @@ final class Haet_Mail {
 			'Trebuchet, sans-serif'				=>  'Trebuchet',
 			'Verdana, sans-serif'				=>  'Verdana',
 		);
+	}
+
+
+	public function get_fonts(){
+		return apply_filters( 'haet_mail_fonts', $this->get_default_fonts() );
 	}
 
 
@@ -982,13 +1036,15 @@ final class Haet_Mail {
 	 */
 	public function init_headerimg_placement( $theme_options ){
 		$headerimg_field_key = $this->multilanguage->get_translateable_theme_options_key( $theme_options, 'headerimg' );
+		if( !array_key_exists( 'headerimg_placement', $theme_options ) )
+			$theme_options['headerimg_placement'] = '';
 
 		if( $theme_options['headerimg_placement'] != 'just_text' 
 			&& (
 				!isset($theme_options[$headerimg_field_key]) 
 				|| strlen($theme_options[$headerimg_field_key])<5
 		 	) )
-			$theme_options['headerimg_placement'] = 'just_text';
+			$theme_options['headerimg_placement'] = 'replace_text';
 		return $theme_options;
 	}
 }

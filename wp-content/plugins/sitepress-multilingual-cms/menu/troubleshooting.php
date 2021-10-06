@@ -662,6 +662,8 @@ echo '</textarea>';
 		<small style="margin-left:10px;"><?php _e( 'Fixes the collation of the element_type column in icl_translations in case this setting changed for your posts.post_type column.', 'sitepress' ) ?></small>
 	</p>
 
+    <?php do_action( 'wpml_troubleshooting_after_fix_element_type_collation' ); ?>
+
 	<?php if(class_exists('TranslationManagement')){ ?>
 	<p>
 		<input id="assign_translation_status_to_duplicates" type="button" class="button-secondary" value="<?php _e( 'Assign translation status to duplicated content', 'sitepress' ) ?>"/><span id="assign_translation_status_to_duplicates_resp"></span><br/>

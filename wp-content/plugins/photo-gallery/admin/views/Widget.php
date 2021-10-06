@@ -10,7 +10,6 @@ class WidgetView_bwg {
    */
 	function widget($args, $instance) {
 		extract($args);
-
 		$title = (!empty($instance['title']) ? $instance['title'] : "");
 		$type  = (!empty($instance['type']) ? $instance['type'] : "gallery");
 		$view_type = (!empty($instance['view_type']) && BWG()->is_pro ? $instance['view_type'] : "thumbnails");
@@ -20,7 +19,7 @@ class WidgetView_bwg {
 		$show  = (!empty($instance['show']) ? $instance['show'] : "random");
 		$sort_by = 'order';
 		if ($show == 'random') {
-			$sort_by = 'RAND()';
+			$sort_by = 'random';
 		}
 		$order_by = 'ASC';
 		if ($show == 'last') {
@@ -74,10 +73,12 @@ class WidgetView_bwg {
 			$params['compuct_album_thumb_height'] = $height;
 			$params['compuct_album_image_thumb_width'] = $width;
 			$params['compuct_album_image_thumb_height'] = $height;
+			$params['all_album_sort_by']  = $sort_by;
+			$params['all_album_order_by'] = $order_by;
 			$params['compuct_album_enable_page'] = 0;
 		}
 		$controller = new $controller_class($view);
-    $bwg = WDWLibrary::unique_number();
+		$bwg = WDWLibrary::unique_number();
 		$pairs = WDWLibrary::get_shortcode_option_params( $params );
 		$controller->execute($pairs, 1, $bwg);
 		// After widget.
@@ -181,23 +182,23 @@ class WidgetView_bwg {
 		  </select>
 		</p>
 		<script>
-      function bwg_change_type(event, obj) {
-        var div = jQuery(obj).closest("div");
-        if (jQuery(jQuery(div).find(".sel_gallery")[0]).prop("checked")) {
-          jQuery(jQuery(div).find("#p_galleries")).css("display", "");
-          jQuery(jQuery(div).find("#p_albums")).css("display", "none");
-          jQuery(obj).nextAll(".bwg_hidden").first().attr("value", "gallery");
-          jQuery(jQuery(div).find("#view_type_container")).css("display", "block");
-          jQuery(jQuery(div).find("#view_type_container")).next("p.description").css("display", "block");
-        }
-        else {
-          jQuery(jQuery(div).find("#p_galleries")).css("display", "none");
-          jQuery(jQuery(div).find("#p_albums")).css("display", "");
-          jQuery(obj).nextAll(".bwg_hidden").first().attr("value", "album");
-          jQuery(jQuery(div).find("#view_type_container")).css("display", "none");
-          jQuery(jQuery(div).find("#view_type_container")).next("p.description").css("display", "none");
-        }
-      }
+		  function bwg_change_type(event, obj) {
+			var div = jQuery(obj).closest("div");
+			if (jQuery(jQuery(div).find(".sel_gallery")[0]).prop("checked")) {
+			  jQuery(jQuery(div).find("#p_galleries")).css("display", "");
+			  jQuery(jQuery(div).find("#p_albums")).css("display", "none");
+			  jQuery(obj).nextAll(".bwg_hidden").first().attr("value", "gallery");
+			  jQuery(jQuery(div).find("#view_type_container")).css("display", "block");
+			  jQuery(jQuery(div).find("#view_type_container")).next("p.description").css("display", "block");
+			}
+			else {
+			  jQuery(jQuery(div).find("#p_galleries")).css("display", "none");
+			  jQuery(jQuery(div).find("#p_albums")).css("display", "");
+			  jQuery(obj).nextAll(".bwg_hidden").first().attr("value", "album");
+			  jQuery(jQuery(div).find("#view_type_container")).css("display", "none");
+			  jQuery(jQuery(div).find("#view_type_container")).next("p.description").css("display", "none");
+			}
+		  }
 		</script>
     <?php
 	}

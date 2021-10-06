@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -72,7 +75,6 @@ class FrmFieldNumber extends FrmFieldType {
 		return $errors;
 	}
 
-
 	/**
 	 * IE fallback for number fields
 	 * Remove the comma when HTML5 isn't supported
@@ -93,6 +95,14 @@ class FrmFieldNumber extends FrmFieldType {
 		if ( ! is_numeric( $value ) ) {
 			$value = (float) $value;
 		}
+
 		return $value;
+	}
+
+	/**
+	 * @since 4.0.04
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
 	}
 }
